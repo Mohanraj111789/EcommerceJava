@@ -8,6 +8,8 @@ public class EcommerceApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(EcommerceApplication.class, args);
-        System.out.println("✅ E-commerce Backend is running...");
+        System.out.println("===========================================================");
+        System.out.println("[INFO] E-commerce Backend is running on http://localhost:8080");
+        System.out.println("===========================================================");
     }
 }

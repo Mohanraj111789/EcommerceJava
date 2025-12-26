@@ -2,6 +2,7 @@ com\ecommerce\model\Cart.class
 com\ecommerce\model\Order.class
 com\ecommerce\ds\ProductSearchTrie.class
 com\ecommerce\ds\RecommendationHeap.class
+com\ecommerce\config\DbConnectionVerifier.class
 com\ecommerce\service\ProductService.class
 com\ecommerce\controller\CartController.class
 com\ecommerce\repository\ProductRepository.class
