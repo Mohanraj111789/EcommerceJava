@@ -1,5 +1,6 @@
 package com.ecommerce.controller;
 
+import com.ecommerce.model.Role;
 import com.ecommerce.model.User;
 import com.ecommerce.repository.UserRepository;
 import com.ecommerce.security.JwtUtil;
@@ -47,10 +48,15 @@ public class AuthController {
             return ResponseEntity.badRequest().body("Email already exists");
         }
         
+        // Set default role to USER
+        if (user.getRole() == null) {
+            user.setRole(Role.USER);
+        }
+        
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         User savedUser = userRepository.save(user);
         
-        String token = jwtUtil.generateToken(savedUser.getEmail());
+        String token = jwtUtil.generateToken(savedUser.getEmail(), savedUser.getRole());
         
         Map<String, Object> response = new HashMap<>();
         response.put("token", token);
@@ -85,7 +91,7 @@ public class AuthController {
             return ResponseEntity.badRequest().body("Invalid credentials");
         }
         
-        String token = jwtUtil.generateToken(user.getEmail());
+        String token = jwtUtil.generateToken(user.getEmail(), user.getRole());
         
         Map<String, Object> response = new HashMap<>();
         response.put("token", token);

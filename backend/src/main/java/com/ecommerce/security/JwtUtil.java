@@ -1,5 +1,6 @@
 package com.ecommerce.security;
 
+import com.ecommerce.model.Role;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -17,8 +18,9 @@ public class JwtUtil {
     private final Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
     private final long EXPIRATION_TIME = 86400000; // 24 hours
 
-    public String generateToken(String email) {
+    public String generateToken(String email, Role role) {
         Map<String, Object> claims = new HashMap<>();
+        claims.put("role", role.toString());
         return createToken(claims, email);
     }
 
@@ -34,6 +36,10 @@ public class JwtUtil {
 
     public String extractEmail(String token) {
         return extractAllClaims(token).getSubject();
+    }
+
+   public String extractRole(String token) {
+        return extractAllClaims(token).get("role", String.class);
     }
 
     private Claims extractAllClaims(String token) {
