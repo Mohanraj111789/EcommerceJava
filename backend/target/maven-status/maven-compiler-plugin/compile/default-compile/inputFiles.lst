@@ -9,6 +9,8 @@ C:\Users\HAI\Desktop\EcommerceJava\backend\src\main\java\com\ecommerce\config\Db
 C:\Users\HAI\Desktop\EcommerceJava\backend\src\main\java\com\ecommerce\EcommerceApplication.java
 C:\Users\HAI\Desktop\EcommerceJava\backend\src\main\java\com\ecommerce\model\Cart.java
 C:\Users\HAI\Desktop\EcommerceJava\backend\src\main\java\com\ecommerce\model\Order.java
+C:\Users\HAI\Desktop\EcommerceJava\backend\src\main\java\com\ecommerce\service\UserService.java
+C:\Users\HAI\Desktop\EcommerceJava\backend\src\main\java\com\ecommerce\controller\AdminUserController.java
 C:\Users\HAI\Desktop\EcommerceJava\backend\src\main\java\com\ecommerce\ds\ProductSearchTrie.java
 C:\Users\HAI\Desktop\EcommerceJava\backend\src\main\java\com\ecommerce\model\Role.java
 C:\Users\HAI\Desktop\EcommerceJava\backend\src\main\java\com\ecommerce\repository\ProductRepository.java

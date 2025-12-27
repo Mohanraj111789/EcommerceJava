@@ -9,10 +9,12 @@ com\ecommerce\controller\CartController.class
 com\ecommerce\repository\ProductRepository.class
 com\ecommerce\model\Product.class
 com\ecommerce\security\JwtAuthenticationFilter.class
+com\ecommerce\service\UserService.class
 com\ecommerce\controller\AuthController.class
 com\ecommerce\EcommerceApplication.class
 com\ecommerce\security\SecurityConfig.class
 com\ecommerce\service\OrderService.class
+com\ecommerce\controller\AdminUserController.class
 com\ecommerce\model\Cart$CartItem.class
 com\ecommerce\security\JwtUtil.class
 com\ecommerce\repository\OrderRepository.class
