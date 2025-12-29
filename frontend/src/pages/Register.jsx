@@ -7,6 +7,7 @@ export default function Register() {
   const navigate = useNavigate();
   const [form, setForm] = useState({ name: '', email: '', password: '' });
   const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(false);
   const [busy, setBusy] = useState(false);
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
@@ -14,29 +15,70 @@ export default function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
+    setSuccess(false);
     setBusy(true);
 
     try {
-      const { success, error } = await register(form);
-      if (success) {
-        navigate('/');
+      const result = await register(form);
+      if (result.success) {
+        setSuccess(true);
+        // Show success message briefly before redirecting
+        setTimeout(() => {
+          navigate('/');
+        }, 1000);
       } else {
-        setError(error || 'Registration failed. Please try again.');
+        // Handle different error formats from backend
+        if (typeof result.error === 'object') {
+          // Validation errors object (e.g., {email: "Email already exists"})
+          const errorMessages = Object.values(result.error).join(', ');
+          setError(errorMessages);
+        } else if (typeof result.error === 'string') {
+          setError(result.error);
+        } else {
+          setError('Registration failed. Please try again.');
+        }
       }
     } catch (err) {
+      console.error('Registration error:', err);
       setError('An error occurred. Please try again.');
     } finally {
       setBusy(false);
     }
   };
 
-  // Rest of your component remains the same
   return (
     <div style={{ maxWidth: 480, margin: '40px auto', border: '1px solid #eee', padding: 24, borderRadius: 8 }}>
       <h2>Register</h2>
-      {error && <div style={{ color: 'red', marginBottom: 12 }}>{error}</div>}
-      {/* Rest of your JSX */}
-      <form>
+
+      {/* Success Message */}
+      {success && (
+        <div style={{
+          color: '#155724',
+          backgroundColor: '#d4edda',
+          border: '1px solid #c3e6cb',
+          padding: 12,
+          marginBottom: 12,
+          borderRadius: 4
+        }}>
+          ✓ Registration successful! Redirecting...
+        </div>
+      )}
+
+      {/* Error Message */}
+      {error && (
+        <div style={{
+          color: '#721c24',
+          backgroundColor: '#f8d7da',
+          border: '1px solid #f5c6cb',
+          padding: 12,
+          marginBottom: 12,
+          borderRadius: 4
+        }}>
+          ✗ {error}
+        </div>
+      )}
+
+      <form onSubmit={handleSubmit}>
         <div style={{ marginBottom: 12 }}>
           <label>Name</label>
           <input
@@ -44,7 +86,7 @@ export default function Register() {
             value={form.name}
             onChange={handleChange}
             required
-            style={{ width: '100%', padding: 8, marginTop: 6 }}
+            style={{ width: '100%', padding: 8, marginTop: 6, boxSizing: 'border-box' }}
           />
         </div>
 
@@ -56,7 +98,7 @@ export default function Register() {
             onChange={handleChange}
             required
             type="email"
-            style={{ width: '100%', padding: 8, marginTop: 6 }}
+            style={{ width: '100%', padding: 8, marginTop: 6, boxSizing: 'border-box' }}
           />
         </div>
 
@@ -69,17 +111,30 @@ export default function Register() {
             required
             minLength={6}
             type="password"
-            style={{ width: '100%', padding: 8, marginTop: 6 }}
+            style={{ width: '100%', padding: 8, marginTop: 6, boxSizing: 'border-box' }}
           />
+          <small style={{ color: '#666', fontSize: '12px' }}>Minimum 6 characters</small>
         </div>
 
-        <button type="submit" disabled={busy} style={{ padding: '10px 14px' }}>
+        <button
+          type="submit"
+          disabled={busy}
+          style={{
+            padding: '10px 14px',
+            backgroundColor: busy ? '#ccc' : '#007bff',
+            color: 'white',
+            border: 'none',
+            borderRadius: 4,
+            cursor: busy ? 'not-allowed' : 'pointer',
+            width: '100%'
+          }}
+        >
           {busy ? 'Registering...' : 'Register'}
         </button>
       </form>
 
-      <p style={{ marginTop: 12 }}>
-        Already have an account? <Link to="/login">Login</Link>
+      <p style={{ marginTop: 12, textAlign: 'center' }}>
+        Already have an account? <Link to="/login" style={{ color: '#007bff' }}>Login</Link>
       </p>
     </div>
   );

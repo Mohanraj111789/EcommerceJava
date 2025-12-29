@@ -134,4 +134,36 @@ public class AuthController {
         
         return ResponseEntity.ok(response);
     }
+    
+    @GetMapping("/me")
+    public ResponseEntity<?> getCurrentUser(@RequestHeader(value = "Authorization", required = false) String authHeader) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return ResponseEntity.status(401).body("No token provided");
+        }
+        
+        String token = authHeader.substring(7); // Remove "Bearer " prefix
+        
+        try {
+            String email = jwtUtil.extractEmail(token);
+            
+            if (email == null || !jwtUtil.validateToken(token, email)) {
+                return ResponseEntity.status(401).body("Invalid token");
+            }
+            
+            Optional<User> userOpt = userRepository.findByEmail(email);
+            
+            if (userOpt.isEmpty()) {
+                return ResponseEntity.status(401).body("User not found");
+            }
+            
+            User user = userOpt.get();
+            
+            Map<String, Object> response = new HashMap<>();
+            response.put("user", user);
+            
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(401).body("Invalid token");
+        }
+    }
 }
