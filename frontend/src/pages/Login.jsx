@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 
 export default function Login() {
+  const { login } = useAuth();
   const navigate = useNavigate();
   const [form, setForm] = useState({ email: '', password: '' });
   const [error, setError] = useState(null);
@@ -14,23 +16,26 @@ export default function Login() {
     setError(null);
     setBusy(true);
 
-    const result = await login(form);
-    setBusy(false);
-
-    if (result.success) {
-      navigate('/');
-    } else {
-      // server might return string or object with field errors
-      setError(typeof result.error === 'string' ? result.error : JSON.stringify(result.error));
+    try {
+      const { success, error } = await login(form);
+      if (success) {
+        navigate('/');
+      } else {
+        setError(error || 'Login failed. Please check your credentials.');
+      }
+    } catch (err) {
+      setError('An error occurred. Please try again.');
+    } finally {
+      setBusy(false);
     }
   };
 
+  // Rest of your component remains the same
   return (
     <div style={{ maxWidth: 480, margin: '40px auto', border: '1px solid #eee', padding: 24, borderRadius: 8 }}>
       <h2>Login</h2>
-
       {error && <div style={{ color: 'red', marginBottom: 12 }}>{error}</div>}
-
+      {/* Rest of your JSX */}
       <form onSubmit={handleSubmit}>
         <div style={{ marginBottom: 12 }}>
           <label>Email</label>
@@ -60,10 +65,6 @@ export default function Login() {
           {busy ? 'Logging in...' : 'Login'}
         </button>
       </form>
-
-      <p style={{ marginTop: 12 }}>
-        Don't have an account? <Link to="/register">Register</Link>
-      </p>
     </div>
   );
 }

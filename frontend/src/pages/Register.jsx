@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 
 export default function Register() {
+  const { register } = useAuth();
   const navigate = useNavigate();
   const [form, setForm] = useState({ name: '', email: '', password: '' });
   const [error, setError] = useState(null);
@@ -14,24 +16,27 @@ export default function Register() {
     setError(null);
     setBusy(true);
 
-    const result = await register(form);
-    setBusy(false);
-
-    if (result.success) {
-      // registered & logged-in automatically
-      navigate('/');
-    } else {
-      setError(typeof result.error === 'string' ? result.error : JSON.stringify(result.error));
+    try {
+      const { success, error } = await register(form);
+      if (success) {
+        navigate('/');
+      } else {
+        setError(error || 'Registration failed. Please try again.');
+      }
+    } catch (err) {
+      setError('An error occurred. Please try again.');
+    } finally {
+      setBusy(false);
     }
   };
 
+  // Rest of your component remains the same
   return (
     <div style={{ maxWidth: 480, margin: '40px auto', border: '1px solid #eee', padding: 24, borderRadius: 8 }}>
       <h2>Register</h2>
-
       {error && <div style={{ color: 'red', marginBottom: 12 }}>{error}</div>}
-
-      <form onSubmit={handleSubmit}>
+      {/* Rest of your JSX */}
+      <form>
         <div style={{ marginBottom: 12 }}>
           <label>Name</label>
           <input
