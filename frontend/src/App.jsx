@@ -4,6 +4,9 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Home from './pages/Home';
 import AdminDashboard from './pages/AdminDashboard';
+import Products from './pages/Products';
+import Cart from './pages/Cart';
+import Orders from './pages/Orders';
 
 // Protected Route component
 function ProtectedRoute({ children }) {
@@ -20,7 +23,7 @@ function AdminRoute({ children }) {
   }
 
   if (!isAdmin) {
-    return <Navigate to="/" replace />;
+    return <Navigate to="/products" replace />;
   }
 
   return children;
@@ -37,7 +40,31 @@ function App() {
             path="/"
             element={
               <ProtectedRoute>
-                <Home />
+                <Navigate to="/products" replace />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/products"
+            element={
+              <ProtectedRoute>
+                <Products />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/cart"
+            element={
+              <ProtectedRoute>
+                <Cart />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/orders"
+            element={
+              <ProtectedRoute>
+                <Orders />
               </ProtectedRoute>
             }
           />

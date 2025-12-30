@@ -32,6 +32,42 @@ public class ProductController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    // Search products by name or description
+    @GetMapping("/search")
+    public List<Product> searchProducts(@RequestParam String q) {
+        return service.searchProducts(q);
+    }
+
+    // Filter products by category
+    @GetMapping("/category/{category}")
+    public List<Product> getByCategory(@PathVariable String category) {
+        return service.getByCategory(category);
+    }
+
+    // Filter products by price range
+    @GetMapping("/price-range")
+    public List<Product> getByPriceRange(
+            @RequestParam(required = false) Double minPrice,
+            @RequestParam(required = false) Double maxPrice) {
+        return service.getByPriceRange(minPrice, maxPrice);
+    }
+
+    // Get all unique categories
+    @GetMapping("/categories")
+    public List<String> getAllCategories() {
+        return service.getAllCategories();
+    }
+
+    // Combined filter endpoint
+    @GetMapping("/filter")
+    public List<Product> filterProducts(
+            @RequestParam(required = false) String category,
+            @RequestParam(required = false) Double minPrice,
+            @RequestParam(required = false) Double maxPrice,
+            @RequestParam(required = false) String search) {
+        return service.filterProducts(category, minPrice, maxPrice, search);
+    }
+
     // ❌ REMOVED: POST endpoint - only admins can add products via /api/admin/products
 }
 

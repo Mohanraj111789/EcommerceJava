@@ -50,5 +50,42 @@ public class ProductService {
         product.setStock(newStock);
         return repo.save(product);
     }
+
+    // Search and filter methods
+    public List<Product> searchProducts(String query) {
+        return repo.findByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(query, query);
+    }
+
+    public List<Product> getByCategory(String category) {
+        return repo.findByCategory(category);
+    }
+
+    public List<Product> getByPriceRange(Double minPrice, Double maxPrice) {
+        if (minPrice != null && maxPrice != null) {
+            return repo.findByPriceBetween(minPrice, maxPrice);
+        } else if (minPrice != null) {
+            return repo.findByPriceGreaterThanEqual(minPrice);
+        } else if (maxPrice != null) {
+            return repo.findByPriceLessThanEqual(maxPrice);
+        }
+        return repo.findAll();
+    }
+
+    public List<String> getAllCategories() {
+        return repo.findDistinctCategories();
+    }
+
+    public List<Product> filterProducts(String category, Double minPrice, Double maxPrice, String search) {
+        List<Product> products = repo.findAll();
+        
+        return products.stream()
+                .filter(p -> category == null || category.isEmpty() || p.getCategory().equalsIgnoreCase(category))
+                .filter(p -> minPrice == null || p.getPrice() >= minPrice)
+                .filter(p -> maxPrice == null || p.getPrice() <= maxPrice)
+                .filter(p -> search == null || search.isEmpty() || 
+                        p.getName().toLowerCase().contains(search.toLowerCase()) ||
+                        p.getDescription().toLowerCase().contains(search.toLowerCase()))
+                .toList();
+    }
 }
 
