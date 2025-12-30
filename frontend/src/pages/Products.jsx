@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 import './Products.css';
 
 export default function Products() {
     const navigate = useNavigate();
+    const { user } = useAuth();
     const [products, setProducts] = useState([]);
     const [filteredProducts, setFilteredProducts] = useState([]);
     const [categories, setCategories] = useState([]);
@@ -100,9 +102,15 @@ export default function Products() {
     };
 
     const handleAddToCart = async (productId) => {
+        if (!user || !user.id) {
+            alert('Please login to add items to cart');
+            navigate('/login');
+            return;
+        }
+
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch('http://localhost:8080/api/cart', {
+            const response = await fetch(`http://localhost:8080/api/cart/${user.id}/add`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

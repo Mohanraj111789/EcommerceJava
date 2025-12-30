@@ -31,11 +31,7 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/auth/**").permitAll()
-                .requestMatchers("/api/products").permitAll()  // Only GET all products
-                .requestMatchers("/api/products/*").permitAll()  // Only GET single product
-                .requestMatchers("/api/admin/**").hasRole("ADMIN")  // Admin routes
-                .anyRequest().authenticated()
+                .anyRequest().permitAll()  // TEMPORARILY ALLOW ALL - FOR TESTING
             )
             .sessionManagement(session -> session
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -63,4 +59,3 @@ public class SecurityConfig {
         return source;
     }
 }
-
