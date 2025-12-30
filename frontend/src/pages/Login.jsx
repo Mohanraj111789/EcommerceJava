@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import './Login.css';
@@ -6,14 +6,40 @@ import './Login.css';
 export default function Login() {
   const { login } = useAuth();
   const navigate = useNavigate();
+
+  // ✅ Always start with empty fields
   const [form, setForm] = useState({ email: '', password: '' });
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
   const [busy, setBusy] = useState(false);
+
+  // 🔐 Hidden admin mode
   const [isAdminLogin, setIsAdminLogin] = useState(false);
 
-  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+  /* ================= ALT + A ADMIN SHORTCUT ================= */
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.altKey && e.key.toLowerCase() === 'a') {
+        e.preventDefault();
 
+        // 🔥 Switch to admin mode
+        setIsAdminLogin(true);
+
+        // 🔥 CLEAR form fields & messages
+        setForm({ email: '', password: '' });
+        setError(null);
+        setSuccess(false);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
+  const handleChange = (e) =>
+    setForm({ ...form, [e.target.name]: e.target.value });
+
+  /* ================= LOGIN SUBMIT ================= */
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
@@ -22,12 +48,12 @@ export default function Login() {
 
     try {
       const result = await login(form);
+
       if (result.success) {
         setSuccess(true);
-        // Get user data from AuthContext after login
         const userData = result.data?.user;
 
-        // Verify admin login if admin mode is selected
+        // 🔒 Admin role validation
         if (isAdminLogin && userData?.role !== 'ADMIN') {
           setError('Access denied. Admin credentials required.');
           setBusy(false);
@@ -35,7 +61,6 @@ export default function Login() {
         }
 
         setTimeout(() => {
-          // Redirect based on user role
           if (userData?.role === 'ADMIN') {
             navigate('/admin/dashboard');
           } else {
@@ -44,12 +69,9 @@ export default function Login() {
         }, 500);
       } else {
         if (typeof result.error === 'object') {
-          const errorMessages = Object.values(result.error).join(', ');
-          setError(errorMessages);
-        } else if (typeof result.error === 'string') {
-          setError(result.error);
+          setError(Object.values(result.error).join(', '));
         } else {
-          setError('Login failed. Please check your credentials.');
+          setError(result.error || 'Login failed. Please try again.');
         }
       }
     } catch (err) {
@@ -64,34 +86,20 @@ export default function Login() {
     <div className="login-page">
       <div className="login-container">
         <div className={`login-card ${isAdminLogin ? 'admin-mode' : ''}`}>
+
+          {/* ===== HEADER ===== */}
           <div className="login-header">
             <h2 className="login-title">
               {isAdminLogin ? '🔐 Admin Login' : 'Welcome Back'}
             </h2>
             <p className="login-subtitle">
               {isAdminLogin
-                ? 'Sign in with your admin credentials'
+                ? 'Sign in with admin credentials'
                 : 'Sign in to continue to your account'}
             </p>
           </div>
 
-          <div className="login-mode-toggle">
-            <button
-              type="button"
-              className={`mode-btn ${!isAdminLogin ? 'active' : ''}`}
-              onClick={() => setIsAdminLogin(false)}
-            >
-              👤 User Login
-            </button>
-            <button
-              type="button"
-              className={`mode-btn ${isAdminLogin ? 'active' : ''}`}
-              onClick={() => setIsAdminLogin(true)}
-            >
-              🔑 Admin Login
-            </button>
-          </div>
-
+          {/* ===== ALERTS ===== */}
           {success && (
             <div className="alert alert-success">
               <span className="alert-icon">✓</span>
@@ -106,7 +114,8 @@ export default function Login() {
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="login-form">
+          {/* ===== FORM ===== */}
+          <form onSubmit={handleSubmit} className="login-form" autoComplete="off">
             <div className="form-group">
               <label className="form-label">Email Address</label>
               <input
@@ -115,7 +124,12 @@ export default function Login() {
                 value={form.email}
                 onChange={handleChange}
                 className="form-input"
-                placeholder={isAdminLogin ? "admin@example.com" : "Enter your email"}
+                placeholder={
+                  isAdminLogin
+                    ? 'admin@example.com'
+                    : 'Enter your email'
+                }
+                autoComplete="off"
                 required
               />
             </div>
@@ -129,21 +143,30 @@ export default function Login() {
                 onChange={handleChange}
                 className="form-input"
                 placeholder="Enter your password"
+                autoComplete="new-password"
                 required
               />
             </div>
 
             <button type="submit" className="btn-submit" disabled={busy}>
               {busy && <span className="spinner"></span>}
-              {busy ? 'Signing in...' : (isAdminLogin ? 'Admin Sign In' : 'Sign In')}
+              {busy
+                ? 'Signing in...'
+                : isAdminLogin
+                ? 'Admin Sign In'
+                : 'Sign In'}
             </button>
           </form>
 
-          <div className="login-footer">
-            <p>
-              Don't have an account? <Link to="/register">Create Account</Link>
-            </p>
-          </div>
+          {/* ===== FOOTER (USER ONLY) ===== */}
+          {!isAdminLogin && (
+            <div className="login-footer">
+              <p>
+                Don't have an account? <Link to="/register">Create Account</Link>
+              </p>
+            </div>
+          )}
+
         </div>
       </div>
     </div>
