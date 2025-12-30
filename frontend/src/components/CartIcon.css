@@ -1,10 +1,11 @@
 .cart-icon {
   position: fixed;
-  top: 20px;
+  top: 80px;
   right: 30px;
   font-size: 28px;
   cursor: pointer;
   color: white;
+
   z-index: 1000;
 }
 

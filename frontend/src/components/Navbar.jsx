@@ -16,7 +16,7 @@ const Navbar = () => {
       <div className="nav-right">
         {user && (
           <span className="greeting">
-            Hello, <b>{user.name}</b> 👋
+            Hello, <b>{user.name}</b> 
           </span>
         )}
 
