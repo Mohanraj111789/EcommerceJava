@@ -1,5 +1,6 @@
 .cart-container {
   padding: 20px;
+  color: white;
 }
 
 .cart-item {
@@ -10,6 +11,10 @@
   padding: 15px;
   margin-bottom: 12px;
   border-radius: 8px;
+}
+
+.item-info h4 {
+  margin-bottom: 6px;
 }
 
 .qty-box {
@@ -32,27 +37,60 @@
   background: #ff4d4d;
   color: white;
   border: none;
-  padding: 6px 10px;
+  padding: 6px 12px;
   cursor: pointer;
+  border-radius: 4px;
 }
 
 .cart-footer {
-  margin-top: 20px;
+  margin-top: 25px;
+  padding-top: 20px;
+  border-top: 1px solid #333;
+}
+
+.total-box {
+  margin-bottom: 15px;
+}
+
+.cart-actions {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
 }
 
 .clear-btn {
+  background: #444;
+  color: white;
+  border: none;
+  padding: 10px 14px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.continue-btn {
+  background: #2874f0;
+  color: white;
+  border: none;
+  padding: 10px 14px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.checkout-btn {
   background: #ff9f00;
   color: black;
   border: none;
-  padding: 8px 14px;
-  font-weight: bold;
+  padding: 10px 16px;
   cursor: pointer;
+  border-radius: 4px;
+  font-weight: bold;
 }
 
 .empty-cart {
   text-align: center;
-  margin-top: 50px;
+  margin-top: 60px;
+}
+
+.empty-cart button {
+  margin-top: 20px;
 }

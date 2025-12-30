@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import "./Cart.css";
 
 const Cart = () => {
   const [cart, setCart] = useState(null);
   const [products, setProducts] = useState({});
+  const navigate = useNavigate();
   const userId = 9;
 
   useEffect(() => {
@@ -42,7 +44,14 @@ const Cart = () => {
   };
 
   if (!cart || cart.items.length === 0) {
-    return <h3 className="empty-cart">🛒 Cart is empty</h3>;
+    return (
+      <div className="empty-cart">
+        <h3>🛒 Your cart is empty</h3>
+        <button className="continue-btn" onClick={() => navigate("/products")}>
+          Continue Shopping
+        </button>
+      </div>
+    );
   }
 
   const total = cart.items.reduce((sum, item) => {
@@ -60,7 +69,7 @@ const Cart = () => {
 
         return (
           <div key={item.id} className="cart-item">
-            <div>
+            <div className="item-info">
               <h4>{product.name}</h4>
               <p>₹ {product.price}</p>
             </div>
@@ -81,11 +90,31 @@ const Cart = () => {
         );
       })}
 
+      {/* CART FOOTER */}
       <div className="cart-footer">
-        <h3>Total: ₹ {total}</h3>
-        <button className="clear-btn" onClick={clearCart}>
-          Clear Cart
-        </button>
+        <div className="total-box">
+          <h3>Total: ₹ {total}</h3>
+        </div>
+
+        <div className="cart-actions">
+          <button className="clear-btn" onClick={clearCart}>
+            Clear Cart
+          </button>
+
+          <button
+            className="continue-btn"
+            onClick={() => navigate("/products")}
+          >
+            Continue Shopping
+          </button>
+
+          <button
+            className="checkout-btn"
+            onClick={() => navigate("/checkout")}
+          >
+            Checkout
+          </button>
+        </div>
       </div>
     </div>
   );
