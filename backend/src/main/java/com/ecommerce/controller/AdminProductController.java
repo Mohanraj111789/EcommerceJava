@@ -55,4 +55,20 @@ public class AdminProductController {
         Product updatedProduct = productService.updateStock(id, newStock);
         return ResponseEntity.ok(updatedProduct);
     }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PatchMapping("/{id}/offer")
+    public ResponseEntity<Product> updateOffer(
+            @PathVariable Long id,
+            @RequestBody Map<String, Integer> offerUpdate) {
+        Integer offerPercentage = offerUpdate.get("offerPercentage");
+        if (offerPercentage == null || offerPercentage < 0 || offerPercentage > 100) {
+            return ResponseEntity.badRequest().build();
+        }
+        Product product = productService.getById(id)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+        product.setOfferPercentage(offerPercentage);
+        Product updatedProduct = productService.save(product);
+        return ResponseEntity.ok(updatedProduct);
+    }
 }

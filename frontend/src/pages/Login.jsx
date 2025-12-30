@@ -10,6 +10,7 @@ export default function Login() {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
   const [busy, setBusy] = useState(false);
+  const [isAdminLogin, setIsAdminLogin] = useState(false);
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
@@ -23,8 +24,23 @@ export default function Login() {
       const result = await login(form);
       if (result.success) {
         setSuccess(true);
+        // Get user data from AuthContext after login
+        const userData = result.data?.user;
+
+        // Verify admin login if admin mode is selected
+        if (isAdminLogin && userData?.role !== 'ADMIN') {
+          setError('Access denied. Admin credentials required.');
+          setBusy(false);
+          return;
+        }
+
         setTimeout(() => {
-          navigate('/');
+          // Redirect based on user role
+          if (userData?.role === 'ADMIN') {
+            navigate('/admin/dashboard');
+          } else {
+            navigate('/');
+          }
         }, 500);
       } else {
         if (typeof result.error === 'object') {
@@ -47,10 +63,33 @@ export default function Login() {
   return (
     <div className="login-page">
       <div className="login-container">
-        <div className="login-card">
+        <div className={`login-card ${isAdminLogin ? 'admin-mode' : ''}`}>
           <div className="login-header">
-            <h2 className="login-title">Welcome Back</h2>
-            <p className="login-subtitle">Sign in to continue to your account</p>
+            <h2 className="login-title">
+              {isAdminLogin ? '🔐 Admin Login' : 'Welcome Back'}
+            </h2>
+            <p className="login-subtitle">
+              {isAdminLogin
+                ? 'Sign in with your admin credentials'
+                : 'Sign in to continue to your account'}
+            </p>
+          </div>
+
+          <div className="login-mode-toggle">
+            <button
+              type="button"
+              className={`mode-btn ${!isAdminLogin ? 'active' : ''}`}
+              onClick={() => setIsAdminLogin(false)}
+            >
+              👤 User Login
+            </button>
+            <button
+              type="button"
+              className={`mode-btn ${isAdminLogin ? 'active' : ''}`}
+              onClick={() => setIsAdminLogin(true)}
+            >
+              🔑 Admin Login
+            </button>
           </div>
 
           {success && (
@@ -76,7 +115,7 @@ export default function Login() {
                 value={form.email}
                 onChange={handleChange}
                 className="form-input"
-                placeholder="Enter your email"
+                placeholder={isAdminLogin ? "admin@example.com" : "Enter your email"}
                 required
               />
             </div>
@@ -96,7 +135,7 @@ export default function Login() {
 
             <button type="submit" className="btn-submit" disabled={busy}>
               {busy && <span className="spinner"></span>}
-              {busy ? 'Signing in...' : 'Sign In'}
+              {busy ? 'Signing in...' : (isAdminLogin ? 'Admin Sign In' : 'Sign In')}
             </button>
           </form>
 

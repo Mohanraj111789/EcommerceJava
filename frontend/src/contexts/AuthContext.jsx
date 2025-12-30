@@ -30,7 +30,7 @@ export function AuthProvider({ children }) {
     if (success) {
       setUser(data.user);
     }
-    return { success, error };
+    return { success, error, data };
   };
 
   const register = async (userData) => {
@@ -51,7 +51,8 @@ export function AuthProvider({ children }) {
     login,
     register,
     logout,
-    isAuthenticated: !!user
+    isAuthenticated: !!user,
+    isAdmin: user?.role === 'ADMIN'
   };
 
   return <AuthContext.Provider value={value}>{!loading && children}</AuthContext.Provider>;
