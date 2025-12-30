@@ -1,13 +1,26 @@
-.products-container {
-  padding: 20px;
+/* Full page center alignment */
+.register-page {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;   /* horizontal center */
+  align-items: center;       /* vertical center */
+  background: radial-gradient(circle at top, #1b2a4e, #0b1020);
 }
 
-.page-title {
-  margin-bottom: 20px;
+/* Optional wrapper (can stay simple) */
+.register-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
 }
 
-.products-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
+/* Card styling (keep or adjust width) */
+.register-card {
+  background: #1e1e1e;
+  color: white;
+  border-radius: 10px;
+  padding: 32px;
+  width: 380px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7);
 }

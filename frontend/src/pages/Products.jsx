@@ -3,6 +3,8 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Card from "../components/Card";
 import CartIcon from "../components/CartIcon";
+import Navbar from "../components/Navbar";
+import { useAuth } from "../contexts/AuthContext";
 import "./Products.css";
 
 const Products = () => {
@@ -10,33 +12,57 @@ const Products = () => {
   const [cartCount, setCartCount] = useState(0);
   const navigate = useNavigate();
 
-  const userId = 9; // replace later with auth user
+  const { user } = useAuth(); // ✅ logged-in user
+  const userId = user?.id;    // ✅ SAFE access
 
+  /* ================= LOAD DATA ================= */
   useEffect(() => {
     loadProducts();
-    loadCartCount();
-  }, []);
+
+    // 🔒 Call cart API ONLY when userId exists
+    if (userId) {
+      loadCartCount();
+    }
+  }, [userId]);
 
   const loadProducts = async () => {
-    const res = await axios.get("http://localhost:8080/api/products");
-    setProducts(res.data);
+    try {
+      const res = await axios.get("http://localhost:8080/api/products");
+      setProducts(res.data);
+    } catch (err) {
+      console.error("Failed to load products", err);
+    }
   };
 
   const loadCartCount = async () => {
-    const res = await axios.get(`http://localhost:8080/api/cart/${userId}`);
-    const count = res.data.items.reduce(
-      (sum, item) => sum + item.quantity,
-      0
-    );
-    setCartCount(count);
+    try {
+      const res = await axios.get(
+        `http://localhost:8080/api/cart/${userId}`
+      );
+
+      const count = res.data.items.reduce(
+        (sum, item) => sum + item.quantity,
+        0
+      );
+      setCartCount(count);
+    } catch (err) {
+      console.error("Failed to load cart count", err);
+      setCartCount(0);
+    }
   };
 
   const addToCart = async (productId) => {
+    if (!userId) {
+      navigate("/login"); // 🔐 not logged in
+      return;
+    }
+
     await axios.post(`http://localhost:8080/api/cart/${userId}/add`, {
       productId,
       quantity: 1
     });
-    loadCartCount(); // update cart badge
+
+    loadCartCount();
   };
 
   const buyNow = async (productId) => {
@@ -46,7 +72,8 @@ const Products = () => {
 
   return (
     <div className="products-container">
-      <CartIcon count={cartCount} />
+      <Navbar />
+      {userId && <CartIcon count={cartCount} />}
 
       <h2 className="page-title">Products</h2>
 

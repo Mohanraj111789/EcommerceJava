@@ -6,13 +6,23 @@ import './Register.css';
 export default function Register() {
   const { register } = useAuth();
   const navigate = useNavigate();
-  const [form, setForm] = useState({ name: '', email: '', password: '' });
+
+  const [form, setForm] = useState({
+    name: '',
+    email: '',
+    password: ''
+  });
+
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
   const [busy, setBusy] = useState(false);
 
-  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+  /* ================= HANDLE INPUT ================= */
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
 
+  /* ================= SUBMIT ================= */
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
@@ -21,24 +31,26 @@ export default function Register() {
 
     try {
       const result = await register(form);
+
       if (result.success) {
         setSuccess(true);
+
+        // Clear form after success
+        setForm({ name: '', email: '', password: '' });
+
         setTimeout(() => {
-          navigate('/');
-        }, 1000);
+          navigate('/login');
+        }, 1200);
       } else {
         if (typeof result.error === 'object') {
-          const errorMessages = Object.values(result.error).join(', ');
-          setError(errorMessages);
-        } else if (typeof result.error === 'string') {
-          setError(result.error);
+          setError(Object.values(result.error).join(', '));
         } else {
-          setError('Registration failed. Please try again.');
+          setError(result.error || 'Registration failed. Please try again.');
         }
       }
     } catch (err) {
       console.error('Registration error:', err);
-      setError('An error occurred. Please try again.');
+      setError('An unexpected error occurred. Please try again.');
     } finally {
       setBusy(false);
     }
@@ -48,15 +60,20 @@ export default function Register() {
     <div className="register-page">
       <div className="register-container">
         <div className="register-card">
+
+          {/* ===== HEADER ===== */}
           <div className="register-header">
             <h2 className="register-title">Create Account</h2>
-            <p className="register-subtitle">Join us today and start shopping</p>
+            <p className="register-subtitle">
+              Join us and start shopping smarter
+            </p>
           </div>
 
+          {/* ===== ALERTS ===== */}
           {success && (
             <div className="alert alert-success">
               <span className="alert-icon">✓</span>
-              <span>Registration successful! Redirecting...</span>
+              <span>Account created successfully! Redirecting...</span>
             </div>
           )}
 
@@ -67,7 +84,12 @@ export default function Register() {
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="register-form">
+          {/* ===== FORM ===== */}
+          <form
+            onSubmit={handleSubmit}
+            className="register-form"
+            autoComplete="off"
+          >
             <div className="form-group">
               <label className="form-label">Full Name</label>
               <input
@@ -102,24 +124,34 @@ export default function Register() {
                 value={form.password}
                 onChange={handleChange}
                 className="form-input"
-                placeholder="Create a password"
+                placeholder="Create a strong password"
                 minLength={6}
+                autoComplete="new-password"
                 required
               />
-              <small className="form-hint">Minimum 6 characters</small>
+              <small className="form-hint">
+                Minimum 6 characters
+              </small>
             </div>
 
-            <button type="submit" className="btn-submit" disabled={busy}>
+            <button
+              type="submit"
+              className="btn-submit"
+              disabled={busy}
+            >
               {busy && <span className="spinner"></span>}
               {busy ? 'Creating Account...' : 'Create Account'}
             </button>
           </form>
 
+          {/* ===== FOOTER ===== */}
           <div className="register-footer">
             <p>
-              Already have an account? <Link to="/login">Sign In</Link>
+              Already have an account?{' '}
+              <Link to="/login">Sign In</Link>
             </p>
           </div>
+
         </div>
       </div>
     </div>
