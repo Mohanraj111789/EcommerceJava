@@ -1,0 +1,40 @@
+.product-card {
+  background: #1e1e1e;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.6);
+  transition: transform 0.2s ease;
+}
+
+.product-card:hover {
+  transform: scale(1.03);
+}
+
+.product-name {
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+.product-price {
+  font-weight: bold;
+  margin-bottom: 12px;
+}
+
+.btn {
+  width: 100%;
+  padding: 8px;
+  border: none;
+  cursor: pointer;
+  margin-top: 6px;
+  font-weight: bold;
+}
+
+.add-btn {
+  background-color: #ff9f00;
+  color: #000;
+}
+
+.buy-btn {
+  background-color: #ffa41c;
+  color: #000;
+}
