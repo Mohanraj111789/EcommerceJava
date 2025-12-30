@@ -1,0 +1,19 @@
+.cart-icon {
+  position: fixed;
+  top: 20px;
+  right: 30px;
+  font-size: 28px;
+  cursor: pointer;
+  color: white;
+}
+
+.cart-badge {
+  position: absolute;
+  top: -6px;
+  right: -10px;
+  background: red;
+  color: white;
+  font-size: 12px;
+  padding: 2px 6px;
+  border-radius: 50%;
+}
