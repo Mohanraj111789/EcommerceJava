@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import './Register.css';
 
 export default function Register() {
   const { register } = useAuth();
@@ -22,14 +23,11 @@ export default function Register() {
       const result = await register(form);
       if (result.success) {
         setSuccess(true);
-        // Show success message briefly before redirecting
         setTimeout(() => {
           navigate('/');
         }, 1000);
       } else {
-        // Handle different error formats from backend
         if (typeof result.error === 'object') {
-          // Validation errors object (e.g., {email: "Email already exists"})
           const errorMessages = Object.values(result.error).join(', ');
           setError(errorMessages);
         } else if (typeof result.error === 'string') {
@@ -47,95 +45,83 @@ export default function Register() {
   };
 
   return (
-    <div style={{ maxWidth: 480, margin: '40px auto', border: '1px solid #eee', padding: 24, borderRadius: 8 }}>
-      <h2>Register</h2>
+    <div className="register-page">
+      <div className="register-container">
+        <div className="register-card">
+          <div className="register-header">
+            <h2 className="register-title">Create Account</h2>
+            <p className="register-subtitle">Join us today and start shopping</p>
+          </div>
 
-      {/* Success Message */}
-      {success && (
-        <div style={{
-          color: '#155724',
-          backgroundColor: '#d4edda',
-          border: '1px solid #c3e6cb',
-          padding: 12,
-          marginBottom: 12,
-          borderRadius: 4
-        }}>
-          ✓ Registration successful! Redirecting...
+          {success && (
+            <div className="alert alert-success">
+              <span className="alert-icon">✓</span>
+              <span>Registration successful! Redirecting...</span>
+            </div>
+          )}
+
+          {error && (
+            <div className="alert alert-error">
+              <span className="alert-icon">✗</span>
+              <span>{error}</span>
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit} className="register-form">
+            <div className="form-group">
+              <label className="form-label">Full Name</label>
+              <input
+                type="text"
+                name="name"
+                value={form.name}
+                onChange={handleChange}
+                className="form-input"
+                placeholder="Enter your full name"
+                required
+              />
+            </div>
+
+            <div className="form-group">
+              <label className="form-label">Email Address</label>
+              <input
+                type="email"
+                name="email"
+                value={form.email}
+                onChange={handleChange}
+                className="form-input"
+                placeholder="Enter your email"
+                required
+              />
+            </div>
+
+            <div className="form-group">
+              <label className="form-label">Password</label>
+              <input
+                type="password"
+                name="password"
+                value={form.password}
+                onChange={handleChange}
+                className="form-input"
+                placeholder="Create a password"
+                minLength={6}
+                required
+              />
+              <small className="form-hint">Minimum 6 characters</small>
+            </div>
+
+            <button type="submit" className="btn-submit" disabled={busy}>
+              {busy && <span className="spinner"></span>}
+              {busy ? 'Creating Account...' : 'Create Account'}
+            </button>
+          </form>
+
+          <div className="register-footer">
+            <p>
+              Already have an account? <Link to="/login">Sign In</Link>
+            </p>
+          </div>
         </div>
-      )}
-
-      {/* Error Message */}
-      {error && (
-        <div style={{
-          color: '#721c24',
-          backgroundColor: '#f8d7da',
-          border: '1px solid #f5c6cb',
-          padding: 12,
-          marginBottom: 12,
-          borderRadius: 4
-        }}>
-          ✗ {error}
-        </div>
-      )}
-
-      <form onSubmit={handleSubmit}>
-        <div style={{ marginBottom: 12 }}>
-          <label>Name</label>
-          <input
-            name="name"
-            value={form.name}
-            onChange={handleChange}
-            required
-            style={{ width: '100%', padding: 8, marginTop: 6, boxSizing: 'border-box' }}
-          />
-        </div>
-
-        <div style={{ marginBottom: 12 }}>
-          <label>Email</label>
-          <input
-            name="email"
-            value={form.email}
-            onChange={handleChange}
-            required
-            type="email"
-            style={{ width: '100%', padding: 8, marginTop: 6, boxSizing: 'border-box' }}
-          />
-        </div>
-
-        <div style={{ marginBottom: 12 }}>
-          <label>Password</label>
-          <input
-            name="password"
-            value={form.password}
-            onChange={handleChange}
-            required
-            minLength={6}
-            type="password"
-            style={{ width: '100%', padding: 8, marginTop: 6, boxSizing: 'border-box' }}
-          />
-          <small style={{ color: '#666', fontSize: '12px' }}>Minimum 6 characters</small>
-        </div>
-
-        <button
-          type="submit"
-          disabled={busy}
-          style={{
-            padding: '10px 14px',
-            backgroundColor: busy ? '#ccc' : '#007bff',
-            color: 'white',
-            border: 'none',
-            borderRadius: 4,
-            cursor: busy ? 'not-allowed' : 'pointer',
-            width: '100%'
-          }}
-        >
-          {busy ? 'Registering...' : 'Register'}
-        </button>
-      </form>
-
-      <p style={{ marginTop: 12, textAlign: 'center' }}>
-        Already have an account? <Link to="/login" style={{ color: '#007bff' }}>Login</Link>
-      </p>
+      </div>
     </div>
   );
 }

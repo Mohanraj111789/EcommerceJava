@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import './Login.css';
 
 export default function Login() {
   const { login } = useAuth();
@@ -22,12 +23,10 @@ export default function Login() {
       const result = await login(form);
       if (result.success) {
         setSuccess(true);
-        // Show success message briefly before redirecting
         setTimeout(() => {
           navigate('/');
         }, 500);
       } else {
-        // Handle different error formats from backend
         if (typeof result.error === 'object') {
           const errorMessages = Object.values(result.error).join(', ');
           setError(errorMessages);
@@ -46,82 +45,68 @@ export default function Login() {
   };
 
   return (
-    <div style={{ maxWidth: 480, margin: '40px auto', border: '1px solid #eee', padding: 24, borderRadius: 8 }}>
-      <h2>Login</h2>
+    <div className="login-page">
+      <div className="login-container">
+        <div className="login-card">
+          <div className="login-header">
+            <h2 className="login-title">Welcome Back</h2>
+            <p className="login-subtitle">Sign in to continue to your account</p>
+          </div>
 
-      {/* Success Message */}
-      {success && (
-        <div style={{
-          color: '#155724',
-          backgroundColor: '#d4edda',
-          border: '1px solid #c3e6cb',
-          padding: 12,
-          marginBottom: 12,
-          borderRadius: 4
-        }}>
-          ✓ Login successful! Redirecting...
+          {success && (
+            <div className="alert alert-success">
+              <span className="alert-icon">✓</span>
+              <span>Login successful! Redirecting...</span>
+            </div>
+          )}
+
+          {error && (
+            <div className="alert alert-error">
+              <span className="alert-icon">✗</span>
+              <span>{error}</span>
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit} className="login-form">
+            <div className="form-group">
+              <label className="form-label">Email Address</label>
+              <input
+                type="email"
+                name="email"
+                value={form.email}
+                onChange={handleChange}
+                className="form-input"
+                placeholder="Enter your email"
+                required
+              />
+            </div>
+
+            <div className="form-group">
+              <label className="form-label">Password</label>
+              <input
+                type="password"
+                name="password"
+                value={form.password}
+                onChange={handleChange}
+                className="form-input"
+                placeholder="Enter your password"
+                required
+              />
+            </div>
+
+            <button type="submit" className="btn-submit" disabled={busy}>
+              {busy && <span className="spinner"></span>}
+              {busy ? 'Signing in...' : 'Sign In'}
+            </button>
+          </form>
+
+          <div className="login-footer">
+            <p>
+              Don't have an account? <Link to="/register">Create Account</Link>
+            </p>
+          </div>
         </div>
-      )}
-
-      {/* Error Message */}
-      {error && (
-        <div style={{
-          color: '#721c24',
-          backgroundColor: '#f8d7da',
-          border: '1px solid #f5c6cb',
-          padding: 12,
-          marginBottom: 12,
-          borderRadius: 4
-        }}>
-          ✗ {error}
-        </div>
-      )}
-
-      <form onSubmit={handleSubmit}>
-        <div style={{ marginBottom: 12 }}>
-          <label>Email</label>
-          <input
-            name="email"
-            value={form.email}
-            onChange={handleChange}
-            required
-            type="email"
-            style={{ width: '100%', padding: 8, marginTop: 6, boxSizing: 'border-box' }}
-          />
-        </div>
-
-        <div style={{ marginBottom: 12 }}>
-          <label>Password</label>
-          <input
-            name="password"
-            value={form.password}
-            onChange={handleChange}
-            required
-            type="password"
-            style={{ width: '100%', padding: 8, marginTop: 6, boxSizing: 'border-box' }}
-          />
-        </div>
-
-        <button
-          type="submit"
-          disabled={busy}
-          style={{
-            padding: '10px 14px',
-            backgroundColor: busy ? '#ccc' : '#007bff',
-            color: 'white',
-            border: 'none',
-            borderRadius: 4,
-            cursor: busy ? 'not-allowed' : 'pointer',
-            width: '100%'
-          }}
-        >
-          {busy ? 'Logging in...' : 'Login'}
-        </button>
-      </form>
-
-      <p style={{ marginTop: 12, textAlign: 'center' }}>
-        Don't have an account? <Link to="/register" style={{ color: '#007bff' }}>Register</Link>
-      </p>
+      </div>
     </div>
   );
 }
