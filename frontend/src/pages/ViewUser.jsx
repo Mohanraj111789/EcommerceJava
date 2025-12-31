@@ -1,11 +1,12 @@
+import "./ViewUser.css";
 export default function ViewUser() {
     return (
         //create a table format to view users table columns: ID, Name, Email, Role
         <div>
             {/*back button to admin dashboard */}
-            <button onClick={() => window.history.back()}>Back to Dashboard</button>
+            <button className="back-button" onClick={() => window.history.back()}>Back to Dashboard</button>
             <h2>User Management</h2>
-            <table>
+            <table border="1">
                 <thead>
                     <tr>
                         <th>ID</th>
