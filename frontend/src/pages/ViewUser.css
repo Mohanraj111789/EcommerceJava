@@ -35,3 +35,147 @@ th {
     margin-bottom: 20px;
     margin-left: 25px;
 }
+
+.user-details-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.user-details-modal {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    padding: 40px;
+    width: 90%;
+    max-width: 500px;
+    position: relative;
+}
+
+.close-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background-color: #001f3f;
+    color: white;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    font-size: 24px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.close-btn:hover {
+    background-color: #000a1a;
+    transform: scale(1.1);
+}
+
+.user-details {
+    display: flex;
+    gap: 30px;
+    margin-bottom: 30px;
+    align-items: flex-start;
+}
+
+.user-avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #001f3f, #003d7a);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.user-avatar::after {
+    content: '';
+    width: 50px;
+    height: 50px;
+    background-color: #001f3f;
+    border-radius: 50%;
+    position: absolute;
+}
+
+.user-info {
+    flex: 1;
+}
+
+.user-info h2 {
+    margin: 0 0 20px 0;
+    font-size: 24px;
+    color: #001f3f;
+    font-weight: 700;
+}
+
+.user-info p {
+    margin: 12px 0;
+    font-size: 16px;
+    color: #333;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+}
+
+.user-info strong {
+    color: #001f3f;
+}
+
+.user-actions {
+    display: flex;
+    gap: 20px;
+    justify-content: space-between;
+    padding-top: 20px;
+    border-top: 2px solid #f0f0f0;
+}
+
+.btn-delete,
+.btn-promote {
+    flex: 1;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.btn-delete {
+    background-color: #fff;
+    color: #001f3f;
+    border: 2px solid #001f3f;
+}
+
+.btn-delete:hover {
+    background-color: #001f3f;
+    color: #f5f5f5;
+    transform: translateY(-2px);
+}
+
+.btn-promote {
+    background-color: #001f3f;
+    color: white;
+}
+
+.btn-promote:hover {
+    background-color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 31, 63, 0.3);
+    color: #001f3f;
+    border: 2px solid #001f3f;
+}
