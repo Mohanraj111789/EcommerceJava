@@ -58,8 +58,13 @@ public class UserService {
         {
             throw new IllegalArgumentException("User not found with id: " + userId);
         }
+        //if the user not a admin, proceed to delete
+        if(userRepository.findById(userId).get().getRole() == Role.ADMIN)
+        {
+            throw new IllegalStateException("Cannot delete an admin user");
+        }
         userRepository.deleteById(userId);
         return;
+    
     }
 }
-

@@ -1,18 +1,22 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
 import "./Cart.css";
 
 const Cart = () => {
   const [cart, setCart] = useState(null);
   const [products, setProducts] = useState({});
   const navigate = useNavigate();
-  const userId = 9;
+  const { user } = useAuth();
+  const userId = user?.id;
 
   useEffect(() => {
-    loadCart();
-    loadProducts();
-  }, []);
+    if (userId) {
+      loadCart();
+      loadProducts();
+    }
+  }, [userId]);
 
   const loadCart = async () => {
     const res = await axios.get(`http://localhost:8080/api/cart/${userId}`);
