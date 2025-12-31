@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 export default function ViewUser() {
     //get users data from backend and display in table format
     const [users, setUsers] = useState([]);
+    const [selectedUser, setSelectedUser] = useState(null);
 
     useEffect(() => {
         fetchUsers();
@@ -15,6 +16,16 @@ export default function ViewUser() {
         });
         const data = await res.json();
         setUsers(data);
+    };
+
+    const viewUserDetails = async(userId) => {
+        //fetch user details from backend
+        const token = localStorage.getItem("token");
+        const res = await fetch(`http://localhost:8080/api/admin/users/${userId}`, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+        const data = await res.json();
+        setSelectedUser(data);
     };
 
     return (
@@ -40,11 +51,20 @@ export default function ViewUser() {
                             <td>{user1.name}</td>
                             <td>{user1.email}</td>
                             <td>{user1.role}</td>
-                            <td><button onClick={() => setSelectedUser(user1)}>View Details</button></td>
+                            <td><button onClick={() => viewUserDetails(user1.id)}>View Details</button></td>
                         </tr>
                     ))}
                 </tbody>
             </table>
+            {selectedUser ? (
+                <div className="user-details">
+                    <h3>User Details</h3>
+                    <p>ID: {selectedUser.id}</p>
+                    <p>Name: {selectedUser.name}</p>
+                    <p>Email: {selectedUser.email}</p>
+                    <p>Role: {selectedUser.role}</p>
+                </div>
+            ): null}
         </div>
     );
 }
