@@ -179,3 +179,15 @@ th {
     color: #001f3f;
     border: 2px solid #001f3f;
 }
+
+.btn-view-details {
+    padding: 8px 16px;
+    background-color: #3e8edf;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+}

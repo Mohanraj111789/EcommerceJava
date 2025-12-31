@@ -51,5 +51,15 @@ public class UserService {
         user.setRole(Role.USER);
         return userRepository.save(user);
     }
+    @Transactional
+    public void deleteUser(Long userId)
+    {
+        if(!userRepository.existsById(userId))
+        {
+            throw new IllegalArgumentException("User not found with id: " + userId);
+        }
+        userRepository.deleteById(userId);
+        return;
+    }
 }
 

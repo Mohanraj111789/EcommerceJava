@@ -87,7 +87,7 @@ export default function ViewUser() {
             console.error('Error demoting user:', error);
         }
     };
-    
+
 
     return (
         //create a table format to view users table columns: ID, Name, Email, Role
@@ -112,7 +112,7 @@ export default function ViewUser() {
                             <td>{user1.name}</td>
                             <td>{user1.email}</td>
                             <td>{user1.role}</td>
-                            <td><button onClick={() => viewUserDetails(user1.id)}>View Details</button></td>
+                            <td><button className="btn-view-details" onClick={() => viewUserDetails(user1.id)}>View Details</button></td>
                         </tr>
                     ))}
                 </tbody>
