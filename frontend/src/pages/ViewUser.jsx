@@ -1,8 +1,23 @@
 export default function ViewUser() {
     return (
+        //create a table format to view users table columns: ID, Name, Email, Role
         <div>
-            <h1>View Users Page</h1>
-            <p>This is where admin can view all users.</p>
+            {/*back button to admin dashboard */}
+            <button onClick={() => window.history.back()}>Back to Dashboard</button>
+            <h2>User Management</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {/* Users data will be populated here */}
+                </tbody>
+            </table>
         </div>
     );
 }
