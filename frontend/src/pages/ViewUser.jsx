@@ -68,6 +68,26 @@ export default function ViewUser() {
             console.error('Error promoting user:', error);
         }
     };
+    const demoteUser = async(userId) => {
+        try{
+            const token = localStorage.getItem("token");
+            const res = await fetch(`${BASEURL}users/${userId}/demote`, {
+                method: 'POST',
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            if(res.ok){
+                alert('User demoted to regular user successfully');
+                setSelectedUser(null);
+                fetchUsers();
+            }
+            else{
+                alert('Failed to demote user');
+            }
+        }catch(error){
+            console.error('Error demoting user:', error);
+        }
+    };
+    
 
     return (
         //create a table format to view users table columns: ID, Name, Email, Role
