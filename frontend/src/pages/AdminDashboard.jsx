@@ -211,7 +211,13 @@ export default function AdminDashboard() {
                     >
                         {showAddForm ? '✕ Cancel' : '+ Add New Product'}
                     </button>
-                    <button className="btn-add-product">View Users</button>
+                    {/* navigate after click user button*/}
+                    <button
+                        onClick={() => navigate('/admin/users')}
+                        className="btn-add-product"
+                    >
+                        👥 View Users
+                    </button>
                 </div>
 
                 {error && (

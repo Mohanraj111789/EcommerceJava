@@ -7,6 +7,7 @@ import AdminDashboard from './pages/AdminDashboard';
 import Products from './pages/Products';
 import Cart from './pages/Cart';
 import Orders from './pages/Orders';
+import ViewUser from './pages/ViewUser';
 
 // Protected Route component
 function ProtectedRoute({ children }) {
@@ -73,6 +74,14 @@ function App() {
             element={
               <AdminRoute>
                 <AdminDashboard />
+              </AdminRoute>
+            }
+          />
+          <Route
+            path="/admin/users"
+            element={
+              <AdminRoute>
+                <ViewUser />
               </AdminRoute>
             }
           />
