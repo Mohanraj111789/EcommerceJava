@@ -203,6 +203,7 @@ export default function AdminDashboard() {
             </div>
 
             <div className="admin-container">
+                
                 <div className="admin-actions">
                     <button
                         onClick={() => setShowAddForm(!showAddForm)}
@@ -210,6 +211,7 @@ export default function AdminDashboard() {
                     >
                         {showAddForm ? '✕ Cancel' : '+ Add New Product'}
                     </button>
+                    <button className="btn-add-product">View Users</button>
                 </div>
 
                 {error && (
@@ -229,6 +231,7 @@ export default function AdminDashboard() {
                 {showAddForm && (
                     <div className="add-product-form">
                         <h2>Add New Product</h2>
+        
                         <form onSubmit={handleAddProduct}>
                             <div className="form-row">
                                 <div className="form-group">
