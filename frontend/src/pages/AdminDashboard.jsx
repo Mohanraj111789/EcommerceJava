@@ -13,6 +13,7 @@ export default function AdminDashboard() {
     const [showAddForm, setShowAddForm] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
     const [editingProduct, setEditingProduct] = useState(null);
+    const BASEURL = 'http://localhost:8080/api';
     const [newProduct, setNewProduct] = useState({
         name: '',
         description: '',
@@ -31,7 +32,7 @@ export default function AdminDashboard() {
         try {
             setLoading(true);
             const token = localStorage.getItem('token');
-            const response = await fetch('http://localhost:8080/api/products', {
+            const response = await fetch(`${BASEURL}/products`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -64,7 +65,7 @@ export default function AdminDashboard() {
                 offerPercentage: newProduct.offerPercentage ? parseInt(newProduct.offerPercentage) : null
             };
 
-            const response = await fetch('http://localhost:8080/api/admin/products', {
+            const response = await fetch(`${BASEURL}/admin/products`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -109,7 +110,7 @@ export default function AdminDashboard() {
                 offerPercentage: editingProduct.offerPercentage ? parseInt(editingProduct.offerPercentage) : null
             };
 
-            const response = await fetch(`http://localhost:8080/api/admin/products/${editingProduct.id}`, {
+            const response = await fetch(`${BASEURL}/admin/products/${editingProduct.id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -142,7 +143,7 @@ export default function AdminDashboard() {
 
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch(`http://localhost:8080/api/admin/products/${productId}`, {
+            const response = await fetch(`${BASEURL}/admin/products/${productId}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -150,7 +151,9 @@ export default function AdminDashboard() {
             });
 
             if (response.ok) {
+                //show 3000ms success message
                 setSuccess('Product deleted successfully!');
+                setTimeout(() => { setSuccess(null); }, 3000);
                 fetchProducts();
             } else {
                 const errorData = await response.text();

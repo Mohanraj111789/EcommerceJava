@@ -52,10 +52,11 @@ export function AuthProvider({ children }) {
     register,
     logout,
     isAuthenticated: !!user,
-    isAdmin: user?.role === 'ADMIN'
+    isAdmin: user?.role === 'ADMIN',
+    loading
   };
 
-  return <AuthContext.Provider value={value}>{!loading && children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
 export const useAuth = () => {
