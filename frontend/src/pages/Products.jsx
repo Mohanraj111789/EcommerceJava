@@ -92,6 +92,8 @@ const Products = () => {
             product={product}
             onAddToCart={addToCart}
             onBuyNow={buyNow}
+            //stock
+            
           />
         ))}
       </div>

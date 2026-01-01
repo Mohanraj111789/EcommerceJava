@@ -87,6 +87,7 @@ public class ProductService {
                         p.getDescription().toLowerCase().contains(search.toLowerCase()))
                 .toList();
     }
-    
+
+    //stock
 }
 
