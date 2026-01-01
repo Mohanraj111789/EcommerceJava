@@ -8,6 +8,7 @@ import Products from './pages/Products';
 import Cart from './pages/Cart';
 import Orders from './pages/Orders';
 import ViewUser from './pages/ViewUser';
+import Checkout from './pages/Checkout';
 
 // Protected Route component
 function ProtectedRoute({ children }) {
@@ -90,6 +91,14 @@ function App() {
               <AdminRoute>
                 <ViewUser />
               </AdminRoute>
+            }
+          />
+          <Route
+            path="/checkout"
+            element={
+              <ProtectedRoute>
+                <Checkout />
+              </ProtectedRoute>
             }
           />
         </Routes>
