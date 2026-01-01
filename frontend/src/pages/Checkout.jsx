@@ -1,8 +1,11 @@
 export default function Checkout()
 {
     return (
-        <div className="checkout-page">
-            <h2>Checkout</h2>
+        //delivery details and payment options will be here
+        <div>
+            <h1>Checkout Page</h1>
+            <p>This is where users will enter delivery details and choose payment options.</p>
+            
         </div>
     );
 }
