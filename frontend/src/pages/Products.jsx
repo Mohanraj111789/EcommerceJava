@@ -56,7 +56,6 @@ const Products = () => {
       navigate("/login"); // 🔐 not logged in
       return;
     }
-
     await axios.post(`http://localhost:8080/api/cart/${userId}/add`, {
       productId,
       quantity: 1
@@ -66,8 +65,17 @@ const Products = () => {
   };
 
   const buyNow = async (productId) => {
-    await addToCart(productId);
+    const cartRes = await axios.get(
+      `http://localhost:8080/api/cart/${userId}`
+    )
+    const existingItem = cartRes.data.items.find(item => item.productId === productId);
+
+    if (!existingItem) {
+      addToCart(productId);
+    }
     navigate("/cart");
+
+
   };
 
   return (
