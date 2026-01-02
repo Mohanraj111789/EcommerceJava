@@ -6,6 +6,8 @@ const Card = ({ product, onAddToCart, onBuyNow }) => {
     <div className="product-card">
       <h4 className="product-name">{product.name}</h4>
       <p className="product-price">₹ {product.price}</p>
+      <p className="product-description">{product.description}</p>
+      <strong className="product-category">Stock:{product.stock}</strong>
 
       <button
         className="btn add-btn"
