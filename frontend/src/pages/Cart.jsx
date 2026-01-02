@@ -20,6 +20,7 @@ const Cart = () => {
 
   const loadCart = async () => {
     const res = await axios.get(`http://localhost:8080/api/cart/${userId}`);
+    console.log(res.data);
     setCart(res.data);
   };
 
