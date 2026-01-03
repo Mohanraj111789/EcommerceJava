@@ -1,17 +1,26 @@
-import { useState } from "react";
+import { use, useState } from "react";
 import {useAuth} from "../contexts/AuthContext";
+import axios from "axios";
+import { useEffect } from "react";
+
 import "./Navbar.css";
 
 const Navbar = () => {
   // Dummy backend-like data
-  const categories = [
-    "All",
-    "Electronics",
-    "Mobiles",
-    "Fashion",
-    "Books",
-    "Appliances",
-  ];
+  const [products, setProducts] = useState([]);
+  useEffect(() => {
+    loadProducts();
+  }, []);
+
+  const loadProducts = async () => {
+    try {
+      const res = await axios.get("http://localhost:8080/api/products");
+      setProducts(res.data);
+    } catch (err) {
+      console.error("Failed to load products", err);
+    }
+  };
+  const categories = ["All", ...new Set(products.map((p) => p.category))];
 const { user } = useAuth();
 //remove the cart for this snippet
 
