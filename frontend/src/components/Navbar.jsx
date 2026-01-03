@@ -1,36 +1,80 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../contexts/AuthContext";
+import { useState } from "react";
+import {useAuth} from "../contexts/AuthContext";
 import "./Navbar.css";
 
 const Navbar = () => {
-  const { user, logout } = useAuth();
-  const navigate = useNavigate();
+  // Dummy backend-like data
+  const categories = [
+    "All",
+    "Electronics",
+    "Mobiles",
+    "Fashion",
+    "Books",
+    "Appliances",
+  ];
+const { user } = useAuth();
+//remove the cart for this snippet
+
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [search, setSearch] = useState("");
+  const handleSearch = () => {
+    console.log("Search:", search);
+    console.log("Category:", selectedCategory);
+    // backend call later
+  };
 
   return (
-    <nav className="navbar">
-      <div className="nav-left" onClick={() => navigate("/")}>
-        🛒 E-Commerce
+    <header className="amazon-navbar">
+      {/* LEFT */}
+      <div className="nav-left">
+        <span className="logo">E-Comp</span>
+        <span className="logo-dot">.in</span>
       </div>
 
-      <div className="nav-right">
-        {user && (
-          <span className="greeting">
-            Hello, <b>{user.name}</b> 
-          </span>
-        )}
+      {/* LOCATION */}
+      <div className="nav-location">
+        <span className="small">Deliver to</span>
+        <span className="bold">India</span>
+      </div>
 
-        <button
-          className="logout-btn"
-          onClick={() => {
-            logout();
-            navigate("/login");
-          }}
+      {/* SEARCH */}
+      <div className="nav-search">
+        <select
+          value={selectedCategory}
+          onChange={(e) => setSelectedCategory(e.target.value)}
         >
-          Logout
-        </button>
+          {categories.map((cat, i) => (
+            <option key={i} value={cat}>
+              {cat}
+            </option>
+          ))}
+        </select>
+
+        <input
+          type="text"
+          placeholder="Search Amazon"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+
+        <button onClick={handleSearch}>🔍</button>
       </div>
-    </nav>
+
+      {/* RIGHT */}
+      <div className="nav-right">
+        <div className="nav-item">
+          <span className="small">Hello, {user ? user.name : "sign in"}</span>
+          <span className="bold">Account & Lists</span>
+        </div>
+
+        <div className="nav-item">
+          <span className="small">Returns</span>
+          <span className="bold">& Orders</span>
+        </div>
+
+
+      </div>
+    </header>
   );
 };
 

@@ -1,34 +1,105 @@
-.navbar {
-  background: #121212;
-  color: white;
-  padding: 12px 20px;
+.amazon-navbar {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  background-color: #131921;
+  color: white;
+  padding: 8px 14px;
+  gap: 16px;
+  font-family: Arial, sans-serif;
 }
 
+/* LEFT */
 .nav-left {
-  font-size: 20px;
+  display: flex;
+  align-items: baseline;
+  font-size: 22px;
   font-weight: bold;
-  cursor: pointer;
 }
 
+.logo {
+  color: #fff;
+}
+
+.logo-dot {
+  color: #f3a847;
+  font-size: 14px;
+  margin-left: 2px;
+}
+
+/* LOCATION */
+.nav-location {
+  display: flex;
+  flex-direction: column;
+  font-size: 12px;
+}
+
+.small {
+  font-size: 11px;
+  color: #ccc;
+}
+
+.bold {
+  font-size: 13px;
+  font-weight: bold;
+}
+
+/* SEARCH */
+.nav-search {
+  display: flex;
+  flex: 1;
+  height: 40px;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.nav-search select {
+  border: none;
+  padding: 0 10px;
+  background: #f3f3f3;
+}
+
+.nav-search input {
+  flex: 1;
+  border: none;
+  padding: 0 10px;
+  font-size: 15px;
+}
+
+.nav-search button {
+  background: #febd69;
+  border: none;
+  width: 45px;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+/* RIGHT */
 .nav-right {
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 20px;
 }
 
-.greeting {
-  font-size: 14px;
-  color: #f0c14b;
+.nav-item {
+  display: flex;
+  flex-direction: column;
 }
 
-.logout-btn {
-  background: #ff4d4d;
-  color: white;
-  border: none;
-  padding: 6px 12px;
-  cursor: pointer;
-  border-radius: 4px;
+.nav-cart {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  position: relative;
+}
+
+.cart-count {
+  position: absolute;
+  top: -6px;
+  left: 12px;
+  background: #f08804;
+  color: black;
+  font-size: 12px;
+  padding: 1px 6px;
+  border-radius: 50%;
+  font-weight: bold;
 }
