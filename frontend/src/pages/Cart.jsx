@@ -50,7 +50,16 @@ const Cart = () => {
   };
 
   const buyNow = (productId) => {
-    navigate("/checkout", { state: { productId } });
+    const product = products[productId];
+    const cartItem = cart.items.find(item => item.productId === productId);
+    
+    // Pass product details and current cart quantity to checkout
+    navigate("/checkout", { 
+      state: { 
+        buyNowProduct: product,
+        quantity: cartItem?.quantity || 1
+      } 
+    });
   };
 
   if (!cart || cart.items.length === 0) {

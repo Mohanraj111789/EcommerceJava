@@ -1,5 +1,5 @@
 import React, { useEffect,useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../contexts/AuthContext";
 import "./Checkout.css";
@@ -9,19 +9,31 @@ import "./Checkout.css";
 export default function Checkout() {
 
   const navigate = useNavigate();
+  const location = useLocation();
   const [cartItems, setCartItems] = useState([]);
   const [cart, setCart] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const {user} = useAuth();
   const [products, setProducts] = useState({});
+  const [buyNowProduct, setBuyNowProduct] = useState(null);
+  const [buyNowQuantity, setBuyNowQuantity] = useState(1);
 
   const userId = user?.id;
+  const isBuyNow = location.state?.buyNowProduct;
 
   useEffect(() => {
     if(userId)
     {
-        loadCart();
+        // If it's a Buy Now checkout, use the passed product
+        if (location.state?.buyNowProduct) {
+          setBuyNowProduct(location.state.buyNowProduct);
+          setBuyNowQuantity(location.state.quantity || 1);
+          setLoading(false);
+        } else {
+          // Regular cart checkout
+          loadCart();
+        }
         loadProducts();
     }
     }, [userId]);
@@ -52,19 +64,75 @@ export default function Checkout() {
   const [address, setAddress] = useState("");
 
   // 🔹 Calculate total
-  const totalAmount = cartItems.reduce(
-    (sum, item) => sum + item.quantity * (products[item.productId]?.price || 0),
-    0
-  );
+  const getTotalAmount = () => {
+    if (isBuyNow && buyNowProduct) {
+      return buyNowProduct.price * buyNowQuantity;
+    }
+    return cartItems.reduce(
+      (sum, item) => sum + item.quantity * (products[item.productId]?.price || 0),
+      0
+    );
+  };
 
-  const handlePlaceOrder = () => {
+  const totalAmount = getTotalAmount();
+
+  const handlePlaceOrder = async () => {
     if (!address.trim()) {
       alert("Please enter delivery address");
       return;
     }
 
-    alert("✅ Order placed successfully!\n(This is dummy checkout)");
-    navigate("/"); // redirect after order
+    try {
+      // Handle Buy Now checkout
+      if (isBuyNow && buyNowProduct) {
+        const orderData = {
+          userId,
+          items: [
+            {
+              productId: buyNowProduct.id,
+              quantity: buyNowQuantity,
+              price: buyNowProduct.price
+            }
+          ],
+          address,
+          totalAmount
+        };
+
+        // Call backend to create order
+        await axios.post("http://localhost:8080/api/orders", orderData, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        });
+
+        alert("✅ Order placed successfully!");
+        navigate("/orders"); // redirect to orders page
+      } else {
+        // Handle regular cart checkout
+        const orderData = {
+          userId,
+          items: cartItems.map(item => ({
+            productId: item.productId,
+            quantity: item.quantity,
+            price: products[item.productId]?.price
+          })),
+          address,
+          totalAmount
+        };
+
+        await axios.post("http://localhost:8080/api/orders", orderData, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        });
+
+        alert("✅ Order placed successfully!");
+        navigate("/orders"); // redirect to orders page
+      }
+    } catch (err) {
+      alert("❌ Error placing order: " + err.message);
+      console.error("Order error:", err);
+    }
   };
 
   return (
@@ -86,18 +154,47 @@ export default function Checkout() {
       <div className="checkout-card">
         <h3>Order Summary</h3>
 
-        {cartItems.map((item) => {
-          const product = products[item.productId];
-          if (!product) return null;
-          return (
-            <div className="summary-row" key={item.id}>
-              <span>
-                {product.name} × {item.quantity}
-              </span>
-              <span>₹{product.price * item.quantity}</span>
+        {isBuyNow && buyNowProduct ? (
+          // Buy Now Product Summary
+          <div>
+            <div className="summary-row">
+              <span>{buyNowProduct.name}</span>
+              <span>₹{buyNowProduct.price}</span>
             </div>
-          );
-        })}
+            <div className="summary-row">
+              <label>Quantity:</label>
+              <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                <button 
+                  onClick={() => setBuyNowQuantity(Math.max(1, buyNowQuantity - 1))}
+                  style={{ padding: '5px 10px' }}
+                >
+                  -
+                </button>
+                <span>{buyNowQuantity}</span>
+                <button 
+                  onClick={() => setBuyNowQuantity(Math.min(buyNowProduct.stock, buyNowQuantity + 1))}
+                  style={{ padding: '5px 10px' }}
+                >
+                  +
+                </button>
+              </div>
+            </div>
+          </div>
+        ) : (
+          // Cart Items Summary
+          cartItems.map((item) => {
+            const product = products[item.productId];
+            if (!product) return null;
+            return (
+              <div className="summary-row" key={item.id}>
+                <span>
+                  {product.name} × {item.quantity}
+                </span>
+                <span>₹{product.price * item.quantity}</span>
+              </div>
+            );
+          })
+        )}
 
         <hr />
 
@@ -111,9 +208,9 @@ export default function Checkout() {
       <div className="checkout-actions">
         <button
           className="btn-secondary"
-          onClick={() => navigate("/cart")}
+          onClick={() => isBuyNow ? navigate("/products") : navigate("/cart")}
         >
-          ← Back to Cart
+          ← {isBuyNow ? "Continue Shopping" : "Back to Cart"}
         </button>
 
         <button
