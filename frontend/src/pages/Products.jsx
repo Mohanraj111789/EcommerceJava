@@ -68,6 +68,13 @@ const Products = () => {
         loadProducts();
         return;
       }
+      if(!searchText && category !== "All") {
+        const response = await axios.get(`http://localhost:8080/api/products/category/${category}`);
+        setProducts(response.data);
+        return;
+      }
+      const response = await axios.get(`http://localhost:8080/api/products/category/${category}`);
+      setProducts(response.data);
 
       const res = await axios.get(
         "http://localhost:8080/api/products/search",
