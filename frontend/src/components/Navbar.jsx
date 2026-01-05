@@ -4,11 +4,13 @@ import "./Navbar.css";
 import { useEffect } from "react"; 
 import { Navigate } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import {SideMenu} from "./SideMenu";
 
 const Navbar = ({ onSearch, products = [] }) => {
-  const { user } = useAuth();
+  const { user , logout} = useAuth();
   const [search, setSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   useEffect(() => {
     if(!search && selectedCategory === "All") {
@@ -23,10 +25,13 @@ const Navbar = ({ onSearch, products = [] }) => {
     onSearch(search, selectedCategory);
   };
   const Navigate = useNavigate();
+  console.log("Navbar render - open:", open);
 
   return (
     <header className="amazon-navbar">
       <div className="nav-left">
+        <button className="nav-left-button" onClick={() => setOpen(true)}>☰ All</button>
+        <SideMenu isOpen={open} onClose={() => setOpen(false)} />
         <span className="logo">E-Comp</span>
         <span className="logo-dot">.in</span>
       </div>
@@ -62,9 +67,10 @@ const Navbar = ({ onSearch, products = [] }) => {
 
       <div className="nav-right">
         <span>Hello, {user ? user.name : "Sign in"}</span>
-        <button onClick={() => {
+        <button className="nav-right-button" onClick={() => {
 
-          navigate("/login");
+
+          logout();
 
         }}>Logout</button>
       </div>

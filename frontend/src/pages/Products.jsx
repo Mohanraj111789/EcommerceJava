@@ -82,7 +82,7 @@ const Products = () => {
       );
 
       setProducts(res.data);
-    } catch (err) {
+    } catch (err) { 
       console.error("Search failed", err);
     }
   };
