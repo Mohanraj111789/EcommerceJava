@@ -1,12 +1,9 @@
-.cart-icon {
+/* .cart-icon {
   position: fixed;
-  top: 80px;
-  right: 30px;
   font-size: 28px;
   cursor: pointer;
   color: white;
-
-  z-index: 1000;
+  right: 1px;
 }
 
 .cart-badge {
@@ -18,4 +15,4 @@
   font-size: 12px;
   padding: 2px 6px;
   border-radius: 50%;
-}
+} */

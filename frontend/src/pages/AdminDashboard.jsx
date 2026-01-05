@@ -192,6 +192,7 @@ export default function AdminDashboard() {
         if (!offerPercentage) return price;
         return price - (price * offerPercentage / 100);
     };
+    console.log(products)
 
     return (
         <div className="admin-dashboard">
@@ -332,7 +333,7 @@ export default function AdminDashboard() {
                             <div className="form-group">
                                 <label className="form-label">Image URL</label>
                                 <input
-                                    type="url"
+                                    type="text"
                                     name="imageUrl"
                                     value={newProduct.imageUrl}
                                     onChange={handleInputChange}

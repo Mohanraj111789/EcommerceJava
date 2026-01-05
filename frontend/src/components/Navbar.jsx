@@ -1,19 +1,20 @@
 import { use, useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import "./Navbar.css";
-import { useEffect } from "react"; 
-import { Navigate } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-import {SideMenu} from "./SideMenu";
+import { useEffect } from "react";
+import { Navigate, useNavigate } from "react-router-dom";
+import { SideMenu } from "./SideMenu";
+import { CartIcon } from "./CartIcon";
 
 const Navbar = ({ onSearch, products = [] }) => {
-  const { user , logout} = useAuth();
+  const { user, logout } = useAuth();
   const [search, setSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
+  const userId = user?.id;
   useEffect(() => {
-    if(!search && selectedCategory === "All") {
+    if (!search && selectedCategory === "All") {
       onSearch("", "All");
     }
   }, [search]);
@@ -44,10 +45,11 @@ const Navbar = ({ onSearch, products = [] }) => {
       <div className="nav-search">
         <select
           value={selectedCategory}
-          onChange={e => {setSelectedCategory(e.target.value)
+          onChange={e => {
+            setSelectedCategory(e.target.value)
             onSearch(search, e.target.value);
           }
-        }
+          }
         >
           {categories.map((cat, i) => (
             <option key={i} value={cat}>{cat}</option>
@@ -67,6 +69,7 @@ const Navbar = ({ onSearch, products = [] }) => {
 
       <div className="nav-right">
         <span>Hello, {user ? user.name : "Sign in"}</span>
+        {userId && <CartIcon count={5} />}
         <button className="nav-right-button" onClick={() => {
 
 
@@ -74,7 +77,7 @@ const Navbar = ({ onSearch, products = [] }) => {
 
         }}>Logout</button>
       </div>
-    
+
     </header>
   );
 };

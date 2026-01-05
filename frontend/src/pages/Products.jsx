@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Card from "../components/Card";
-import CartIcon from "../components/CartIcon";
 import Navbar from "../components/Navbar";
 import { NotFound } from "../components/NotFound";
 import { useAuth } from "../contexts/AuthContext";
@@ -69,7 +68,7 @@ const Products = () => {
         loadProducts();
         return;
       }
-      if(!searchText && category !== "All") {
+      if (!searchText && category !== "All") {
         const response = await axios.get(`http://localhost:8080/api/products/category/${category}`);
         setProducts(response.data);
         return;
@@ -81,14 +80,14 @@ const Products = () => {
         "http://localhost:8080/api/products/search",
         { params: { q: searchText, category } }
       );
-      
-      if(res.data.length === 0) {
+
+      if (res.data.length === 0) {
         navigate("/NotFound");
         return;
       }
-      
+
       setProducts(res.data);
-    } catch (err) { 
+    } catch (err) {
       console.error("Search failed", err);
       navigate("/not-found");
     }
@@ -98,9 +97,6 @@ const Products = () => {
     <div className="products-container">
       {/* 🔥 Navbar now controls search */}
       <Navbar onSearch={handleSearch} products={products} />
-
-      {userId && <CartIcon count={cartCount} />}
-
       <h2 className="page-title">Products</h2>
 
       <div className="products-grid">

@@ -150,3 +150,22 @@
 .nav-right-button:hover {
   border: 1px solid white;
 }
+
+
+.cart-icon {
+  /* position: fixed; */
+  font-size: 28px;
+  cursor: pointer;
+  color: white;
+  right: 1px;
+}
+
+.cart-badge {
+  position: absolute;
+  top: 6px;
+  background: red;
+  color: white;
+  font-size: 12px;
+  padding: 2px 6px;
+  border-radius: 50%;
+}

@@ -2,10 +2,12 @@ import React from "react";
 import "./Card.css";
 
 const Card = ({ product, onAddToCart, onBuyNow }) => {
+  const BASE_URL = `../public/assets/`;
+  console.log(product.imageUrl);
   return (
     <div className="product-card">
       {/*i want to add product image here */}
-      <img src="../vite.svg" className="product-image" />
+      <img src= {`../assets/${product.imageUrl}`} className="product-image"></img>
       <h4 className="product-name">{product.name}</h4>
       <p className="product-price">₹ {product.price}</p>
       <p className="product-description">{product.description}</p>

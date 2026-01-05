@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import "./CartIcon.css";
 
-const CartIcon = ({ count }) => {
+export function CartIcon({ count }) {
   const navigate = useNavigate();
 
   return (
@@ -13,4 +13,3 @@ const CartIcon = ({ count }) => {
   );
 };
 
-export default CartIcon;

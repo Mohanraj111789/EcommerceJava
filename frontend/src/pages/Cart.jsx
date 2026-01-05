@@ -52,13 +52,13 @@ const Cart = () => {
   const buyNow = (productId) => {
     const product = products[productId];
     const cartItem = cart.items.find(item => item.productId === productId);
-    
+
     // Pass product details and current cart quantity to checkout
-    navigate("/checkout", { 
-      state: { 
+    navigate("/checkout", {
+      state: {
         buyNowProduct: product,
         quantity: cartItem?.quantity || 1
-      } 
+      }
     });
   };
 
@@ -90,7 +90,7 @@ const Cart = () => {
           return (
             <div key={item.id} className="cart-card">
               <div className="product-image-placeholder"></div>
-              
+
               <div className="product-details">
                 <h4 className="product-name">{product.name}</h4>
                 <p className="product-price">₹ {product.price}</p>
@@ -99,14 +99,14 @@ const Cart = () => {
               <div className="qty-control">
                 <span className="qty-label">Qty:</span>
                 <div className="qty-box">
-                  <button 
+                  <button
                     className="qty-btn"
                     onClick={() => updateQty(item.id, item.quantity - 1)}
                   >
                     −
                   </button>
                   <span className="qty-value">{item.quantity}</span>
-                  <button 
+                  <button
                     className="qty-btn"
                     onClick={() => updateQty(item.id, item.quantity + 1)}
                   >
