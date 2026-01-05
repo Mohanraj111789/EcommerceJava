@@ -10,6 +10,8 @@ import Orders from './pages/Orders';
 import ViewUser from './pages/ViewUser';
 import Checkout from './pages/Checkout';
 import { NotFound } from './components/NotFound';
+import ProductPage from './components/ProductPage';
+
 
 // Protected Route component
 function ProtectedRoute({ children }) {
@@ -106,7 +108,9 @@ function App() {
             path="/NotFound"
             element={<NotFound />}
           />
-          
+          <>
+            <Route path="/product/:id" element={<ProductPage />} />
+          </>
         </Routes>
       </Router>
     </AuthProvider>
