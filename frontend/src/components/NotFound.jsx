@@ -11,6 +11,9 @@ export const NotFound = () => {
       navigate("/login", { replace: true });
     }
   }, [user, navigate]);
+  if (!user) {
+    return null;
+  }
     
   return (
     <div className="notfound-wrapper">
