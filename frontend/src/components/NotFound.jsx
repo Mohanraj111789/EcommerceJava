@@ -22,7 +22,7 @@ export const NotFound = () => {
           <div className="card">
             <span className="tag">Aw, Snap!</span>
             <h3>404</h3>
-            <p>Page Missing</p>
+            <p>Product Not Found</p>
           </div>
 
           <div className="floating-circle one"></div>
