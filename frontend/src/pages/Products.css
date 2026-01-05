@@ -12,11 +12,8 @@ body {
 }
 
 .products-grid {
-  /* display: grid;
-  grid-template-columns: repeat(8, 1fr); */
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
   gap: 20px;
 }
 
