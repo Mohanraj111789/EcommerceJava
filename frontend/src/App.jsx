@@ -9,6 +9,7 @@ import Cart from './pages/Cart';
 import Orders from './pages/Orders';
 import ViewUser from './pages/ViewUser';
 import Checkout from './pages/Checkout';
+import { NotFound } from './components/NotFound';
 
 // Protected Route component
 function ProtectedRoute({ children }) {
@@ -101,6 +102,11 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/NotFound"
+            element={<NotFound />}
+          />
+          
         </Routes>
       </Router>
     </AuthProvider>

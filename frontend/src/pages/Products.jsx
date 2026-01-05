@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Card from "../components/Card";
 import CartIcon from "../components/CartIcon";
 import Navbar from "../components/Navbar";
+import { NotFound } from "../components/NotFound";
 import { useAuth } from "../contexts/AuthContext";
 import "./Products.css";
 
@@ -80,10 +81,16 @@ const Products = () => {
         "http://localhost:8080/api/products/search",
         { params: { q: searchText, category } }
       );
-
+      
+      if(res.data.length === 0) {
+        navigate("/NotFound");
+        return;
+      }
+      
       setProducts(res.data);
     } catch (err) { 
       console.error("Search failed", err);
+      navigate("/NotFound");
     }
   };
 
