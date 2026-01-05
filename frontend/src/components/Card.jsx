@@ -3,7 +3,6 @@ import "./Card.css";
 
 const Card = ({ product, onAddToCart, onBuyNow }) => {
   const BASE_URL = `../public/assets/`;
-  console.log(product.imageUrl);
   return (
     <div className="product-card">
       {/*i want to add product image here */}

@@ -192,7 +192,7 @@ export default function AdminDashboard() {
         if (!offerPercentage) return price;
         return price - (price * offerPercentage / 100);
     };
-    console.log(products)
+
 
     return (
         <div className="admin-dashboard">

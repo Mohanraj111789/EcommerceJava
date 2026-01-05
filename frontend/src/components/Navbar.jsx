@@ -26,7 +26,6 @@ const Navbar = ({ onSearch, products = [] ,cartCount}) => {
     onSearch(search, selectedCategory);
   };
   const Navigate = useNavigate();
-  console.log("Navbar render - open:", open);
 
   return (
     <header className="amazon-navbar">
@@ -62,7 +61,14 @@ const Navbar = ({ onSearch, products = [] ,cartCount}) => {
           placeholder="Search products"
           value={search}
           onChange={e => setSearch(e.target.value)}
+          onKeyDown={e =>{
+            if(e.key === "Enter"){
+              handleSearchClick();
+            }
+          }}
         />
+        {/*press enter also call the function */}
+
 
         <button onClick={handleSearchClick}>🔍</button>
       </div>
