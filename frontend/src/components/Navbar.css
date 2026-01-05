@@ -6,6 +6,11 @@
   padding: 8px 14px;
   gap: 16px;
   font-family: Arial, sans-serif;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
 }
 
 /* LEFT */

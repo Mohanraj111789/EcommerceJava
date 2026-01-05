@@ -105,7 +105,7 @@ function App() {
             }
           />
           <Route
-            path="/NotFound"
+            path="/not-found"
             element={<NotFound />}
           />
           <>

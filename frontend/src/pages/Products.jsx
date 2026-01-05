@@ -90,7 +90,7 @@ const Products = () => {
       setProducts(res.data);
     } catch (err) { 
       console.error("Search failed", err);
-      navigate("/NotFound");
+      navigate("/not-found");
     }
   };
 
