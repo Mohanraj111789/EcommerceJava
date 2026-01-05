@@ -1,6 +1,9 @@
 import "./NotFound.css";
+import { useNavigate } from "react-router-dom";
 
 export const NotFound = () => {
+    const navigate = useNavigate();
+    
   return (
     <div className="notfound-wrapper">
       <div className="notfound-container">
@@ -12,8 +15,8 @@ export const NotFound = () => {
             Please check the product or try again later.
           </p>
 
-          <button className="notfound-btn">
-            Continue Shopping
+          <button className="notfound-btn" onClick={() => navigate('/products')}>
+            Browse Products
           </button>
         </div>
 
