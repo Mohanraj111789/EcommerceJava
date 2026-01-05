@@ -6,7 +6,7 @@ import { Navigate, useNavigate } from "react-router-dom";
 import { SideMenu } from "./SideMenu";
 import { CartIcon } from "./CartIcon";
 
-const Navbar = ({ onSearch, products = [] }) => {
+const Navbar = ({ onSearch, products = [] ,cartCount}) => {
   const { user, logout } = useAuth();
   const [search, setSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
@@ -69,7 +69,7 @@ const Navbar = ({ onSearch, products = [] }) => {
 
       <div className="nav-right">
         <span>Hello, {user ? user.name : "Sign in"}</span>
-        {userId && <CartIcon count={5} />}
+        {userId && <CartIcon count={cartCount} />}
         <button className="nav-right-button" onClick={() => {
 
 

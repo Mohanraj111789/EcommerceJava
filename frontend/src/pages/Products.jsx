@@ -96,7 +96,7 @@ const Products = () => {
   return (
     <div className="products-container">
       {/* 🔥 Navbar now controls search */}
-      <Navbar onSearch={handleSearch} products={products} />
+      <Navbar onSearch={handleSearch} products={products} cartCount = {cartCount} />
       <h2 className="page-title">Products</h2>
 
       <div className="products-grid">
