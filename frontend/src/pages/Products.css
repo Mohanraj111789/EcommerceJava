@@ -51,3 +51,21 @@ body {
   background-color: #ffa41c;
   color: #000;
 }
+
+.filter-container {
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.filter-container select {
+  width: 200px;
+  padding: 10px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  background-color: #1e1e1e;
+  color: white;
+  border-radius: 5px;
+  margin-left: 10px;
+}
