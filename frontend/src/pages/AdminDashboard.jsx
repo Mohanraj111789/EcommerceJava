@@ -107,7 +107,9 @@ export default function AdminDashboard() {
                 ...editingProduct,
                 price: parseFloat(editingProduct.price),
                 stock: parseInt(editingProduct.stock),
-                offerPercentage: editingProduct.offerPercentage ? parseInt(editingProduct.offerPercentage) : null
+                offerPercentage: editingProduct.offerPercentage ? parseInt(editingProduct.offerPercentage) : null,
+                imageUrl: editingProduct.imageUrl || ''
+                
             };
 
             const response = await fetch(`${BASEURL}/admin/products/${editingProduct.id}`, {
@@ -118,6 +120,7 @@ export default function AdminDashboard() {
                 },
                 body: JSON.stringify(productData)
             });
+            console.log(productData);
 
             if (response.ok) {
                 setSuccess('Product updated successfully!');
@@ -441,7 +444,7 @@ export default function AdminDashboard() {
                                 <div className="form-group">
                                     <label className="form-label">Image URL</label>
                                     <input
-                                        type="url"
+                                        type="text"
                                         name="imageUrl"
                                         value={editingProduct.imageUrl || ''}
                                         onChange={handleEditInputChange}

@@ -34,6 +34,7 @@ public class ProductService {
         existing.setName(updatedProduct.getName());
         existing.setPrice(updatedProduct.getPrice());
         existing.setStock(updatedProduct.getStock());
+        existing.setImageUrl(updatedProduct.getImageUrl());
         return repo.save(existing);
     }
 

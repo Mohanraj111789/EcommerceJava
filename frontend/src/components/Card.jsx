@@ -6,7 +6,9 @@ const Card = ({ product, onAddToCart, onBuyNow }) => {
   return (
     <div className="product-card">
       {/*i want to add product image here */}
-      <img src= {`../assets/${product.imageUrl}`} className="product-image"></img>
+      <div className="product-image-container">
+        <img src= {`../assets/${product.imageUrl}`} className="product-image"></img>
+      </div>
       <h4 className="product-name">{product.name}</h4>
       <p className="product-price">₹ {product.price}</p>
       <p className="product-description">{product.description}</p>

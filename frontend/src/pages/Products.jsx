@@ -82,7 +82,7 @@ const Products = () => {
       );
 
       if (res.data.length === 0) {
-        navigate("/NotFound");
+        navigate("/not-found");
         return;
       }
 
