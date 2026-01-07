@@ -34,6 +34,8 @@ public class ProductService {
         existing.setName(updatedProduct.getName());
         existing.setPrice(updatedProduct.getPrice());
         existing.setStock(updatedProduct.getStock());
+        existing.setDescription(updatedProduct.getDescription());
+        existing.setCategory(updatedProduct.getCategory());
         existing.setImageUrl(updatedProduct.getImageUrl());
         return repo.save(existing);
     }
@@ -88,7 +90,5 @@ public class ProductService {
                         p.getDescription().toLowerCase().contains(search.toLowerCase()))
                 .toList();
     }
-
-    //stock
 }
 

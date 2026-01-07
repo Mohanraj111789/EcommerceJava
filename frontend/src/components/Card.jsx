@@ -25,7 +25,7 @@ const Card = ({ product, onAddToCart, onBuyNow }) => {
 
       <h4 className="product-name">{product.name}</h4>
       <p className="product-price">₹ {product.price}</p>
-      <p className="product-description">{product.description}</p>
+      <p className="text-overflow">{product.description}</p>
       <strong className="product-category">Stock: {product.stock}</strong>
 
       <button className="btn add-btn" onClick={() => onAddToCart(product.id)}>

@@ -66,7 +66,7 @@ const Navbar1 = () => {
       {/* USER */}
       <div className="nav-user">
         <span>Hello,</span>
-        <strong>Mohanraj S</strong>
+        <strong>{user.name}</strong>
       </div>
 
       {/* CART */}

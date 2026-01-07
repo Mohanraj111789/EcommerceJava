@@ -2,7 +2,6 @@ import React, { useEffect,useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../contexts/AuthContext";
-import Navbar1 from "../components/Navbar1";
 import "./Checkout.css";
 
 
@@ -138,7 +137,6 @@ export default function Checkout() {
 
   return (
     <div className="checkout-page">
-      <Navbar1/>
       <h2 className="checkout-title">Checkout</h2>
 
       {/* Address Section */}

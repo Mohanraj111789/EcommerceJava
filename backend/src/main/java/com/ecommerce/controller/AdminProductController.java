@@ -87,4 +87,21 @@ public class AdminProductController {
         Product updatedProduct = productService.save(product);
         return ResponseEntity.ok(updatedProduct);
     }
+
+    //update description
+    @PreAuthorize("hasRole('ADMIN')")
+    @PatchMapping("/{id}/description")
+    public ResponseEntity<Product> updateDescription(
+            @PathVariable Long id,
+            @RequestBody Map<String, String> descriptionUpdate) {
+        String description = descriptionUpdate.get("description");
+        if (description == null || description.trim().isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+        Product product = productService.getById(id)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+        product.setDescription(description);
+        Product updatedProduct = productService.save(product);
+        return ResponseEntity.ok(updatedProduct);
+    }
 }
