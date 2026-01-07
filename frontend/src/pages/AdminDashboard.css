@@ -310,10 +310,18 @@
   }
   
   .product-stock {
-    font-size: 12px;
-    color: #374151;
+    font-size: 18px;
+    font-weight: 200px;
+    color: #c9d8f0;
   }
-  
+  .stock{
+    color: #15803d;
+
+  }
+  .stock-red
+  {
+    color: #dc2626;
+  }
   /* ================= CARD ACTIONS ================= */
   .product-actions {
     display: flex;

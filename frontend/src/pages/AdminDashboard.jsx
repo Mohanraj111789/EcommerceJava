@@ -490,6 +490,7 @@ export default function AdminDashboard() {
 
                                     )}
                                     <div className="product-info">
+                                        <h3 className="product-name">ID:{product.id}</h3>
                                         <h3 className="product-name">{product.name}</h3>
                                         <p className="product-category">{product.category}</p>
                                         <p className="product-description">{product.description}</p>
@@ -506,7 +507,11 @@ export default function AdminDashboard() {
                                                     <span className="product-price">&#8377;{product.price?.toFixed(2)}</span>
                                                 )}
                                             </div>
-                                            <span className="product-stock">Stock: {product.stock}</span>
+                                            <span className="product-stock">Stock:
+                                                <span className={`${product.stock > 10 ? "stock" : "stock-red"}`}>
+                                                                    {product.stock}
+                                                </span>
+                                            </span>
                                         </div>
                                         <div className="product-actions">
                                             <button
