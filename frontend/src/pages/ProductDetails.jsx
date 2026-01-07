@@ -39,7 +39,7 @@ export default function ProductDetails() {
               ? `/assets/${product.imageUrl}`
               : `/assets/product.jpg`
           }
-          className="product-image"
+          className="product-details-main-image"
           alt={product.name}
         />
           </div>
