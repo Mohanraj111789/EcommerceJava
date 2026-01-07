@@ -226,6 +226,8 @@ export default function AdminDashboard() {
                         👥 View Users
                         
                     </button>
+                    <button onClick={()=>navigate('/products')}
+                    className="btn-add-product">Preview</button>
                 </div>
 
                 {error && (
@@ -466,7 +468,7 @@ export default function AdminDashboard() {
                 )}
 
                 <div className="products-section">
-                    <h2>Product List ({products.length})</h2>
+                    <h2 className="Length-product">Product List ({products.length})</h2>
 
                     {loading ? (
                         <div className="loading">Loading products...</div>

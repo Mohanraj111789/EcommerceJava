@@ -357,6 +357,10 @@
   .btn-delete:hover {
     background: #dc2626;
   }
+  .Length-product
+  {
+    color: #000;
+  }
   
   /* ================= RESPONSIVE ================= */
   @media (max-width: 1600px) {
