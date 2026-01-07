@@ -11,6 +11,11 @@
   flex-direction: column;
   justify-content: space-between;
 }
+.product-description{
+  margin-top: 10px;
+  color: #ffffff;
+  font-size: 14px;
+}
 
 .product-card:hover {
   transform: scale(1.03);
