@@ -88,7 +88,9 @@ const Cart = () => {
 
           return (
             <div key={item.id} className="cart-card">
-              <div className="product-image-placeholder"></div>
+              <div className="product-image-container">
+                <img src={`../assets/${product.imageUrl}`} className="product-image"></img>
+              </div>
 
               <div className="product-details">
                 <h4 className="product-name">{product.name}</h4>
