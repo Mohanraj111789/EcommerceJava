@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
+import Navbar1 from '../components/Navbar1';
 import './Orders.css';
 
 export default function Orders() {
@@ -69,6 +70,7 @@ export default function Orders() {
 
     return (
         <div className="orders-page">
+            <Navbar1/>
             <div className="orders-container">
                 <div className="orders-header">
                     <h1>📦 My Orders</h1>
