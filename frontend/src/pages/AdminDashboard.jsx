@@ -290,7 +290,7 @@ export default function AdminDashboard() {
 
                             <div className="form-row">
                                 <div className="form-group">
-                                    <label className="form-label">Price ($)</label>
+                                    <label className="form-label">Price (&#8377;)</label>
                                     <input
                                         type="number"
                                         name="price"
@@ -494,11 +494,11 @@ export default function AdminDashboard() {
                                                     <>
                                                         <span className="product-price original-price">${product.price?.toFixed(2)}</span>
                                                         <span className="product-price discounted-price">
-                                                            ${calculateDiscountedPrice(product.price, product.offerPercentage).toFixed(2)}
+                                                        ${calculateDiscountedPrice(product.price, product.offerPercentage).toFixed(2)}
                                                         </span>
                                                     </>
                                                 ) : (
-                                                    <span className="product-price">${product.price?.toFixed(2)}</span>
+                                                    <span className="product-price">&#8377;{product.price?.toFixed(2)}</span>
                                                 )}
                                             </div>
                                             <span className="product-stock">Stock: {product.stock}</span>
