@@ -401,7 +401,7 @@ export default function AdminDashboard() {
 
                                 <div className="form-row">
                                     <div className="form-group">
-                                        <label className="form-label">Price ($)</label>
+                                        <label className="form-label">Price (&#8377;)</label>
                                         <input
                                             type="number"
                                             name="price"
