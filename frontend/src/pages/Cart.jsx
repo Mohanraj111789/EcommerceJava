@@ -3,7 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import "./Cart.css";
-
+import Navbar1 from "../components/Navbar1";
 const Cart = () => {
   const [cart, setCart] = useState(null);
   const [products, setProducts] = useState({});
@@ -79,6 +79,7 @@ const Cart = () => {
 
   return (
     <div className="cart-container">
+      <Navbar1/>
       <h1 className="cart-title">SHOPPING CART</h1>
 
       <div className="cart-items-grid">

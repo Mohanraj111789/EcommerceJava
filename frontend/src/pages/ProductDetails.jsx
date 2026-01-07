@@ -1,5 +1,6 @@
 import "./ProductDetails.css";
 import { useLocation, useParams, useNavigate } from "react-router-dom";
+import Navbar1 from "../components/Navbar1";
 
 export default function ProductDetails() {
   const { state } = useLocation();
@@ -22,6 +23,7 @@ export default function ProductDetails() {
 
   return (
     <div className="product-page">
+        <Navbar1/>
       <div className="product-card">
 
         {/* LEFT – IMAGE */}

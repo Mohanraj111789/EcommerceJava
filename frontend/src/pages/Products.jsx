@@ -123,18 +123,14 @@ const Products = () => {
 
       {/* PRODUCTS */}
       <div className="products-grid">
-        {getSortedProducts().length === 0 ? (
-          <p className="no-products">No products found</p>
-        ) : (
-          getSortedProducts().map(product => (
+          {getSortedProducts().map(product => (
             <Card
               key={product.id}
               product={product}
               onAddToCart={addToCart}
               onBuyNow={buyNow}
             />
-          ))
-        )}
+          ))}
       </div>
     </div>
   );
