@@ -1,20 +1,24 @@
 import "./ProductDetails.css";
-import { useLocation, useParams, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Navbar1 from "../components/Navbar1";
 
 export default function ProductDetails() {
   const { state } = useLocation();
-  const { id } = useParams();
   const navigate = useNavigate();
 
   const product = state?.product;
 
-  // 🔐 Safety check (refresh / direct URL access)
+  // Safety check
   if (!product) {
     return (
-      <div className="product-page">
-        <h2>Product not found</h2>
-        <button className="btn" onClick={() => navigate("/products")}>
+      <div className="product-details-page-not-found-wrapper">
+        <h2 className="product-details-page-not-found-title">
+          Product not found
+        </h2>
+        <button
+          className="product-details-page-not-found-button"
+          onClick={() => navigate("/products")}
+        >
           Back to Products
         </button>
       </div>
@@ -22,54 +26,82 @@ export default function ProductDetails() {
   }
 
   return (
-    <div className="product-page">
-        <Navbar1/>
-      <div className="product-card">
+    <div className="product-details-main-page-container">
+      <Navbar1 />
 
-        {/* LEFT – IMAGE */}
-        <div className="product-images">
-          <div className="main-image">
+      <div className="product-details-content-wrapper">
+        {/* LEFT SECTION */}
+        <div className="product-details-left-section">
+          <div className="product-details-image-box">
             <img
               src={`/assets/${product.imageUrl}`}
               alt={product.name}
+              className="product-details-main-image"
             />
           </div>
         </div>
 
-        {/* RIGHT – INFO */}
-        <div className="product-info">
-          <span className="product-tag">PRODUCT</span>
-          <h1 className="product-title">{product.name}</h1>
+        {/* RIGHT SECTION */}
+        <div className="product-details-right-section">
+          <span className="product-details-product-tag">
+            PRODUCT
+          </span>
 
-          <div className="rating">
-            <span className="stars">★★★★☆</span>
-            <span className="rating-text">(4.5 Ratings)</span>
+          <h1 className="product-details-product-title">
+            {product.name}
+          </h1>
+
+          <div className="product-details-rating-wrapper">
+            <span className="product-details-rating-stars">
+              ★★★★☆
+            </span>
+            <span className="product-details-rating-text">
+              (4.5 Ratings)
+            </span>
           </div>
 
-          <p className="description">{product.description}</p>
+          <p className="product-details-product-description">
+            {product.description}
+          </p>
 
-          <div className="price-section">
-            <span className="price">₹ {product.price}</span>
-            <span className="badge">In Stock</span>
+          <div className="product-details-price-stock-wrapper">
+            <span className="product-details-product-price">
+              ₹ {product.price}
+            </span>
+            <span className="product-details-stock-badge">
+              In Stock
+            </span>
           </div>
 
-          <div className="details">
-            <div>
-              <strong>Category</strong>
-              <span>{product.category}</span>
+          <div className="product-details-meta-information-wrapper">
+            <div className="product-details-meta-item">
+              <strong className="product-details-meta-label">
+                Category
+              </strong>
+              <span className="product-details-meta-value">
+                {product.category}
+              </span>
             </div>
-            <div>
-              <strong>Available</strong>
-              <span>{product.stock}</span>
+
+            <div className="product-details-meta-item">
+              <strong className="product-details-meta-label">
+                Available
+              </strong>
+              <span className="product-details-meta-value">
+                {product.stock}
+              </span>
             </div>
           </div>
 
-          <div className="actions">
-            <button className="btn cart">Add to Cart</button>
-            <button className="btn buy">Buy Now</button>
+          <div className="product-details-action-buttons-wrapper">
+            <button className="product-details-add-to-cart-button">
+              Add to Cart
+            </button>
+            <button className="product-details-buy-now-button">
+              Buy Now
+            </button>
           </div>
         </div>
-
       </div>
     </div>
   );
