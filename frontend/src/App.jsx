@@ -10,7 +10,7 @@ import Orders from './pages/Orders';
 import ViewUser from './pages/ViewUser';
 import Checkout from './pages/Checkout';
 import { NotFound } from './components/NotFound';
-import ProductPage from './components/ProductPage';
+import ProductDetails from './pages/ProductDetails';
 
 
 // Protected Route component
@@ -109,7 +109,7 @@ function App() {
             element={<NotFound />}
           />
           <>
-            <Route path="/product/:id" element={<ProductPage />} />
+            <Route path="/product/:id" element={<ProductDetails />} />
           </>
         </Routes>
       </Router>

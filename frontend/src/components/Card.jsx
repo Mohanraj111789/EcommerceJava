@@ -1,10 +1,17 @@
 import React from "react";
 import "./Card.css";
+import { useNavigate } from "react-router-dom";
 
 const Card = ({ product, onAddToCart, onBuyNow }) => {
+  const navigate = useNavigate();
+  const handleClick = () => {
+    navigate(`/product/${product.id}`,
+      {state: {product}
+    });
+  };
   const BASE_URL = `../public/assets/`;
   return (
-    <div className="product-card">
+    <div className="product-card" onClick={handleClick}>
       {/*i want to add product image here */}
       <div className="product-image-container">
         <img src= {`../assets/${product.imageUrl}`} className="product-image"></img>
