@@ -479,10 +479,15 @@ export default function AdminDashboard() {
                                     {product.offerPercentage && product.offerPercentage > 0 && (
                                         <div className="offer-badge">{product.offerPercentage}% OFF</div>
                                     )}
-                                    {product.imageUrl && (
+                                    {product.imageUrl ?(
                                         <div className="product-image-container">
                                             <img src={`../assets/${product.imageUrl}`} alt={product.name} className="product-image" />
                                         </div>
+                                    ):(
+                                        <div className="product-image-container">
+                                            <img src={`../assets/product.jpg`} alt={product.name} className="product-image" />
+                                        </div>
+
                                     )}
                                     <div className="product-info">
                                         <h3 className="product-name">{product.name}</h3>
