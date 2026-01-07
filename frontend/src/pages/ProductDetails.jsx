@@ -33,11 +33,15 @@ export default function ProductDetails() {
         {/* LEFT SECTION */}
         <div className="product-details-left-section">
           <div className="product-details-image-box">
-            <img
-              src={`/assets/${product.imageUrl}`}
-              alt={product.name}
-              className="product-details-main-image"
-            />
+          <img
+          src={
+            product.imageUrl
+              ? `/assets/${product.imageUrl}`
+              : `/assets/product.jpg`
+          }
+          className="product-image"
+          alt={product.name}
+        />
           </div>
         </div>
 
