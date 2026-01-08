@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../contexts/AuthContext";
 import "./Checkout.css";
+import Navbar1 from "../components/Navbar1";
 
 export default function Checkout() {
   const navigate = useNavigate();
@@ -119,6 +120,7 @@ export default function Checkout() {
 
   return (
     <div className="checkout-page">
+      <Navbar1/>
       <h2 className="checkout-title">Checkout</h2>
 
       {/* ADDRESS */}
