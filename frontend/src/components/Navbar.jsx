@@ -6,6 +6,7 @@ import { Navigate, useNavigate } from "react-router-dom";
 import { SideMenu } from "./SideMenu";
 import { CartIcon } from "./CartIcon";
 
+
 const Navbar = ({ onSearch, products = [] ,cartCount}) => {
   const { user, logout } = useAuth();
   const [search, setSearch] = useState("");

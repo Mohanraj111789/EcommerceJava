@@ -4,13 +4,12 @@ import { useState, useEffect } from "react";
 import "./Navbar1.css";
 import axios from "axios";
 import { useAuth } from "../contexts/AuthContext";
+import { CartContext } from "../contexts/NavContexts";
 
 const Navbar1 = () => {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
-
-  // ✅ Correct state hook
-  const [cartCount, setCartCount] = useState(0);
+  const { cartCount, setCartCount } = useContext(CartContext);
 
   // 🔐 Example userId (replace with AuthContext if you have one)
   const userId = user?.id;
@@ -41,6 +40,10 @@ const Navbar1 = () => {
   useEffect(() => {
     loadCartCount();
   }, [userId]);
+
+  useEffect(() => {
+    setCartCount1(cartCount);
+  }, [cartCount]);
 
   return (
     <header className="navbar">

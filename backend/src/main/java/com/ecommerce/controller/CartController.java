@@ -72,6 +72,14 @@ public class CartController {
         Cart saved = cartRepository.save(cart);
         return ResponseEntity.ok(saved);
     }
+    //testing API call example:
+    //method: POST
+    //body:
+    //{
+    //    "productId": 1,
+    //    "quantity": 2
+    //}
+    //http://localhost:8080/api/cart/1/add
 
     /* ================= UPDATE QUANTITY ================= */
     @PutMapping("/{userId}/item/{itemId}")
@@ -134,27 +142,40 @@ public class CartController {
                 break;
             }
         }
-
+        
+        
         if (!removed) {
             return ResponseEntity.notFound().build();
         }
-
+        
         Cart saved = cartRepository.save(cart);
         return ResponseEntity.ok(saved);
     }
-
+    
     /* ================= CLEAR CART ================= */
     @DeleteMapping("/{userId}/clear")
     public ResponseEntity<Void> clearCart(@PathVariable Long userId) {
-
+        
         Optional<Cart> optionalCart = cartRepository.findByUserId(userId);
         if (optionalCart.isPresent()) {
             Cart cart = optionalCart.get();
             cart.getItems().clear();
             cartRepository.save(cart);
         }
-
+        
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/{productId}")
+    public ResponseEntity<Integer> getCartCount(@PathVariable Long productId) {
+        Optional<Cart> optionalCart = cartRepository.findByUserId(productId);
+        if (optionalCart.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        Cart cart = optionalCart.get();
+        return ResponseEntity.ok(cart.getItems().size());
+    }
+    //testing API call example:
+    //http://localhost:8080/api/cart/1
 
 }

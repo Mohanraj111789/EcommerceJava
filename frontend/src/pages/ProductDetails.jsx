@@ -1,10 +1,13 @@
 import "./ProductDetails.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import Navbar1 from "../components/Navbar1";
+import { CartContext } from "../contexts/NavContexts";
+import { useContext } from "react";
 
 export default function ProductDetails() {
   const { state } = useLocation();
   const navigate = useNavigate();
+  const { addToCart } = useContext(CartContext);
 
   const product = state?.product;
 
@@ -98,7 +101,9 @@ export default function ProductDetails() {
           </div>
 
           <div className="product-details-action-buttons-wrapper">
-            <button className="product-details-add-to-cart-button">
+            <button className="product-details-add-to-cart-button" onClick={()=>{
+              addToCart(product.id);
+            }}>
               Add to Cart
             </button>
             <button className="product-details-buy-now-button">
