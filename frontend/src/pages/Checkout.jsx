@@ -1,145 +1,127 @@
-import React, { useEffect,useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../contexts/AuthContext";
 import "./Checkout.css";
 
-
-
 export default function Checkout() {
-
   const navigate = useNavigate();
   const location = useLocation();
+  const { user } = useAuth();
+
+  const userId = user?.id;
+  const isBuyNow = Boolean(location.state?.buyNowProduct);
+
   const [cartItems, setCartItems] = useState([]);
-  const [cart, setCart] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const {user} = useAuth();
   const [products, setProducts] = useState({});
   const [buyNowProduct, setBuyNowProduct] = useState(null);
   const [buyNowQuantity, setBuyNowQuantity] = useState(1);
+  const [address, setAddress] = useState("");
+  const [loading, setLoading] = useState(true);
 
-  const userId = user?.id;
-  const isBuyNow = location.state?.buyNowProduct;
+  /* ---------------- LOAD DATA ---------------- */
 
   useEffect(() => {
-    if(userId)
-    {
-        // If it's a Buy Now checkout, use the passed product
-        if (location.state?.buyNowProduct) {
-          setBuyNowProduct(location.state.buyNowProduct);
-          setBuyNowQuantity(location.state.quantity || 1);
-          setLoading(false);
-        } else {
-          // Regular cart checkout
-          loadCart();
-        }
-        loadProducts();
+    if (!userId) return;
+
+    loadProducts();
+
+    if (isBuyNow) {
+      setBuyNowProduct(location.state.buyNowProduct);
+      setBuyNowQuantity(location.state.quantity || 1);
+      setLoading(false);
+    } else {
+      loadCart();
     }
-    }, [userId]);
+  }, [userId]);
 
-    const loadCart = async () => {
-        try {
-            setLoading(true);
-            const res = await axios.get(`http://localhost:8080/api/cart/count/${userId}`);
-            
-            setCart(res.data);
-            setCartItems(res.data.items);
-        } catch (err) {
-            setError('Error loading cart: ' + err.message);
-        } finally {
-            setLoading(false);
-        }
-    };
+  const loadCart = async () => {
+    try {
+      const res = await axios.get(
+        `http://localhost:8080/api/cart/count/${userId}`
+      );
 
-    const loadProducts = async () => {
-        const res = await axios.get("http://localhost:8080/api/products");
-        const map = {};
-        res.data.forEach(p => (map[p.id] = p));
-        setProducts(map);
-    };
-    console.log(products)
-
-  // 🔹 Dummy address
-  const [address, setAddress] = useState("");
-
-  // 🔹 Calculate total
-  const getTotalAmount = () => {
-    if (isBuyNow && buyNowProduct) {
-      return buyNowProduct.price * buyNowQuantity;
+      // IMPORTANT: copy quantities to local state
+      setCartItems(
+        res.data.items.map((item) => ({
+          ...item,
+          quantity: item.quantity, // local quantity
+        }))
+      );
+    } catch (err) {
+      console.error("Cart load error:", err);
+    } finally {
+      setLoading(false);
     }
-    return cartItems.reduce(
-      (sum, item) => sum + item.quantity * (products[item.productId]?.price || 0),
-      0
+  };
+
+  const loadProducts = async () => {
+    const res = await axios.get("http://localhost:8080/api/products");
+    const map = {};
+    res.data.forEach((p) => (map[p.id] = p));
+    setProducts(map);
+  };
+
+  /* ---------------- FRONTEND-ONLY QUANTITY UPDATE ---------------- */
+
+  const increaseQty = (productId, stock) => {
+    setCartItems((prev) =>
+      prev.map((item) =>
+        item.productId === productId
+          ? {
+              ...item,
+              quantity: Math.min(stock, item.quantity + 1),
+            }
+          : item
+      )
     );
   };
 
-  const totalAmount = getTotalAmount();
+  const decreaseQty = (productId) => {
+    setCartItems((prev) =>
+      prev.map((item) =>
+        item.productId === productId
+          ? {
+              ...item,
+              quantity: Math.max(1, item.quantity - 1),
+            }
+          : item
+      )
+    );
+  };
 
-  const handlePlaceOrder = async () => {
+  /* ---------------- TOTAL ---------------- */
+
+  const totalAmount = isBuyNow
+    ? buyNowProduct?.price * buyNowQuantity
+    : cartItems.reduce(
+        (sum, item) =>
+          sum +
+          item.quantity * (products[item.productId]?.price || 0),
+        0
+      );
+
+  /* ---------------- PLACE ORDER ---------------- */
+
+  const handlePlaceOrder = () => {
     if (!address.trim()) {
       alert("Please enter delivery address");
       return;
     }
 
-    try {
-      // Handle Buy Now checkout
-      if (isBuyNow && buyNowProduct) {
-        const orderData = {
-          userId,
-          items: [
-            {
-              productId: buyNowProduct.id,
-              quantity: buyNowQuantity,
-              price: buyNowProduct.price
-            }
-          ],
-          address,
-          totalAmount
-        };
-
-        // Call backend to create order
-        await axios.post("http://localhost:8080/api/orders", orderData, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`
-          }
-        });
-
-        alert("✅ Order placed successfully!");
-        navigate("/orders"); // redirect to orders page
-      } else {
-        // Handle regular cart checkout
-        const orderData = {
-          userId,
-          items: cartItems.map(item => ({
-            productId: item.productId,
-            quantity: item.quantity,
-            price: products[item.productId]?.price
-          })),
-          address,
-          totalAmount
-        };
-
-        await axios.post("http://localhost:8080/api/orders", orderData, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`
-          }
-        });
-
-        alert("✅ Order placed successfully!");
-        navigate("/orders"); // redirect to orders page
-      }
-    } catch (err) {
-      alert("❌ Error placing order: " + err.message);
-      console.error("Order error:", err);
-    }
+    alert("✅ Order placed successfully (frontend demo)");
+    navigate("/orders");
   };
+
+  if (loading) return <h3>Loading checkout...</h3>;
+
+  /* ---------------- UI ---------------- */
 
   return (
     <div className="checkout-page">
       <h2 className="checkout-title">Checkout</h2>
 
-      {/* Address Section */}
+      {/* ADDRESS */}
       <div className="checkout-card">
         <h3>Delivery Address</h3>
         <textarea
@@ -150,73 +132,113 @@ export default function Checkout() {
         />
       </div>
 
-      {/* Order Summary */}
+      {/* ORDER SUMMARY */}
       <div className="checkout-card">
         <h3>Order Summary</h3>
 
-        {isBuyNow && buyNowProduct ? (
-          // Buy Now Product Summary
-          <div>
-            <div className="summary-row">
-              <span>{buyNowProduct.name}</span>
-              <span>₹{buyNowProduct.price}</span>
+        {/* BUY NOW */}
+        {isBuyNow && buyNowProduct && (
+          <div className="order-row">
+            <div className="order-product-name">
+              {buyNowProduct.name}
             </div>
-            <div className="summary-row">
-              <label>Quantity:</label>
-              <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-                <button 
-                  onClick={() => setBuyNowQuantity(Math.max(1, buyNowQuantity - 1))}
-                  style={{ padding: '5px 10px' }}
-                >
-                  -
-                </button>
-                <span>{buyNowQuantity}</span>
-                <button 
-                  onClick={() => setBuyNowQuantity(Math.min(buyNowProduct.stock, buyNowQuantity + 1))}
-                  style={{ padding: '5px 10px' }}
-                >
-                  +
-                </button>
-              </div>
+
+            <div className="order-qty">
+              <button
+                className="qty-btn"
+                onClick={() =>
+                  setBuyNowQuantity(Math.max(1, buyNowQuantity - 1))
+                }
+              >
+                −
+              </button>
+
+              <span className="qty-value">{buyNowQuantity}</span>
+
+              <button
+                className="qty-btn"
+                onClick={() =>
+                  setBuyNowQuantity(
+                    Math.min(buyNowProduct.stock, buyNowQuantity + 1)
+                  )
+                }
+              >
+                +
+              </button>
+            </div>
+
+            <div className="order-price">
+              ₹{(buyNowProduct.price * buyNowQuantity).toFixed(2)}
             </div>
           </div>
-        ) : (
-          // Cart Items Summary
+        )}
+
+        {/* CART ITEMS */}
+        {!isBuyNow &&
           cartItems.map((item) => {
             const product = products[item.productId];
             if (!product) return null;
+
             return (
-              <div className="summary-row" key={item.id}>
-                <span>
-                  {product.name} × {item.quantity}
-                </span>
-                <span>₹{product.price * item.quantity}</span>
+              <div className="order-row" key={item.id}>
+                <div className="order-product-name">
+                  {product.name} (₹{product.price})
+                </div>
+
+                <div className="order-qty">
+                  <button
+                    className="qty-btn"
+                    onClick={() =>
+                      decreaseQty(item.productId)
+                    }
+                  >
+                    −
+                  </button>
+
+                  <span className="qty-value">
+                    {item.quantity}
+                  </span>
+
+                  <button
+                    className="qty-btn"
+                    onClick={() =>
+                      increaseQty(
+                        item.productId,
+                        product.stock
+                      )
+                    }
+                  >
+                    +
+                  </button>
+                </div>
+
+                <div className="order-price">
+                  ₹{(product.price * item.quantity).toFixed(2)}
+                </div>
               </div>
             );
-          })
-        )}
+          })}
 
         <hr />
 
         <div className="summary-total">
           <span>Total</span>
-          <span>₹{totalAmount}</span>
+          <span>₹{totalAmount.toFixed(2)}</span>
         </div>
       </div>
 
-      {/* Actions */}
+      {/* ACTIONS */}
       <div className="checkout-actions">
         <button
           className="btn-secondary"
-          onClick={() => isBuyNow ? navigate("/products") : navigate("/cart")}
+          onClick={() =>
+            navigate(isBuyNow ? "/products" : "/cart")
+          }
         >
           ← {isBuyNow ? "Continue Shopping" : "Back to Cart"}
         </button>
 
-        <button
-          className="btn-primary"
-          onClick={handlePlaceOrder}
-        >
+        <button className="btn-primary" onClick={handlePlaceOrder}>
           Place Order
         </button>
       </div>
