@@ -82,6 +82,7 @@ public class CartController {
     //http://localhost:8080/api/cart/1/add
 
     /* ================= UPDATE QUANTITY ================= */
+
     @PutMapping("/{userId}/item/{itemId}")
     public ResponseEntity<Cart> updateQuantity(
             @PathVariable Long userId,
@@ -164,6 +165,14 @@ public class CartController {
         }
         
         return ResponseEntity.ok().build();
+    }
+    @GetMapping("/count/{userId}")
+    public ResponseEntity<Cart> getCartByUserId(@PathVariable Long userId) {
+        Optional<Cart> optionalCart = cartRepository.findByUserId(userId);
+        if (optionalCart.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(optionalCart.get());
     }
 
     @GetMapping("/{productId}")

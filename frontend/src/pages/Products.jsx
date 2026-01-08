@@ -36,7 +36,7 @@ const Products = () => {
   const loadCartCount = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:8080/api/cart/${userId}`
+        `http://localhost:8080/api/cart/count/${userId}`
       );
       const count = res.data.items.reduce(
         (sum, item) => sum + item.quantity,

@@ -33,7 +33,7 @@ export const CartProvider = ({ children }) => {
       setLoading(true);
       const token = localStorage.getItem('token');
       
-      const response = await fetch(`http://localhost:8080/api/cart/${userId}`, {
+      const response = await fetch(`http://localhost:8080/api/cart/count/${userId}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
