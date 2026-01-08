@@ -1,49 +1,13 @@
 import { useNavigate } from "react-router-dom";
 import { CartIcon } from "./CartIcon";
-import { useState, useEffect } from "react";
 import "./Navbar1.css";
-import axios from "axios";
 import { useAuth } from "../contexts/AuthContext";
-import { CartContext } from "../contexts/NavContexts";
+import { useCart } from "../contexts/NavContexts";
 
 const Navbar1 = () => {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
-  const { cartCount, setCartCount } = useContext(CartContext);
-
-  // 🔐 Example userId (replace with AuthContext if you have one)
-  const userId = user?.id;
-
-  // ✅ Load cart count
-  const loadCartCount = async () => {
-    if (!userId) return;
-
-    try {
-      const res = await axios.get(
-        `http://localhost:8080/api/cart/${userId}`
-      );
-
-      const count = res.data.items.reduce(
-        (sum, item) => sum + item.quantity,
-        0
-      );
-      console.log(count);
-
-      setCartCount(count);
-    } catch (error) {
-      console.error("Failed to load cart count", error);
-      setCartCount(0);
-    }
-  };
-
-  // ✅ Call API on mount & when userId changes
-  useEffect(() => {
-    loadCartCount();
-  }, [userId]);
-
-  useEffect(() => {
-    setCartCount1(cartCount);
-  }, [cartCount]);
+  const { cartCount } = useCart();
 
   return (
     <header className="navbar">

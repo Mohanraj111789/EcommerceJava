@@ -1,13 +1,12 @@
 import "./ProductDetails.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import Navbar1 from "../components/Navbar1";
-import { CartContext } from "../contexts/NavContexts";
-import { useContext } from "react";
+import { useCart } from "../contexts/NavContexts";
 
 export default function ProductDetails() {
   const { state } = useLocation();
   const navigate = useNavigate();
-  const { addToCart } = useContext(CartContext);
+  const { addToCart } = useCart();
 
   const product = state?.product;
 
@@ -36,15 +35,15 @@ export default function ProductDetails() {
         {/* LEFT SECTION */}
         <div className="product-details-left-section">
           <div className="product-details-image-box">
-          <img
-          src={
-            product.imageUrl
-              ? `/assets/${product.imageUrl}`
-              : `/assets/product.jpg`
-          }
-          className="product-details-main-image"
-          alt={product.name}
-        />
+            <img
+              src={
+                product.imageUrl
+                  ? `/assets/${product.imageUrl}`
+                  : `/assets/product.jpg`
+              }
+              className="product-details-main-image"
+              alt={product.name}
+            />
           </div>
         </div>
 
@@ -101,7 +100,7 @@ export default function ProductDetails() {
           </div>
 
           <div className="product-details-action-buttons-wrapper">
-            <button className="product-details-add-to-cart-button" onClick={()=>{
+            <button className="product-details-add-to-cart-button" onClick={() => {
               addToCart(product.id);
             }}>
               Add to Cart
