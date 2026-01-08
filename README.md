@@ -18,7 +18,8 @@ A modern, full-stack e-commerce application built with **Spring Boot** (Backend)
 
 ### 🛍️ E-commerce Functionality
 - Product browsing and search
-- Shopping cart management
+- **Global cart state management** with CartProvider (NavContext)
+- Shopping cart with real-time count updates
 - Order placement and tracking
 - User profile management
 - Admin product management
@@ -94,7 +95,8 @@ EcommerceJava/
 │   │   │   ├── Home.jsx
 │   │   │   └── Home.css
 │   │   ├── contexts/               # React Context
-│   │   │   └── AuthContext.jsx
+│   │   │   ├── AuthContext.jsx
+│   │   │   └── NavContexts.jsx    # Cart Context
 │   │   ├── services/               # API Services
 │   │   │   └── api.js
 │   │   ├── index.css              # Global Styles
@@ -301,6 +303,22 @@ This project is open source and available under the [MIT License](LICENSE).
 - React Documentation
 - Google Fonts (Inter)
 - JWT.io for JWT implementation guidance
+
+## 📚 Documentation
+
+Comprehensive documentation is available for different aspects of the project:
+
+- **[README.md](README.md)** - Main project documentation (this file)
+- **[WORKFLOW_FLOWCHART.md](WORKFLOW_FLOWCHART.md)** - Complete application workflow and post-login flow
+- **[NAVCONTEXT_WORKFLOW.md](NAVCONTEXT_WORKFLOW.md)** - Detailed NavContext (CartProvider) workflow with diagrams
+- **[NAVCONTEXT_IMPLEMENTATION.md](NAVCONTEXT_IMPLEMENTATION.md)** - Step-by-step implementation guide for cart features
+
+### Quick Links
+
+- **Setting up the project?** → Start with [Installation & Setup](#-installation--setup)
+- **Understanding the workflow?** → Read [WORKFLOW_FLOWCHART.md](WORKFLOW_FLOWCHART.md)
+- **Implementing cart features?** → Follow [NAVCONTEXT_IMPLEMENTATION.md](NAVCONTEXT_IMPLEMENTATION.md)
+- **Need API details?** → Check [API Endpoints](#-api-endpoints)
 
 ## 📸 Screenshots
 
