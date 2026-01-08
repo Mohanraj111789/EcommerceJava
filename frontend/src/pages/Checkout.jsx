@@ -41,7 +41,7 @@ export default function Checkout() {
     const loadCart = async () => {
         try {
             setLoading(true);
-            const res = await axios.get(`http://localhost:8080/api/cart/${userId}`);
+            const res = await axios.get(`http://localhost:8080/api/cart/count/${userId}`);
             
             setCart(res.data);
             setCartItems(res.data.items);
