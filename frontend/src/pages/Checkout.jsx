@@ -109,9 +109,18 @@ export default function Checkout() {
       alert("Please enter delivery address");
       return;
     }
-
-    alert("✅ Order placed successfully (frontend demo)");
-    navigate("/orders");
+    const res = axios.post("http://localhost:8080/api/orders", {
+      userId,
+      address,
+      status: "PENDING",
+      items: isBuyNow 
+        ? [{ productId: buyNowProduct.id, quantity: buyNowQuantity }]
+        : cartItems.map((item) => ({
+            productId: item.productId,
+            quantity: item.quantity,
+          })),
+    });
+    console.log(res);
   };
 
   if (loading) return <h3>Loading checkout...</h3>;
