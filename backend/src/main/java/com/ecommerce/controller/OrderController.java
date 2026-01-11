@@ -5,6 +5,9 @@ import com.ecommerce.service.OrderService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 @RestController
 @RequestMapping("/api/orders")
@@ -25,5 +28,12 @@ public class OrderController {
         return orderService.save(order);
     }
 
+    @GetMapping("/{userId}")
+    public List<Order> postMethodName(@PathVariable Long userId) {
+        //TODO: process POST request
+        return orderService.findByUserId(userId);
+    }
     
+
+
 }

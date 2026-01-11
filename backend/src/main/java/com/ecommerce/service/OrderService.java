@@ -5,6 +5,7 @@ import com.ecommerce.repository.OrderRepository;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
+import com.ecommerce.model.*;
 
 @Service
 public class OrderService {
@@ -30,9 +31,8 @@ public class OrderService {
         repo.deleteById(id);
     }
 
-
-
-
-
+    public List<Order> findByUserId(Long userId) {
+        return repo.findByUserId(userId);
+    }
     
 }
