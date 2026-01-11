@@ -29,8 +29,7 @@ public class OrderController {
     }
 
     @GetMapping("/{userId}")
-    public List<Order> postMethodName(@PathVariable Long userId) {
-        //TODO: process POST request
+    public List<Order> getOrdersByUserId(@PathVariable Long userId) {
         return orderService.findByUserId(userId);
     }
     
