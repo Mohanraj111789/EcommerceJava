@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import Navbar1 from '../components/Navbar1';
 import './Orders.css';
+import axios from 'axios';
 
 export default function Orders() {
     const { user } = useAuth();
@@ -19,19 +20,21 @@ export default function Orders() {
         try {
             setLoading(true);
             const token = localStorage.getItem('token');
-            const response = await fetch(`http://localhost:8080/api/orders/user/${user.id}`, {
+            const response = await axios.get(`http://localhost:8080/api/orders/${user.id}`, {
                 headers: {
-                    'Authorization': `Bearer ${token}`
+                    Authorization: `Bearer ${token}`
                 }
             });
 
-            if (response.ok) {
-                const data = await response.json();
+            if (response.status === 200) {
+                const data = await response.data;
                 setOrders(data);
             } else {
+                console.log(response);
                 setError('Failed to fetch orders');
             }
         } catch (err) {
+            console.log(err);
             setError('Error fetching orders: ' + err.message);
         } finally {
             setLoading(false);
@@ -125,7 +128,7 @@ export default function Orders() {
 
                                     <div className="order-total">
                                         <span>Total Amount:</span>
-                                        <span className="total-amount">${order.totalAmount.toFixed(2)}</span>
+                                        <span className="total-amount">${order.totalPrice.toFixed(2)}</span>
                                     </div>
                                 </div>
                             </div>

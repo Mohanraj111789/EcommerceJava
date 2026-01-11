@@ -92,7 +92,7 @@ export default function Checkout() {
 
   /* ---------------- TOTAL ---------------- */
 
-  const totalAmount = isBuyNow
+  const totalPrice = isBuyNow
     ? buyNowProduct?.price * buyNowQuantity
     : cartItems.reduce(
         (sum, item) =>
@@ -103,13 +103,26 @@ export default function Checkout() {
 
   /* ---------------- PLACE ORDER ---------------- */
 
-  const handlePlaceOrder = () => {
+  const handlePlaceOrder = async() => {
     if (!address.trim()) {
       alert("Please enter delivery address");
       return;
     }
+    const res = await axios.post("http://localhost:8080/api/orders", {
+      userId,
+      status: "pending",
+      address,
+      totalPrice,
+      productId: isBuyNow ? buyNowProduct.id : cartItems.map(item => item.productId)
+      
+    });
+    if (res.status === 201) {
+      alert("Order placed successfully");
+    }
+    //body
 
-    alert("✅ Order placed successfully (frontend demo)");
+
+
     navigate("/orders");
   };
 
@@ -223,7 +236,7 @@ export default function Checkout() {
 
         <div className="summary-total">
           <span>Total</span>
-          <span>₹{totalAmount.toFixed(2)}</span>
+          <span>₹{totalPrice.toFixed(2)}</span>
         </div>
       </div>
 
