@@ -10,5 +10,9 @@ import java.util.List;
 @Repository
 public interface OrderRepository extends JpaRepository<Order,Long>{
     List<Order> findByUserId(Long userId);
+    //implent the join of order table and product table
+    
+
+
 
 }
