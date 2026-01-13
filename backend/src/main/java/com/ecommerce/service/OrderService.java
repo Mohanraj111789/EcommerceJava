@@ -40,33 +40,10 @@ public class OrderService {
         return repo.findByUserId(userId);
     }
 
-    // ✅ FILLED METHOD
-    public List<Map<String, Object>> getOrderItemsWithProducts(Long orderId) {
-
-        Order order = repo.findById(orderId)
-                .orElseThrow(() -> new RuntimeException("Order not found"));
-
-        List<Map<String, Object>> response = new ArrayList<>();
-
-        for (OrderItem item : order.getOrderItems()) {
-
-            Product product = productRepository.findById(item.getProductId())
-                    .orElseThrow(() -> new RuntimeException("Product not found"));
-
-            Map<String, Object> map = new HashMap<>();
-            map.put("orderItemId", item.getId());
-            map.put("quantity", item.getQuantity());
-            map.put("price", item.getPrice());
-
-            map.put("productId", product.getId());
-            map.put("productName", product.getName());
-            map.put("productImage", product.getImageUrl());
-            map.put("productDescription", product.getDescription());
-            map.put("productCategory", product.getCategory());
-
-            response.add(map);
-        }
-
-        return response;
+    public List<Product> getAllProducts()
+    {
+        return productRepository.findAll();
     }
+
+
 }

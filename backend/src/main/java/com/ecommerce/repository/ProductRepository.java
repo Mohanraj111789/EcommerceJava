@@ -9,24 +9,24 @@ import java.util.List;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
+
     List<Product> findByNameContainingIgnoreCase(String name);
+
     List<Product> findByPriceBetween(double minPrice, double maxPrice);
-    
-    // Search methods
-    List<Product> findByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(String name, String description);
-    
-    // Category filter
+
+    List<Product> findByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(
+            String name, String description
+    );
+
     List<Product> findByCategory(String category);
-    
-    // Price range filters
+
     List<Product> findByPriceGreaterThanEqual(Double minPrice);
+
     List<Product> findByPriceLessThanEqual(Double maxPrice);
-    
-    // Get distinct categories
+
     @Query("SELECT DISTINCT p.category FROM Product p WHERE p.category IS NOT NULL ORDER BY p.category")
     List<String> findDistinctCategories();
-    
 
-    //all products
-    List<Product> findAll();
+    // ❌ REMOVE THIS (already exists in JpaRepository)
+    // List<Product> findById(Long ProductId);
 }
