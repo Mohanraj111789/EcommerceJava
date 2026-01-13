@@ -112,17 +112,10 @@ export default function Orders() {
                                 <div className="order-details">
                                     <div className="order-items">
                                         <h4>Items</h4>
-                                        {order.orderItems && order.orderItems.length > 0 ? (
-                                            <ul>
-                                                {order.orderItems.map((item, index) => (
-                                                    <li key={index}>
-                                                        Product ID: {item.productId} - Quantity: {item.quantity} - ${item.price.toFixed(2)}
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                        ) : (
-                                            <p>No items</p>
-                                        )}
+                                        <div>
+                                            <img src ="../assets/heals1.jpg"></img>
+                                        </div>
+
                                     </div>
                                 </div>
                             </div>
