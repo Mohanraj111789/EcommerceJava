@@ -6,6 +6,7 @@ import com.ecommerce.model.Product;
 import com.ecommerce.repository.OrderRepository;
 import com.ecommerce.repository.ProductRepository;
 import org.springframework.stereotype.Service;
+import com.ecommerce.dto.OrderProductDTO;
 
 import java.util.*;
 
@@ -43,6 +44,10 @@ public class OrderService {
     public List<Product> getAllProducts()
     {
         return productRepository.findAll();
+    }
+
+    public List<OrderProductDTO> getOrdersWithProducts() {
+        return repo.getOrdersWithProducts();
     }
 
 

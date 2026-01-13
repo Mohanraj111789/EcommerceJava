@@ -5,6 +5,7 @@ import com.ecommerce.model.OrderItem;
 import com.ecommerce.model.Product;
 import com.ecommerce.service.OrderService;
 import com.ecommerce.service.ProductService;
+import com.ecommerce.dto.OrderProductDTO;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -98,5 +99,10 @@ public class OrderController {
         }
 
         return filteredProducts;
+    }
+    
+    @GetMapping("/user/{userId}/orders")
+    public List<OrderProductDTO> getOrdersWithProducts(@PathVariable Long userId) {
+        return orderService.getOrdersWithProducts();
     }
 }

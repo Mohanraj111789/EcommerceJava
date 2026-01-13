@@ -87,6 +87,7 @@ export default function Checkout() {
       if (isBuyNow && buyNowProduct) {
         const orderData = {
           userId,
+          status:"PENDING",
           items: [
             {
               productId: buyNowProduct.id,
@@ -95,8 +96,10 @@ export default function Checkout() {
             }
           ],
           address,
-          totalAmount
+          totalPrice: totalAmount,
+          productId:buyNowProduct.id
         };
+        console.log(orderData);
 
         // Call backend to create order
         await axios.post("http://localhost:8080/api/orders", orderData, {
@@ -117,7 +120,7 @@ export default function Checkout() {
             price: products[item.productId]?.price
           })),
           address,
-          totalAmount
+          totalPrice: totalAmount
         };
 
         await axios.post("http://localhost:8080/api/orders", orderData, {
