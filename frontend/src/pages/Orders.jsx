@@ -20,7 +20,7 @@ export default function Orders() {
         try {
             setLoading(true);
             const token = localStorage.getItem('token');
-            const response = await axios.get(`http://localhost:8080/api/orders/${user.id}`, {
+            const response = await axios.get(`http://localhost:8080/api/orders/user/${user.id}/products`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -104,9 +104,9 @@ export default function Orders() {
                                     </div>
                                     <div
                                         className="order-status"
-                                        style={{ backgroundColor: getStatusColor(order.status) }}
+                                        style={{ backgroundColor: getStatusColor(order.name) }}
                                     >
-                                        {order.status}
+                                        {order.name}
                                     </div>
                                 </div>
 
@@ -124,11 +124,6 @@ export default function Orders() {
                                         ) : (
                                             <p>No items</p>
                                         )}
-                                    </div>
-
-                                    <div className="order-total">
-                                        <span>Total Amount:</span>
-                                        <span className="total-amount">${order.totalPrice.toFixed(2)}</span>
                                     </div>
                                 </div>
                             </div>
