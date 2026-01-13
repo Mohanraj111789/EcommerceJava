@@ -6,7 +6,6 @@ export const ProductRefreshProvider = ({ children }) => {
   const [refreshTrigger, setRefreshTrigger] = useState(0);
 
   const triggerRefresh = () => {
-    console.log("🔄 Triggering product refresh across all components");
     setRefreshTrigger(prev => prev + 1);
   };
 

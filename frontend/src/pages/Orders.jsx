@@ -30,7 +30,6 @@ export default function Orders() {
                 const data = await response.data;
                 setOrders(data);
             } else {
-                console.log(response);
                 setError('Failed to fetch orders');
             }
         } catch (err) {

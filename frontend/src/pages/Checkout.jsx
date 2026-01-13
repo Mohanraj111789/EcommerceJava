@@ -58,7 +58,7 @@ export default function Checkout() {
         res.data.forEach(p => (map[p.id] = p));
         setProducts(map);
     };
-    console.log(products)
+
 
   // 🔹 Dummy address
   const [address, setAddress] = useState("");
@@ -99,7 +99,7 @@ export default function Checkout() {
           totalPrice: totalAmount,
           productId:buyNowProduct.id
         };
-        console.log(orderData);
+
 
         // Call backend to create order
         await axios.post("http://localhost:8080/api/orders", orderData, {

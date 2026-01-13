@@ -120,7 +120,7 @@ export default function AdminDashboard() {
                 },
                 body: JSON.stringify(productData)
             });
-            console.log(productData);
+    
 
             if (response.ok) {
                 setSuccess('Product updated successfully!');
