@@ -64,6 +64,4 @@ public class Wallet {
     public void setVersion(Integer version) {
         this.version = version;
     }
-
-    // getters & setters
 }
