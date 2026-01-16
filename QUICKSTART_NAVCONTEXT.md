@@ -7,7 +7,6 @@ This is the fastest way to get the NavContext (CartProvider) feature working in 
 ---
 
 ## ✅ Prerequisites Check
-
 Before starting, verify:
 
 - [x] Backend is running on `http://localhost:8080`
