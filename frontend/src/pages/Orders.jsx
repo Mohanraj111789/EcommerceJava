@@ -113,7 +113,7 @@ export default function Orders() {
             {/* Footer */}
             <div className="order-footer">
               <span className="order-total">
-                Total: ₹{order.total_price}
+                Total: ₹{order.price}
               </span>
               <button className="view-btn">View Details</button>
             </div>
