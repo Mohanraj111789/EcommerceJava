@@ -72,6 +72,8 @@ export default function Orders() {
     }
 
    return (
+    <>
+    <Navbar1/>
     <div className="orders-page">
       <h2 className="orders-title">My Orders</h2>
 
@@ -99,7 +101,7 @@ export default function Orders() {
             {/* Product Section */}
             <div className="order-product">
               <img
-                src={`/assets/${order.imageUrl}`}
+                src={order.imageUrl? `/assets/${order.imageUrl}` : '/assets/product.jpg'}
                 alt={order.name}
                 className="product-image"
               />
@@ -121,5 +123,6 @@ export default function Orders() {
         ))
       )}
     </div>
-  );
+    </>
+    );
 }
