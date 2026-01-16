@@ -39,6 +39,7 @@ export default function Orders() {
             setLoading(false);
         }
     };
+    console.log(orders);
 
     const getStatusColor = (status) => {
         const colors = {
@@ -70,59 +71,55 @@ export default function Orders() {
         );
     }
 
-    return (
-        <div className="orders-page">
-            <Navbar1/>
-            <div className="orders-container">
-                <div className="orders-header">
-                    <h1>📦 My Orders</h1>
-                    <p>Track and manage your orders</p>
-                </div>
+   return (
+    <div className="orders-page">
+      <h2 className="orders-title">My Orders</h2>
 
-                {error && (
-                    <div className="alert alert-error">
-                        <span className="alert-icon">✗</span>
-                        <span>{error}</span>
-                    </div>
-                )}
+      {orders.length === 0 ? (
+        <p className="empty-text">You have no orders yet.</p>
+      ) : (
+        orders.map((order) => (
+          <div key={order.order_id} className="order-card">
+            {/* Order Header */}
+            <div className="order-header">
+              <div>
+                <p className="order-id">
+                  Order ID: <span>#{order.order_id}</span>
+                </p>
+                <p className="order-address">{order.address}</p>
+              </div>
 
-                {orders.length === 0 ? (
-                    <div className="no-orders">
-                        <div className="no-orders-icon">📦</div>
-                        <h2>No orders yet</h2>
-                        <p>Start shopping to see your orders here!</p>
-                    </div>
-                ) : (
-                    <div className="orders-list">
-                        {orders.map((order) => (
-                            <div key={order.id} className="order-card">
-                                <div className="order-header">
-                                    <div className="order-info">
-                                        <h3>Order #{order.id}</h3>
-                                        <p className="order-date">{formatDate(order.createdAt)}</p>
-                                    </div>
-                                    <div
-                                        className="order-status"
-                                        style={{ backgroundColor: getStatusColor(order.name) }}
-                                    >
-                                        {order.name}
-                                    </div>
-                                </div>
-
-                                <div className="order-details">
-                                    <div className="order-items">
-                                        <h4>Items</h4>
-                                        <div>
-                                            <img src ="../assets/heals1.jpg"></img>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                )}
+              <span
+                className={`order-status ${order.status}`}
+              >
+                {order.status}
+              </span>
             </div>
-        </div>
-    );
+
+            {/* Product Section */}
+            <div className="order-product">
+              <img
+                src={`/assets/${order.imageUrl}`}
+                alt={order.name}
+                className="product-image"
+              />
+
+              <div className="product-info">
+                <h4 className="product-name">{order.name}</h4>
+                <p className="product-price">₹{order.price}</p>
+              </div>
+            </div>
+
+            {/* Footer */}
+            <div className="order-footer">
+              <span className="order-total">
+                Total: ₹{order.total_price}
+              </span>
+              <button className="view-btn">View Details</button>
+            </div>
+          </div>
+        ))
+      )}
+    </div>
+  );
 }

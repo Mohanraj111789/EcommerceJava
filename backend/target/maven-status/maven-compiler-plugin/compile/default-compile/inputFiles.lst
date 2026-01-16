@@ -23,6 +23,7 @@ C:\Users\HAI\Desktop\ECom\EcommerceJava\backend\src\main\java\com\ecommerce\serv
 C:\Users\HAI\Desktop\ECom\EcommerceJava\backend\src\main\java\com\ecommerce\model\OrderItem.java
 C:\Users\HAI\Desktop\ECom\EcommerceJava\backend\src\main\java\com\ecommerce\controller\AuthController.java
 C:\Users\HAI\Desktop\ECom\EcommerceJava\backend\src\main\java\com\ecommerce\security\SecurityConfig.java
+C:\Users\HAI\Desktop\ECom\EcommerceJava\backend\src\main\java\com\ecommerce\dto\OrderProductDTO.java
 C:\Users\HAI\Desktop\ECom\EcommerceJava\backend\src\main\java\com\ecommerce\service\RecommendationService.java
 C:\Users\HAI\Desktop\ECom\EcommerceJava\backend\src\main\java\com\ecommerce\ds\ProductSearchTrie.java
 C:\Users\HAI\Desktop\ECom\EcommerceJava\backend\src\main\java\com\ecommerce\security\JwtUtil.java
