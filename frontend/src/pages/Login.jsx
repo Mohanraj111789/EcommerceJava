@@ -52,6 +52,7 @@ export default function Login() {
       if (result.success) {
         setSuccess(true);
         const userData = result.data?.user;
+        localStorage.setItem("token", result.data?.token);
 
         // 🔒 Admin role validation
         if (isAdminLogin && userData?.role !== 'ADMIN') {

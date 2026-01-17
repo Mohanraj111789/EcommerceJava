@@ -12,6 +12,7 @@ import ViewUser from './pages/ViewUser';
 import Checkout from './pages/Checkout';
 import { NotFound } from './components/NotFound';
 import ProductDetails from './pages/ProductDetails';
+import Wallet from './pages/wallet';
 
 
 // Protected Route component
@@ -112,6 +113,7 @@ function App() {
             />
             <>
               <Route path="/product/:id" element={<ProductDetails />} />
+              <Route path="/wallet" element={<Wallet />} />
             </>
           </Routes>
         </Router>
