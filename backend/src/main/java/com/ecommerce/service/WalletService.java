@@ -22,7 +22,18 @@ public class WalletService {
             return walletRepository.save(wallet);
         });
      }
-     public Wallet getWalletByUserId(Long userId) {
-        return walletRepository.findByUserId(userId).orElseThrow(() -> new RuntimeException("Wallet not found"));
-     }
+public Wallet getWalletByUserId(Long userId) {
+
+    return walletRepository.findByUserId(userId)
+        .orElseGet(() -> {
+
+            Wallet wallet = new Wallet();
+            wallet.setUserId(userId);
+            wallet.setBalance(BigDecimal.ZERO);
+            wallet.setStatus("ACTIVE");
+
+            return walletRepository.save(wallet);
+        });
+}
+
 }
