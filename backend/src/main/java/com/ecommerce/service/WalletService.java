@@ -1,10 +1,12 @@
 package com.ecommerce.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ecommerce.model.Wallet;
 import com.ecommerce.repository.WalletRepository;
 import java.math.BigDecimal;
+
 
 @Service
 public class WalletService {
@@ -34,6 +36,16 @@ public Wallet getWalletByUserId(Long userId) {
 
             return walletRepository.save(wallet);
         });
+}
+
+@Transactional
+public Wallet addMoney(Long userId, BigDecimal amount) {
+
+    Wallet wallet = walletRepository.findByUserId(userId).get();
+
+    wallet.setBalance(wallet.getBalance().add(amount));
+
+    return walletRepository.save(wallet);
 }
 
 }
