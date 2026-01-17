@@ -32,7 +32,7 @@ public class WalletController {
         return walletService.getWalletByUserId(userId).getBalance();
     }
 @PostMapping("/add-money")
-public ResponseEntity<?> addMoney(
+public ResponseEntity<Wallet> addMoney(
         Authentication auth,
         @RequestBody AddMoneyRequest request
 ) {
