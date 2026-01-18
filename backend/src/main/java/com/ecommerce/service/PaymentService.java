@@ -16,6 +16,12 @@ public class PaymentService {
     @Autowired
     private TransactionRepository transactionRepository;
 
+    public PaymentService(WalletRepository walletRepository,TransactionRepository transactionRepository)
+    {
+        this.transactionRepository = transactionRepository;
+        this.walletRepository = walletRepository;
+    }
+
     @Transactional
     public Transaction transfer(
             Long senderUserId,
@@ -42,7 +48,13 @@ public class PaymentService {
                 .orElseThrow(() -> new RuntimeException("Sender wallet not found"));
 
         Wallet receiver = walletRepository.findByUserId(receiverUserId)
-                .orElseThrow(() -> new RuntimeException("Receiver wallet not found"));
+        .orElseGet(()->{
+            Wallet w = new Wallet();
+            w.setUserId(receiverUserId);
+            w.setBalance(BigDecimal.ZERO);
+            w.setStatus("ACTIVE");
+            return walletRepository.save(w);
+        });
 
         // 3️⃣ Lock wallets in fixed order (prevents deadlock)
         Wallet firstLock = sender.getId() < receiver.getId() ? sender : receiver;
