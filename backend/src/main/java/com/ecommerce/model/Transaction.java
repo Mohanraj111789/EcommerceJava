@@ -17,6 +17,8 @@ public class Transaction {
     private BigDecimal amount;
     private String status;
 
+    private String IdempotencyKey;
+
     private LocalDateTime createdAt = LocalDateTime.now();
 
     public Long getId() {
@@ -65,6 +67,14 @@ public class Transaction {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public String getIdempotencyKey() {
+        return IdempotencyKey;
+    }
+
+    public void setIdempotencyKey(String idempotencyKey) {
+        IdempotencyKey = idempotencyKey;
     }
 
     // getters & setters
