@@ -3,6 +3,7 @@ import com.ecommerce.repository.*;
 import com.ecommerce.model.*;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
@@ -21,11 +22,13 @@ public class PaymentService {
         this.transactionRepository = transactionRepository;
         this.walletRepository = walletRepository;
     }
+    @Value("${payment.system.user-id}")
+    private Long receiverUserId;
 
     @Transactional
     public Transaction transfer(
             Long senderUserId,
-            Long receiverUserId,
+            // Long receiverUserId,
             BigDecimal amount,
             String idempotencyKey
     ) {

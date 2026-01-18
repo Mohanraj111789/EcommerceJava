@@ -42,7 +42,6 @@ public class PaymentController {
 
         Transaction txn = paymentService.transfer(
                 user.getId(),
-                request.getReceiverUserId(),
                 request.getAmount(),
                 idempotencyKey
         );

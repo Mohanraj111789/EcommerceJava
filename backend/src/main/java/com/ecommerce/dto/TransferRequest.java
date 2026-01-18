@@ -7,7 +7,6 @@ import java.math.BigDecimal;
 
 public class TransferRequest {
 
-    @NotNull
     private Long receiverUserId;
 
     @NotNull

@@ -13,6 +13,7 @@ import Checkout from './pages/Checkout';
 import { NotFound } from './components/NotFound';
 import ProductDetails from './pages/ProductDetails';
 import Wallet from './pages/wallet';
+import Payment from './pages/Payment';
 
 
 // Protected Route component
@@ -114,8 +115,10 @@ function App() {
             <>
               <Route path="/product/:id" element={<ProductDetails />} />
               <Route path="/wallet" element={<Wallet />} />
+              <Route path="/payment" element={<Payment/>}/>
             </>
           </Routes>
+
         </Router>
       </CartProvider>
     </AuthProvider>
