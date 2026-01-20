@@ -24,6 +24,9 @@ export default function Payment() {
   const handlePayment = async () =>{
     payUsingWallet().then(()=>{
       alert("OrderPlaced SuccessFully");
+      handleWallet().then((balance)=>{
+        setwalletbalance(balance);
+      })
     });
   };
 
@@ -76,7 +79,7 @@ export default function Payment() {
               <div className="wallet-box">
                 <p>Available Balance</p>
                 <h2>₹{walletbalance}</h2>
-                <button className="Add-money-button" onClick={()=>{navigate("./add-money")}}>Add Money</button>
+                <button className="Add-money-button" onClick={()=>{navigate("/add-money")}}>Add Money</button>
               </div>
               <button className="btn1" onClick={handlePayment}>Pay using Wallet</button>
             </>
