@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.transaction.annotation.Transactional;
+import com.ecommerce.exception.InsufficientBalanceException;
 
 import java.math.BigDecimal;
 
@@ -68,7 +69,7 @@ public class PaymentService {
 
         // 4️⃣ Balance check
         if (sender.getBalance().compareTo(amount) < 0) {
-            throw new RuntimeException("Insufficient balance");
+            throw new InsufficientBalanceException("Insufficient balance");
         }
 
         // 5️⃣ Update balances
