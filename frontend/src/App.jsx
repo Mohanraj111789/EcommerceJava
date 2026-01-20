@@ -15,6 +15,7 @@ import ProductDetails from './pages/ProductDetails';
 import Wallet from './pages/wallet';
 import Payment from './pages/Payment';
 import { PaymentProvider } from './contexts/PaymentContext';
+import AddMoney from './pages/AddMoney';
 
 
 // Protected Route component
@@ -118,6 +119,7 @@ function App() {
               <Route path="/product/:id" element={<ProductDetails />} />
               <Route path="/wallet" element={<Wallet />} />
               <Route path="/payment" element={<Payment/>}/>
+              <Route path="/add-money" element={<AddMoney/>}/>
             </>
           </Routes>
 

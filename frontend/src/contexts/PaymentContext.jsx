@@ -60,6 +60,7 @@ export const PaymentProvider = ({ children }) => {
         "http://localhost:8080/api/wallet/balance",
         {
           headers: {
+            "Content-Type":"application/json",
             Authorization: `Bearer ${localStorage.getItem("token")}`
           }
         }
@@ -70,7 +71,34 @@ export const PaymentProvider = ({ children }) => {
       console.error("Wallet payment failed:", error);
       throw error;
     }
+  };
+  const AddMoneytoWallet = async(Amount)=>
+  {
+    try{
+      setLoading(true);
+      const response = await axios.post(
+        "http://localhost:8080/api/wallet/add-money",
+        {
+          amount:Amount
+        },
+        {
+          headers:
+          {
+            "Content-Type":"application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+
+          }
+        }
+      )
+    }catch(error){
+          console.error("Add money failed:", error);
+          throw error;
+        }
+        finally{
+          setLoading(false);
+        }
   }
+
   return (
     <PaymentContext.Provider
       value={{
@@ -78,7 +106,8 @@ export const PaymentProvider = ({ children }) => {
         setOrderDetails,
         payUsingWallet,
         handleWallet,
-        loading
+        loading,
+        AddMoneytoWallet
       }}
     >
       {children}
