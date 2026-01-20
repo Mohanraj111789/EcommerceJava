@@ -13,7 +13,7 @@ public class Order {
     private Long id;
     
     private Long userId;
-    private String status;
+    private String status = "PENDING_PAYMENT";
     private String address;
     private Double totalPrice;
     private Long productId;
@@ -53,6 +53,8 @@ public class Order {
     public void setProductId(Long productId) {
         this.productId = productId;
     }
+
+
 
     //getters and setters
     

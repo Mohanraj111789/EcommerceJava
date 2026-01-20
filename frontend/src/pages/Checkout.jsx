@@ -74,7 +74,7 @@ export default function Checkout() {
     );
   };
 
-  const totalAmount = getTotalAmount();
+  const totalPrice = getTotalAmount();
 
   const handlePlaceOrder = async () => {
     if (!address.trim()) {
@@ -87,15 +87,10 @@ export default function Checkout() {
       if (isBuyNow && buyNowProduct) {
         const orderData = {
           userId,
-          items: [
-            {
-              productId: buyNowProduct.id,
-              quantity: buyNowQuantity,
-              price: buyNowProduct.price
-            }
-          ],
           address,
-          totalAmount
+
+          totalPrice,
+          productId:buyNowProduct.id
         };
 
         // Call backend to create order
@@ -117,7 +112,7 @@ export default function Checkout() {
             price: products[item.productId]?.price
           })),
           address,
-          totalAmount
+          totalPrice
         };
 
         await axios.post("http://localhost:8080/api/orders", orderData, {
@@ -200,7 +195,7 @@ export default function Checkout() {
 
         <div className="summary-total">
           <span>Total</span>
-          <span>₹{totalAmount}</span>
+          <span>₹{totalPrice}</span>
         </div>
       </div>
 
