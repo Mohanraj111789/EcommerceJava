@@ -26,6 +26,7 @@ export default function Payment() {
       alert("OrderPlaced SuccessFully");
       handleWallet().then((balance)=>{
         setwalletbalance(balance);
+        navigate("/orders");
       })
     });
   };

@@ -17,6 +17,9 @@ import com.ecommerce.service.PaymentService;
 import com.ecommerce.dto.TransferRequest;
 
 import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+
 
 @RestController
 @RequestMapping("/api/payment")
@@ -47,6 +50,12 @@ public class PaymentController {
         );
 
         return ResponseEntity.ok(txn);
+    }
+    @PutMapping("path/{id}")
+    public String putMethodName(@PathVariable String id, @RequestBody String entity) {
+        //TODO: process PUT request
+        
+        return entity;
     }
     
 }
