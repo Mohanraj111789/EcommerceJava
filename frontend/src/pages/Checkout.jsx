@@ -58,7 +58,7 @@ export default function Checkout() {
         res.data.forEach(p => (map[p.id] = p));
         setProducts(map);
     };
-
+    console.log(products)
 
   // 🔹 Dummy address
   const [address, setAddress] = useState("");
@@ -87,7 +87,6 @@ export default function Checkout() {
       if (isBuyNow && buyNowProduct) {
         const orderData = {
           userId,
-          status:"PENDING",
           items: [
             {
               productId: buyNowProduct.id,
@@ -96,10 +95,8 @@ export default function Checkout() {
             }
           ],
           address,
-          totalPrice: totalAmount,
-          productId:buyNowProduct.id
+          totalAmount
         };
-
 
         // Call backend to create order
         await axios.post("http://localhost:8080/api/orders", orderData, {
@@ -120,7 +117,7 @@ export default function Checkout() {
             price: products[item.productId]?.price
           })),
           address,
-          totalPrice: totalAmount
+          totalAmount
         };
 
         await axios.post("http://localhost:8080/api/orders", orderData, {

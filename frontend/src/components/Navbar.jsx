@@ -3,7 +3,7 @@ import { useAuth } from "../contexts/AuthContext";
 import "./Navbar.css";
 import { useEffect } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
-import { SideMenu } from "./SideMenu";
+// import { SideMenu } from "./SideMenu";
 import { CartIcon } from "./CartIcon";
 
 
@@ -32,7 +32,7 @@ const Navbar = ({ onSearch, products = [] ,cartCount}) => {
     <header className="amazon-navbar">
       <div className="nav-left">
         <button className="nav-left-button" onClick={() => setOpen(true)}>☰ All</button>
-        <SideMenu isOpen={open} onClose={() => setOpen(false)} />
+        
         <span className="logo">E-Comp</span>
         <span className="logo-dot">.in</span>
       </div>
