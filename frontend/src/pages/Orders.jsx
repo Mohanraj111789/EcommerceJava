@@ -39,7 +39,7 @@ export default function Orders() {
             setLoading(false);
         }
     };
-    console.log(orders);
+  
 
     const getStatusColor = (status) => {
         const colors = {

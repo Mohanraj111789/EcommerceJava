@@ -5,7 +5,7 @@ import "./Payment.css";
 export default function Payment() {
   const [method, setMethod] = useState("upi");
   const [walletbalance,setwalletbalance] = useState(null);
-  const { handleWallet } = usePayment();
+  const { handleWallet, handlePayWithWallet } = usePayment();
   useEffect (()=>{
     if(method === "wallet")
     {
@@ -68,8 +68,9 @@ export default function Payment() {
               <div className="wallet-box">
                 <p>Available Balance</p>
                 <h2>₹{walletbalance}</h2>
+                <button className="Add-money-button">Add Money</button>
               </div>
-              <button className="btn1">Pay using Wallet</button>
+              <button className="btn1" onClick={handlePayWithWallet}>Pay using Wallet</button>
             </>
           )}
           </div>

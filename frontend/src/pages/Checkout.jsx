@@ -59,7 +59,7 @@ export default function Checkout() {
         res.data.forEach(p => (map[p.id] = p));
         setProducts(map);
     };
-    console.log(products)
+  
 
   // 🔹 Dummy address
   const [address, setAddress] = useState("");

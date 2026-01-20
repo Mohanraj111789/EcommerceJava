@@ -213,4 +213,18 @@
   justify-content: space-between;
   align-items: center;
 }
+.Add-money-button {
+  background-color: #2874f0;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  margin-top: 10px;
+}
+.Add-money-button:hover {
+  background-color: #1b5fd1;
+}
 

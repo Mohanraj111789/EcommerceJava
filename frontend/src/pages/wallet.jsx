@@ -51,7 +51,7 @@ const Wallet = () => {
       setAmount("");
       fetchBalance();
       alert("Money added successfully");
-      console.log(await fetchBalance());
+
 
     } catch (err) {
       alert("Failed to add money");
