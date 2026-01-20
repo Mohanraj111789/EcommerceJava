@@ -5,11 +5,11 @@ import "./AddMoney.css";
 export default function AddMoney() {
   const [amount, setAmount] = useState(3290);
   const presetAmounts = [3282, 3290, 10, 50];
-  const {AddMoneytoWallet,handleWallet} = usePayment();
+  const {addMoneyToWallet,handleWallet} = usePayment();
   const [walletbalance,setWalletbalance] = useState(0);
 
   const handleAddMoney = async()=>{
-    AddMoneytoWallet(amount).then(()=>{
+    addMoneyToWallet(amount).then(()=>{
       alert("Money added successfully");
     }).catch((err)=>{
       alert("Failed to add money");

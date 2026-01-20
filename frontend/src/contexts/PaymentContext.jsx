@@ -1,12 +1,13 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState,useEffect } from "react";
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
+
 
 const PaymentContext = createContext();
 
 export const PaymentProvider = ({ children }) => {
 
-  const [order, setOrder] = useState(null);
+ 
   const [loading, setLoading] = useState(false);
 
   // ---------------------------
@@ -15,23 +16,32 @@ export const PaymentProvider = ({ children }) => {
   const setOrderDetails = (orderData) => {
     setOrder(orderData);
   };
+//   useEffect(() => {
+//   const savedOrder = localStorage.getItem("currentOrder");
+//   if (savedOrder) {
+//     setOrder(JSON.parse(savedOrder));
+//   }
+// }, []);
+const order = JSON.parse(localStorage.getItem("currentOrder"));
+
+
 
   // ---------------------------
-  // WALLET PAYMENT (FIXED)
+  // WALLET PAYMENT
   // ---------------------------
   const payUsingWallet = async () => {
+    if (!order) {
+      throw new Error("Order not found");
+    }
+
     try {
       setLoading(true);
 
       const response = await axios.post(
         "http://localhost:8080/api/payment/transfer",
-
-        // ✅ BODY
         {
-          amount: order.totalAmount
+          amount: order.totalPrice
         },
-
-        // ✅ CONFIG
         {
           headers: {
             "Idempotency-Key": uuidv4(),
@@ -40,8 +50,23 @@ export const PaymentProvider = ({ children }) => {
           }
         }
       );
+      if(!response.ok)
+      {
+        return response.data;
+      }
 
-      console.log("Payment success:", response.data);
+      // ✅ UPDATE ORDER STATUS
+      await axios.put(
+        `http://localhost:8080/api/orders/${order.id}/status?status=PAID`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+          }
+        }
+      );
+      localStorage.removeItem("currentOrder");
+
 
       return response.data;
 
@@ -52,52 +77,55 @@ export const PaymentProvider = ({ children }) => {
       setLoading(false);
     }
   };
-  const handleWallet = async() =>
-  {
-    try{
-      setLoading(true);
+
+  // ---------------------------
+  // GET WALLET BALANCE
+  // ---------------------------
+  const handleWallet = async () => {
+    try {
       const response = await axios.get(
         "http://localhost:8080/api/wallet/balance",
         {
           headers: {
-            "Content-Type":"application/json",
             Authorization: `Bearer ${localStorage.getItem("token")}`
           }
         }
       );
-      console.log("Wallet balance:", response.data);
+
       return response.data;
-    }catch(error){
-      console.error("Wallet payment failed:", error);
+
+    } catch (error) {
+      console.error("Wallet fetch failed:", error);
       throw error;
     }
   };
-  const AddMoneytoWallet = async(Amount)=>
-  {
-    try{
+
+  // ---------------------------
+  // ADD MONEY TO WALLET
+  // ---------------------------
+  const addMoneyToWallet = async (amount) => {
+    try {
       setLoading(true);
+
       const response = await axios.post(
         "http://localhost:8080/api/wallet/add-money",
+        { amount },
         {
-          amount:Amount
-        },
-        {
-          headers:
-          {
-            "Content-Type":"application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`
           }
         }
-      )
-    }catch(error){
-          console.error("Add money failed:", error);
-          throw error;
-        }
-        finally{
-          setLoading(false);
-        }
-  }
+      );
+
+      return response.data;
+
+    } catch (error) {
+      console.error("Add money failed:", error);
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <PaymentContext.Provider
@@ -106,8 +134,8 @@ export const PaymentProvider = ({ children }) => {
         setOrderDetails,
         payUsingWallet,
         handleWallet,
-        loading,
-        AddMoneytoWallet
+        addMoneyToWallet,
+        loading
       }}
     >
       {children}

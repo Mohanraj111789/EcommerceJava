@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { usePayment } from "../contexts/PaymentContext";
 import "./Payment.css";
+import { useNavigate } from "react-router-dom";
 
 export default function Payment() {
+  const navigate = useNavigate();
   const [method, setMethod] = useState("upi");
   const [walletbalance,setwalletbalance] = useState(null);
-  const { handleWallet, handlePayWithWallet } = usePayment();
+  const { handleWallet,payUsingWallet} = usePayment();
   useEffect (()=>{
     if(method === "wallet")
     {
@@ -18,6 +20,12 @@ export default function Payment() {
     }
 
   },[method]);
+
+  const handlePayment = async () =>{
+    payUsingWallet().then(()=>{
+      alert("OrderPlaced SuccessFully");
+    });
+  };
 
   return (
     <div className="payment-container1">
@@ -68,9 +76,9 @@ export default function Payment() {
               <div className="wallet-box">
                 <p>Available Balance</p>
                 <h2>₹{walletbalance}</h2>
-                <button className="Add-money-button">Add Money</button>
+                <button className="Add-money-button" onClick={()=>{navigate("./add-money")}}>Add Money</button>
               </div>
-              <button className="btn1" onClick={handlePayWithWallet}>Pay using Wallet</button>
+              <button className="btn1" onClick={handlePayment}>Pay using Wallet</button>
             </>
           )}
           </div>

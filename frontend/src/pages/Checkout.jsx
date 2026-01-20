@@ -2,6 +2,8 @@ import React, { useEffect,useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../contexts/AuthContext";
+import { usePayment } from "../contexts/PaymentContext";
+
 
 import "./Checkout.css";
 
@@ -19,6 +21,7 @@ export default function Checkout() {
   const [products, setProducts] = useState({});
   const [buyNowProduct, setBuyNowProduct] = useState(null);
   const [buyNowQuantity, setBuyNowQuantity] = useState(1);
+  const { setOrderDetails } = usePayment();
 
   const userId = user?.id;
   const isBuyNow = location.state?.buyNowProduct;
@@ -38,6 +41,8 @@ export default function Checkout() {
         loadProducts();
     }
     }, [userId]);
+    
+
 
     const loadCart = async () => {
         try {
@@ -95,11 +100,12 @@ export default function Checkout() {
         };
 
         // Call backend to create order
-        await axios.post("http://localhost:8080/api/orders", orderData, {
+        const response = await axios.post("http://localhost:8080/api/orders", orderData, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`
           }
         });
+        localStorage.setItem("currentOrder", JSON.stringify(response.data));
 
         navigate("/payment"); // redirect to orders page
       } else {
@@ -120,6 +126,7 @@ export default function Checkout() {
             Authorization: `Bearer ${localStorage.getItem('token')}`
           }
         });
+        setOrderDetails(orderData);
 
         navigate("/payment"); // redirect to orders page
       }
