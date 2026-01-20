@@ -14,6 +14,7 @@ import { NotFound } from './components/NotFound';
 import ProductDetails from './pages/ProductDetails';
 import Wallet from './pages/wallet';
 import Payment from './pages/Payment';
+import { PaymentProvider } from './contexts/PaymentContext';
 
 
 // Protected Route component
@@ -46,6 +47,7 @@ function AdminRoute({ children }) {
 
 function App() {
   return (
+    <PaymentProvider>
     <AuthProvider>
       <CartProvider>
         <Router>
@@ -122,6 +124,7 @@ function App() {
         </Router>
       </CartProvider>
     </AuthProvider>
+    </PaymentProvider>
   );
 }
 

@@ -52,13 +52,32 @@ export const PaymentProvider = ({ children }) => {
       setLoading(false);
     }
   };
-
+  const handleWallet = async() =>
+  {
+    try{
+      setLoading(true);
+      const response = await axios.get(
+        "http://localhost:8080/api/wallet/balance",
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+          }
+        }
+      );
+      console.log("Wallet balance:", response.data);
+      return response.data;
+    }catch(error){
+      console.error("Wallet payment failed:", error);
+      throw error;
+    }
+  }
   return (
     <PaymentContext.Provider
       value={{
         order,
         setOrderDetails,
         payUsingWallet,
+        handleWallet,
         loading
       }}
     >

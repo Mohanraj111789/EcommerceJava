@@ -1,8 +1,23 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { usePayment } from "../contexts/PaymentContext";
 import "./Payment.css";
 
 export default function Payment() {
   const [method, setMethod] = useState("upi");
+  const [walletbalance,setwalletbalance] = useState(null);
+  const { handleWallet } = usePayment();
+  useEffect (()=>{
+    if(method === "wallet")
+    {
+      handleWallet().then((balance)=>{
+        setwalletbalance(balance);
+      })
+      .catch((err)=>{
+        console.error("wallet balance error",err);
+      });
+    }
+
+  },[method]);
 
   return (
     <div className="payment-container1">
@@ -52,7 +67,7 @@ export default function Payment() {
               <h3 className="h3">Wallet Balance</h3>
               <div className="wallet-box">
                 <p>Available Balance</p>
-                <h2>₹3,500</h2>
+                <h2>₹{walletbalance}</h2>
               </div>
               <button className="btn1">Pay using Wallet</button>
             </>
