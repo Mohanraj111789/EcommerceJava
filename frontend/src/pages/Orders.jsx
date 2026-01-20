@@ -20,7 +20,7 @@ export default function Orders() {
         try {
             setLoading(true);
             const token = localStorage.getItem('token');
-            const response = await axios.get(`http://localhost:8080/api/orders/user/${user.id}/products`, {
+            const response = await axios.get(`http://localhost:8080/api/orders/user/${user.id}/orders`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -77,51 +77,57 @@ export default function Orders() {
     <div className="orders-page">
       <h2 className="orders-title">My Orders</h2>
 
-      {orders.length === 0 ? (
-        <p className="empty-text">You have no orders yet.</p>
-      ) : (
-        orders.map((order) => (
-          <div key={order.order_id} className="order-card">
-            {/* Order Header */}
-            <div className="order-header">
-              <div>
-                <p className="order-id">
-                  Order ID: <span>#{order.order_id}</span>
-                </p>
-                <p className="order-address">{order.address}</p>
-              </div>
+ {orders.length === 0 ? (
+  <p className="empty-text">You have no orders yet.</p>
+) : (
+  orders
+    .filter(order => order.status !== "PENDING_PAYMENT")
+    .map((order) => (
+      <div key={order.orderId} className="order-card">
 
-              <span
-                className={`order-status ${order.status}`}
-              >
-                {order.status}
-              </span>
-            </div>
-
-            {/* Product Section */}
-            <div className="order-product">
-              <img
-                src={order.imageUrl? `/assets/${order.imageUrl}` : '/assets/product.jpg'}
-                alt={order.name}
-                className="product-image"
-              />
-
-              <div className="product-info">
-                <h4 className="product-name">{order.name}</h4>
-                <p className="product-price">₹{order.price}</p>
-              </div>
-            </div>
-
-            {/* Footer */}
-            <div className="order-footer">
-              <span className="order-total">
-                Total: ₹{order.price}
-              </span>
-              <button className="view-btn">View Details</button>
-            </div>
+        {/* Order Header */}
+        <div className="order-header">
+          <div>
+            <p className="order-id">
+              Order ID: <span>#{order.orderId}</span>
+            </p>
+            <p className="order-address">{order.address}</p>
           </div>
-        ))
-      )}
+
+          <span className={`order-status ${order.status}`}>
+            {order.status}
+          </span>
+        </div>
+
+        {/* Product Section */}
+        <div className="order-product">
+          <img
+            src={
+              order.imageUrl
+                ? `/assets/${order.imageUrl}`
+                : "/assets/product.jpg"
+            }
+            alt={order.productName}
+            className="product-image"
+          />
+
+          <div className="product-info">
+            <h4 className="product-name">{order.productName}</h4>
+            <p className="product-price">₹{order.productPrice}</p>
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div className="order-footer">
+          <span className="order-total">
+            Total: ₹{order.totalPrice}
+          </span>
+          <button className="view-btn">View Details</button>
+        </div>
+
+      </div>
+    ))
+)}
     </div>
     </>
     );

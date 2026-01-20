@@ -2,6 +2,7 @@ import React, { useEffect,useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../contexts/AuthContext";
+
 import "./Checkout.css";
 
 
@@ -100,8 +101,7 @@ export default function Checkout() {
           }
         });
 
-        alert("✅ Order placed successfully!");
-        navigate("/orders"); // redirect to orders page
+        navigate("/payment"); // redirect to orders page
       } else {
         // Handle regular cart checkout
         const orderData = {
@@ -121,8 +121,7 @@ export default function Checkout() {
           }
         });
 
-        alert("✅ Order placed successfully!");
-        navigate("/orders"); // redirect to orders page
+        navigate("/payment"); // redirect to orders page
       }
     } catch (err) {
       alert("❌ Error placing order: " + err.message);
