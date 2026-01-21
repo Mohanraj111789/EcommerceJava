@@ -50,14 +50,14 @@ const order = JSON.parse(localStorage.getItem("currentOrder"));
           }
         }
       );
-      if(!response.ok)
-      {
-        return response.data;
-      }
+      // if(!response.ok)
+      // {
+      //   return response.data;
+      // }
 
       // ✅ UPDATE ORDER STATUS
       await axios.put(
-        `http://localhost:8080/api/orders/${order.id}/status?status=PAID`,
+        `http://localhost:8080/api/payment/update/${order.id}?status=PAID`,
         {},
         {
           headers: {

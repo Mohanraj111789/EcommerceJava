@@ -6,6 +6,10 @@
     background-color: #131921;
     color: white;
     font-family: Arial, sans-serif;
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+    margin-bottom: 100px;
   }
   
   /* LOGO */
