@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -14,6 +15,7 @@ import com.ecommerce.model.Transaction;
 import com.ecommerce.model.User;
 import com.ecommerce.repository.UserRepository;
 import com.ecommerce.service.PaymentService;
+import com.ecommerce.service.OrderService;
 import com.ecommerce.dto.TransferRequest;
 
 import jakarta.validation.Valid;
@@ -30,6 +32,9 @@ public class PaymentController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private OrderService orderService;
 
     @PostMapping("/transfer")
     public ResponseEntity<?> transfer(
@@ -51,11 +56,14 @@ public class PaymentController {
 
         return ResponseEntity.ok(txn);
     }
-    @PutMapping("path/{id}")
-    public String putMethodName(@PathVariable String id, @RequestBody String entity) {
-        //TODO: process PUT request
-        
-        return entity;
-    }
+    @PutMapping("/update/{orderId}")
+public ResponseEntity<String> updateStatus(
+        @PathVariable Long orderId,
+        @RequestParam String status
+) {
+    orderService.updateOrderStatus(orderId, status);
+    return ResponseEntity.ok("Order status updated successfully");
+}
+
     
 }

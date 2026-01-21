@@ -49,6 +49,13 @@ public class OrderService {
     public List<OrderProductDTO> getOrdersWithProducts() {
         return repo.getOrdersWithProducts();
     }
+    
+    public void updateOrderStatus(Long orderId, String status) {
+        int updated = repo.updateOrderStatus(orderId, status);
+        if (updated == 0) {
+            throw new RuntimeException("Order not found or update failed");
+        }
+    }
 
 
 }

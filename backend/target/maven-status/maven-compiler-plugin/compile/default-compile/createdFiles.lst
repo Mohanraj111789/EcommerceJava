@@ -8,6 +8,7 @@ com\ecommerce\service\ProductService.class
 com\ecommerce\controller\CartController.class
 com\ecommerce\dto\TransferRequest.class
 com\ecommerce\repository\ProductRepository.class
+com\ecommerce\exception\GlobalExceptionHandler.class
 com\ecommerce\model\Product.class
 com\ecommerce\security\JwtAuthenticationFilter.class
 com\ecommerce\service\UserService.class
@@ -21,6 +22,7 @@ com\ecommerce\EcommerceApplication.class
 com\ecommerce\model\Wallet.class
 com\ecommerce\security\SecurityConfig.class
 com\ecommerce\repository\TransactionRepository.class
+com\ecommerce\exception\InsufficientBalanceException.class
 com\ecommerce\service\OrderService.class
 com\ecommerce\controller\AdminUserController.class
 com\ecommerce\dto\OrderProductDTO.class

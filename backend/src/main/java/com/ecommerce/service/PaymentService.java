@@ -18,10 +18,14 @@ public class PaymentService {
     @Autowired
     private TransactionRepository transactionRepository;
 
-    public PaymentService(WalletRepository walletRepository,TransactionRepository transactionRepository)
+    @Autowired
+    private OrderService orderService;
+
+    public PaymentService(WalletRepository walletRepository,TransactionRepository transactionRepository,OrderService orderService)
     {
         this.transactionRepository = transactionRepository;
         this.walletRepository = walletRepository;
+        this.orderService = orderService;
     }
     @Value("${payment.system.user-id}")
     private Long receiverUserId;
