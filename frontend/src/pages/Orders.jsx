@@ -73,7 +73,7 @@ export default function Orders() {
 
                 <div className="info-row">
                   <span className="dot orange">⏳</span>
-                  Payment: Pending
+                  Payment:{order.status}
                 </div>
               </div>
 
