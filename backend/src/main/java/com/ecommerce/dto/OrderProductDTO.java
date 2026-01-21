@@ -6,6 +6,7 @@ public class OrderProductDTO {
     private Long userId;
     private String status;
     private Double totalPrice;
+    private String address;
 
     private Long productId;
     private String productName;
@@ -17,6 +18,7 @@ public class OrderProductDTO {
             Long userId,
             String status,
             Double totalPrice,
+            String address,
             Long productId,
             String productName,
             Double productPrice,
@@ -26,6 +28,7 @@ public class OrderProductDTO {
         this.userId = userId;
         this.status = status;
         this.totalPrice = totalPrice;
+        this.address = address;
         this.productId = productId;
         this.productName = productName;
         this.productPrice = productPrice;
@@ -94,6 +97,14 @@ public class OrderProductDTO {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
     
     // getters only (recommended)

@@ -24,6 +24,7 @@ public interface OrderRepository extends JpaRepository<Order,Long>{
             o.userId,
             o.status,
             o.totalPrice,
+            o.address,
             p.id,
             p.name,
             p.price,
