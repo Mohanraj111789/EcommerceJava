@@ -41,7 +41,20 @@ export default function Orders() {
 
               {/* LEFT */}
               <div className="order-left">
-                <div className="order-box">📦</div>
+                <div className="order-box">
+                    <div className="product-image-container">
+                      <img
+                        src={
+                          order.imageUrl
+                            ? `/assets/${order.imageUrl}`
+                            : `/assets/product.jpg`
+                        }
+                        className="product-image"
+                        alt={order.name}
+                      />
+                    </div>
+
+                </div>
 
                 <div>
                   <h4>{order.productName} x1</h4>
