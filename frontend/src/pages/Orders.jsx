@@ -57,7 +57,7 @@ export default function Orders() {
                 </div>
 
                 <div>
-                  <h4 className="product-name">{order.productName}</h4>
+                  <h4 className="product-name1">{order.productName}</h4>
                   <p className="items">Items: 1</p>
                 </div>
               </div>
