@@ -11,6 +11,7 @@ const Card = ({ product, onAddToCart, onBuyNow }) => {
 
   return (
     <div className="product-card">
+      <div className="offer-badge">{product.offerPercentage}% OFF</div>
       <div className="product-image-container" onClick={handleClick}>
         <img
           src={
