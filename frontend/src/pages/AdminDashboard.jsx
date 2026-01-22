@@ -434,7 +434,7 @@ export default function AdminDashboard() {
                                         <input
                                             type="number"
                                             name="offerPercentage"
-                                            value={editingProduct.offerPercentage || ''}
+                                            value={editingProduct.offerPercentage === null ? '' : editingProduct.offerPercentage}
                                             onChange={handleEditInputChange}
                                             className="form-input"
                                             min="0"

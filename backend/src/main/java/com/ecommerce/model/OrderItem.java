@@ -15,6 +15,7 @@ public class OrderItem {
     private Double price;
 
     public OrderItem() {
+        
     }
 
     public Long getId() {

@@ -36,6 +36,7 @@ public class ProductService {
         existing.setStock(updatedProduct.getStock());
         existing.setDescription(updatedProduct.getDescription());
         existing.setCategory(updatedProduct.getCategory());
+        existing.setOfferPercentage(updatedProduct.getOfferPercentage());
         existing.setImageUrl(updatedProduct.getImageUrl());
         return repo.save(existing);
     }
