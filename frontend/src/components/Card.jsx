@@ -27,7 +27,15 @@ const Card = ({ product, onAddToCart, onBuyNow }) => {
       </div>
 
       <h4 className="product-name">{product.name}</h4>
-      <p className="product-price">₹ {product.price}</p>
+      {product.offerPercentage > 0 ? (
+        <>
+            <span className="product-price original-price">₹ {product.price}</span>
+            <span className="product-price discounted-price">₹ {product.price - (product.price * product.offerPercentage / 100)}</span>
+
+        </>
+      ) : (
+        <p className="product-price">₹ {product.price}</p>
+      )}
       <p className="text-overflow">{product.description}</p>
       <strong className="product-category">Stock: {product.stock}</strong>
 

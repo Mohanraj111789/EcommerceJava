@@ -97,6 +97,9 @@ const Products = () => {
     if (!userId) return navigate("/login");
 
     const product = allProducts.find(p => p.id === productId);
+    if(product.offerPercentage > 0){
+        product.price = product.price - (product.price * product.offerPercentage / 100);
+    }
     navigate("/checkout", {
       state: { buyNowProduct: product, quantity: 1 }
     });
