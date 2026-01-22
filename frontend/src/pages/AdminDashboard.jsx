@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import './AdminDashboard.css';
+import axios from 'axios';
+import { usePayment } from '../contexts/PaymentContext';
 
 export default function AdminDashboard() {
     const { user, logout } = useAuth();
@@ -13,6 +15,8 @@ export default function AdminDashboard() {
     const [showAddForm, setShowAddForm] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
     const [editingProduct, setEditingProduct] = useState(null);
+    const [totalRevenue, setTotalRevenue] = useState(0);
+    const { handleWallet } = usePayment();
     const BASEURL = 'http://localhost:8080/api';
     const [newProduct, setNewProduct] = useState({
         name: '',
@@ -26,6 +30,7 @@ export default function AdminDashboard() {
 
     useEffect(() => {
         fetchProducts();
+        fetchTotalRevenue();
     }, []);
 
     const fetchProducts = async () => {
@@ -47,6 +52,20 @@ export default function AdminDashboard() {
         } catch (err) {
             setError('Error fetching products: ' + err.message);
         } finally {
+            setLoading(false);
+        }
+    };
+
+    const fetchTotalRevenue = async () =>{
+        try{
+            setLoading(true);
+            const token = localStorage.getItem('token');
+            const res = await handleWallet();
+            console.log(res);
+            setTotalRevenue(res);
+        }catch(err){
+            setError('Error fetching total revenue: ' + err.message);
+        }finally{
             setLoading(false);
         }
     };
@@ -228,6 +247,8 @@ export default function AdminDashboard() {
                     </button>
                     <button onClick={()=>navigate('/products')}
                     className="btn-add-product">Preview</button>
+
+                    <h1>Total Revenue:{totalRevenue}</h1>
                 </div>
 
                 {error && (
