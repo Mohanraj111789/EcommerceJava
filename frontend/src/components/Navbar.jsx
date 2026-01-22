@@ -7,11 +7,13 @@ import { Navigate, useNavigate } from "react-router-dom";
 import { CartIcon } from "./CartIcon";
 
 
+
 const Navbar = ({ onSearch, products = [] ,cartCount}) => {
   const { user, logout } = useAuth();
   const [search, setSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
-  const [open, setOpen] = useState(false);
+  const [openMenu, setOpenMenu] = useState(false);
+
   const navigate = useNavigate();
   const userId = user?.id;
   useEffect(() => {
@@ -31,7 +33,7 @@ const Navbar = ({ onSearch, products = [] ,cartCount}) => {
   return (
     <header className="amazon-navbar">
       <div className="nav-left">
-        <button className="nav-left-button" onClick={() => setOpen(true)}>☰ All</button>
+        <button className="nav-left-button" onClick={() => setOpenMenu(true)}>☰ All</button>
         
         <span className="logo">E-Comp</span>
         <span className="logo-dot">.in</span>
@@ -75,7 +77,11 @@ const Navbar = ({ onSearch, products = [] ,cartCount}) => {
       </div>
 
       <div className="nav-right">
+
         <span>Hello, {user ? user.name : "Sign in"}</span>
+        <span className="orders" onClick={()=>
+          navigate("/orders")
+        }>ORDERS</span>
         {userId && <CartIcon count={cartCount} />}
         <button className="nav-right-button" onClick={() => {
 
