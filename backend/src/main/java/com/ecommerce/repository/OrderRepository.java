@@ -44,5 +44,25 @@ public interface OrderRepository extends JpaRepository<Order,Long>{
     );
 
 
+    @Query("""
+        SELECT new com.ecommerce.dto.OrderProductDTO(
+            o.id,
+            o.userId,
+            o.status,
+            o.totalPrice,
+            o.address,
+            p.id,
+            p.name,
+            p.price,
+            p.imageUrl
+        )
+        FROM Order o
+        JOIN Product p ON o.productId = p.id
+        WHERE o.userId = :userId
+        ORDER BY o.id DESC
+    """)
+    List<OrderProductDTO> findOrdersByUserId(@Param("userId") Long userId);
+
+
 
 }

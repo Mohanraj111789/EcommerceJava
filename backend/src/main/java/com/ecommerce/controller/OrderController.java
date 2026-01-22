@@ -101,8 +101,9 @@ public class OrderController {
         return filteredProducts;
     }
     
-    @GetMapping("/user/{userId}/orders")
-    public List<OrderProductDTO> getOrdersWithProducts(@PathVariable Long userId) {
-        return orderService.getOrdersWithProducts();
-    }
+@GetMapping("/my-orders/{userId}")
+public List<OrderProductDTO> getMyOrders(@PathVariable Long userId) {
+    return orderService.getOrdersByUserId(userId);
+}
+
 }

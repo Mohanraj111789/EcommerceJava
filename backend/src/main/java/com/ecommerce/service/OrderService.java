@@ -57,5 +57,9 @@ public class OrderService {
         }
     }
 
+    public List<OrderProductDTO> getOrdersByUserId(Long userId) {
+        return repo.findOrdersByUserId(userId);
+    }
+
 
 }

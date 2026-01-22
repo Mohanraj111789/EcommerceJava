@@ -23,7 +23,6 @@ com\ecommerce\model\Wallet.class
 com\ecommerce\security\SecurityConfig.class
 com\ecommerce\repository\TransactionRepository.class
 com\ecommerce\exception\InsufficientBalanceException.class
-com\ecommerce\service\OrderService.class
 com\ecommerce\controller\AdminUserController.class
 com\ecommerce\dto\OrderProductDTO.class
 com\ecommerce\security\JwtUtil.class
@@ -36,7 +35,6 @@ com\ecommerce\service\WalletService.class
 com\ecommerce\repository\UserRepository.class
 com\ecommerce\ds\RecentViewQueue.class
 com\ecommerce\model\User.class
-com\ecommerce\controller\OrderController.class
 com\ecommerce\controller\PaymentController.class
 com\ecommerce\ds\ProductSearchTrie$TrieNode.class
 com\ecommerce\service\RecommendationService.class
