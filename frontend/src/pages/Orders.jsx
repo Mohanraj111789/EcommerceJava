@@ -16,7 +16,7 @@ export default function Orders() {
   const fetchOrders = async () => {
     const token = localStorage.getItem("token");
     const res = await axios.get(
-      `http://localhost:8080/api/orders/user/${user.id}/orders`,
+      `http://localhost:8080/api/orders/my-orders/${user.id}`,
       {
         headers: { Authorization: `Bearer ${token}` },
       }
