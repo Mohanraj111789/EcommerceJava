@@ -500,7 +500,7 @@ export default function AdminDashboard() {
                                             <div className="price-section">
                                                 {product.offerPercentage && product.offerPercentage > 0 ? (
                                                     <>
-                                                        <span className="product-price original-price">&#8377;{product.price?.toFixed(2)}</span>
+                                                        <span className="product-price original-price">&#8377;{product.price?.toFixed(2)}</span><br></br>
                                                         <span className="product-price discounted-price">
                                                         &#8377;{calculateDiscountedPrice(product.price, product.offerPercentage).toFixed(2)}
                                                         </span>
