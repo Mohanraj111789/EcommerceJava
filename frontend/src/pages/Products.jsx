@@ -11,6 +11,8 @@ const Products = () => {
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [sortType, setSortType] = useState("featured");
   const [cartCount, setCartCount] = useState(0);
+  const API_URL = 'https://ecommerce-java-mohan-raj.onrender.com/api';
+
 
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -24,7 +26,7 @@ const Products = () => {
 
   const fetchProducts = async () => {
     try {
-      const res = await axios.get("http://localhost:8080/api/products");
+      const res = await axios.get(`${API_URL}/products`);
       setAllProducts(res.data);
       setFilteredProducts(res.data);
     } catch (err) {
@@ -36,7 +38,7 @@ const Products = () => {
   const loadCartCount = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:8080/api/cart/count/${userId}`
+        `${API_URL}/cart/count/${userId}`
       );
       const count = res.data.items.reduce(
         (sum, item) => sum + item.quantity,
@@ -86,7 +88,7 @@ const Products = () => {
     if (!userId) return navigate("/login");
 
     await axios.post(
-      `http://localhost:8080/api/cart/${userId}/add`,
+      `${API_URL}/cart/${userId}/add`,
       { productId, quantity: 1 }
     );
 

@@ -5,13 +5,14 @@ const Wallet = () => {
   const [balance, setBalance] = useState(0);
   const [amount, setAmount] = useState("");
   const [loading, setLoading] = useState(false);
+  const API_URL = 'https://ecommerce-java-mohan-raj.onrender.com/api';
 
   const token = localStorage.getItem("token");
 
   const fetchBalance = async () => {
     try {
       const res = await axios.get(
-        "http://localhost:8080/api/wallet/balance",
+        `${API_URL}/wallet/balance`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -39,7 +40,7 @@ const Wallet = () => {
       setLoading(true);
 
       await axios.post(
-        "http://localhost:8080/api/wallet/add-money",
+        `${API_URL}/wallet/add-money`,
         { amount: amount },
         {
           headers: {

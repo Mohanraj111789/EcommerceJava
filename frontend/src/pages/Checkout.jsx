@@ -22,7 +22,7 @@ export default function Checkout() {
   const [buyNowProduct, setBuyNowProduct] = useState(null);
   const [buyNowQuantity, setBuyNowQuantity] = useState(1);
   const { setOrderDetails } = usePayment();
-
+  const API_URL = 'https://ecommerce-java-mohan-raj.onrender.com/api';
   const userId = user?.id;
   const isBuyNow = location.state?.buyNowProduct;
 
@@ -47,7 +47,7 @@ export default function Checkout() {
     const loadCart = async () => {
         try {
             setLoading(true);
-            const res = await axios.get(`http://localhost:8080/api/cart/${userId}`);
+            const res = await axios.get(`${API_URL}/cart/${userId}`);
             
             setCart(res.data);
             setCartItems(res.data.items);
@@ -59,7 +59,7 @@ export default function Checkout() {
     };
 
     const loadProducts = async () => {
-        const res = await axios.get("http://localhost:8080/api/products");
+        const res = await axios.get(`${API_URL}/products`);
         const map = {};
         res.data.forEach(p => (map[p.id] = p));
         setProducts(map);
@@ -100,7 +100,7 @@ export default function Checkout() {
         };
 
         // Call backend to create order
-        const response = await axios.post("http://localhost:8080/api/orders", orderData, {
+        const response = await axios.post(`${API_URL}/orders`, orderData, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`
           }
@@ -121,7 +121,7 @@ export default function Checkout() {
           totalPrice
         };
 
-        await axios.post("http://localhost:8080/api/orders", orderData, {
+        await axios.post(`${API_URL}/orders`, orderData, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`
           }

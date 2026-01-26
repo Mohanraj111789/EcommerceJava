@@ -10,6 +10,7 @@ const Cart = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
   const userId = user?.id;
+  const API_URL = 'https://ecommerce-java-mohan-raj.onrender.com/api';
 
   useEffect(() => {
     if (userId) {
@@ -19,12 +20,12 @@ const Cart = () => {
   }, [userId]);
 
   const loadCart = async () => {
-    const res = await axios.get(`http://localhost:8080/api/cart/count/${userId}`);
+    const res = await axios.get(`${API_URL}/cart/count/${userId}`);
     setCart(res.data);
   };
 
   const loadProducts = async () => {
-    const res = await axios.get("http://localhost:8080/api/products");
+    const res = await axios.get(`${API_URL}/products`);
     const map = {};
     res.data.forEach(p => (map[p.id] = p));
     setProducts(map);
@@ -32,19 +33,19 @@ const Cart = () => {
 
   const updateQty = async (itemId, qty) => {
     if (qty <= 0) return;
-    await axios.put(`http://localhost:8080/api/cart/${userId}/item/${itemId}`, {
+    await axios.put(`${API_URL}/cart/${userId}/item/${itemId}`, {
       quantity: qty
     });
     loadCart();
   };
 
   const removeItem = async (itemId) => {
-    await axios.delete(`http://localhost:8080/api/cart/${userId}/item/${itemId}`);
+    await axios.delete(`${API_URL}/cart/${userId}/item/${itemId}`);
     loadCart();
   };
 
   const clearCart = async () => {
-    await axios.delete(`http://localhost:8080/api/cart/${userId}/clear`);
+    await axios.delete(`${API_URL}/cart/${userId}/clear`);
     loadCart();
   };
 

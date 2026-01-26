@@ -7,6 +7,7 @@ export default function ProductDetails() {
   const { state } = useLocation();
   const navigate = useNavigate();
   const { addToCart } = useCart();
+  const API_URL = 'https://ecommerce-java-mohan-raj.onrender.com/api';
 
   const product = state?.product;
 

@@ -8,6 +8,7 @@ export default function Payment() {
   const [method, setMethod] = useState("upi");
   const [walletbalance,setwalletbalance] = useState(null);
   const { handleWallet,payUsingWallet} = usePayment();
+  const API_URL = 'https://ecommerce-java-mohan-raj.onrender.com/api';
   useEffect (()=>{
     if(method === "wallet")
     {

@@ -17,7 +17,7 @@ export default function AdminDashboard() {
     const [editingProduct, setEditingProduct] = useState(null);
     const [totalRevenue, setTotalRevenue] = useState(0);
     const { handleWallet } = usePayment();
-    const BASEURL = 'http://localhost:8080/api';
+    const BASEURL = 'https://ecommerce-java-mohan-raj.onrender.com/api';
     const [newProduct, setNewProduct] = useState({
         name: '',
         description: '',

@@ -8,7 +8,7 @@ export default function ViewUser() {
     useEffect(() => {
         fetchUsers();
     }, []);
-    const BASEURL = "http://localhost:8080/api/admin/";
+    const BASEURL = "https://ecommerce-java-mohan-raj.onrender.com/api/admin/";
 
     const fetchUsers = async () => {
         const token = localStorage.getItem("token");
