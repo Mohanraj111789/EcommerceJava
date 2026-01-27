@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:8080/api'; // Update with your backend URL
+const API_URL = 'https://ecommercejava-2.onrender.com/api'; // Update with your backend URL
 
 // Helper function to handle API responses
 async function handleResponse(response) {
