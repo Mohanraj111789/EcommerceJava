@@ -70,9 +70,10 @@ export default function AddMoney() {
         <p className="info">
           Recommended amount to make your next transaction in 1-click
         </p>
-
-        <button className="continue-btn" onClick={handleAddMoney}>Add Money</button>
-        <button className="continue-btn" onClick={handleContinue}>Continue Payment</button>
+        <div className="button-container">
+          <button className="continue-btn" onClick={handleAddMoney}>Add Money</button>
+          <button className="continue-btn" onClick={handleContinue}>Continue Payment</button>
+        </div>
       </div>
     </div>
   );
