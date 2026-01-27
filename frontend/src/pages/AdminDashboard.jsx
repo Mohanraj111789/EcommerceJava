@@ -249,7 +249,7 @@ export default function AdminDashboard() {
                     <button onClick={()=>navigate('/products')}
                     className="btn-add-product">Preview</button>
 
-                    <h1>Total Revenue:{totalRevenue}</h1>
+                    <h1 className='total-amount'>Total Revenue:{totalRevenue}</h1>
                 </div>
 
                 {error && (
