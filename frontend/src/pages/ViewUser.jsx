@@ -8,7 +8,7 @@ export default function ViewUser() {
     useEffect(() => {
         fetchUsers();
     }, []);
-    const BASEURL = "https://ecommercejava-production.up.railway.app/api/admin";
+    const BASEURL = "https://ecommercejava-production.up.railway.app/api/admin/";
 
     const fetchUsers = async () => {
         const token = localStorage.getItem("token");
