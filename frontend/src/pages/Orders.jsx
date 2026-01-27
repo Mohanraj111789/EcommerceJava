@@ -8,6 +8,7 @@ export default function Orders() {
   const { user } = useAuth();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
+  const API_URL = "https://ecommercejava-2.onrender.com/api";
 
   useEffect(() => {
     if (user) fetchOrders();
@@ -16,7 +17,7 @@ export default function Orders() {
   const fetchOrders = async () => {
     const token = localStorage.getItem("token");
     const res = await axios.get(
-      `http://localhost:8080/api/orders/my-orders/${user.id}`,
+      `${API_URL}/orders/my-orders/${user.id}`,
       {
         headers: { Authorization: `Bearer ${token}` },
       }

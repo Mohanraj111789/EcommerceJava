@@ -9,6 +9,7 @@ export const PaymentProvider = ({ children }) => {
 
  
   const [loading, setLoading] = useState(false);
+  const API_URL = "https://ecommercejava-2.onrender.com/api";
 
   // ---------------------------
   // SET ORDER AFTER CHECKOUT
@@ -38,7 +39,7 @@ const order = JSON.parse(localStorage.getItem("currentOrder"));
       setLoading(true);
 
       const response = await axios.post(
-        "http://localhost:8080/api/payment/transfer",
+        `${API_URL}/payment/transfer`,
         {
           amount: order.totalPrice
         },
@@ -57,7 +58,7 @@ const order = JSON.parse(localStorage.getItem("currentOrder"));
 
       // ✅ UPDATE ORDER STATUS
       await axios.put(
-        `http://localhost:8080/api/payment/update/${order.id}?status=PAID`,
+        `${API_URL}/payment/update/${order.id}?status=PAID`,
         {},
         {
           headers: {
@@ -84,7 +85,7 @@ const order = JSON.parse(localStorage.getItem("currentOrder"));
   const handleWallet = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:8080/api/wallet/balance",
+        `${API_URL}/wallet/balance`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`
@@ -108,7 +109,7 @@ const order = JSON.parse(localStorage.getItem("currentOrder"));
       setLoading(true);
 
       const response = await axios.post(
-        "http://localhost:8080/api/wallet/add-money",
+        `${API_URL}/wallet/add-money`,
         { amount },
         {
           headers: {

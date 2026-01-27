@@ -18,6 +18,7 @@ export const CartProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const { user } = useAuth();
   const userId = user?.id;
+  const API_URL = "https://ecommercejava-2.onrender.com/api"
 
   /**
    * Fetch cart count from backend
@@ -33,7 +34,7 @@ export const CartProvider = ({ children }) => {
       setLoading(true);
       const token = localStorage.getItem('token');
       
-      const response = await fetch(`http://localhost:8080/api/cart/count/${userId}`, {
+      const response = await fetch(`${API_URL}/cart/count/${userId}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -77,7 +78,7 @@ export const CartProvider = ({ children }) => {
       setLoading(true);
       const token = localStorage.getItem('token');
 
-      const response = await fetch(`http://localhost:8080/api/cart/${userId}/add`, {
+      const response = await fetch(`${API_URL}cart/${userId}/add`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
