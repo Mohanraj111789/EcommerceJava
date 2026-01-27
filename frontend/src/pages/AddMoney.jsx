@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { usePayment } from "../contexts/PaymentContext";
+import { useNavigate } from "react-router-dom";
 import "./AddMoney.css";
 
 export default function AddMoney() {
@@ -7,6 +8,7 @@ export default function AddMoney() {
   const presetAmounts = [3282, 3290, 10, 50];
   const {addMoneyToWallet,handleWallet} = usePayment();
   const [walletbalance,setWalletbalance] = useState(0);
+  const navigate = useNavigate();
 
   const handleAddMoney = async()=>{
     addMoneyToWallet(amount).then(()=>{
@@ -20,6 +22,10 @@ export default function AddMoney() {
       setWalletbalance(balance);
     })
   },[handleWallet]);
+
+  const handleContinue = ()=>{
+    navigate("/payment");
+  }
 
 
   return (
@@ -66,6 +72,7 @@ export default function AddMoney() {
         </p>
 
         <button className="continue-btn" onClick={handleAddMoney}>Add Money</button>
+        <button className="continue-btn" onClick={handleContinue}>Continue Payment</button>
       </div>
     </div>
   );
