@@ -1,8 +1,5 @@
-import API from "../config/api";
 
-
-
-const API_URL = import.meta.env.API_URL; // Update with your backend URL
+const API_URL = 'https://ecommercejava-2.onrender.com/api'; // Update with your backend URL
 
 
 
