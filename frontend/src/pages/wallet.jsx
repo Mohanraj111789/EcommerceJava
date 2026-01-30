@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import Navbar1 from "../components/Navbar1";
 
 const Wallet = () => {
   const [balance, setBalance] = useState(0);
@@ -63,8 +62,6 @@ const Wallet = () => {
 
   return (
     <>
-      <Navbar1/>
-      <p style={{ color: "red" }}>NAVBAR TEST</p>
 
     <div className="wallet-container">
       <div className="wallet-card">

@@ -16,6 +16,7 @@ import Wallet from './pages/wallet';
 import Payment from './pages/Payment';
 import { PaymentProvider } from './contexts/PaymentContext';
 import AddMoney from './pages/AddMoney';
+import Layout from './layouts/Layout';
 
 
 // Protected Route component
@@ -59,7 +60,7 @@ function App() {
               path="/"
               element={
                 <ProtectedRoute>
-                  <Navigate to="/products" replace />
+                  <Navigate to="/login" replace />
                 </ProtectedRoute>
               }
             />
@@ -115,12 +116,13 @@ function App() {
               path="/not-found"
               element={<NotFound />}
             />
-            <>
+            <Route element={<Layout />}>
               <Route path="/product/:id" element={<ProductDetails />} />
               <Route path="/wallet" element={<Wallet />} />
               <Route path="/payment" element={<Payment/>}/>
               <Route path="/add-money" element={<AddMoney/>}/>
-            </>
+            </Route>
+            
           </Routes>
 
         </Router>
