@@ -115,11 +115,7 @@ export const CartProvider = ({ children }) => {
   const refreshCartCount = async () => {
     await getCartCount();
   };
-  //Update Cart Count
-  const updateCartCount = async () => {
-    setCartCount(cartCount - 1);
-    refreshCartCount();
-  };
+
   // Load cart count when user changes
   useEffect(() => {
     if (userId) {

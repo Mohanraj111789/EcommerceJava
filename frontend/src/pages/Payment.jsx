@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { usePayment } from "../contexts/PaymentContext";
-import useNavContexts from "../contexts/NavContexts";
+
 import "./Payment.css";
 import { useNavigate } from "react-router-dom";
 
@@ -9,7 +9,6 @@ export default function Payment() {
   const [method, setMethod] = useState("upi");
   const [walletbalance,setwalletbalance] = useState(null);
   const { handleWallet,payUsingWallet} = usePayment();
-  const {updateCartCount} = useNavContexts();
   const API_URL = "https://ecommercejava-2.onrender.com/api";
   useEffect (()=>{
     if(method === "wallet")
