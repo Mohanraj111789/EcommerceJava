@@ -30,7 +30,7 @@ const Card = ({ product, onAddToCart, onBuyNow }) => {
       {product.offerPercentage > 0 ? (
         <>
             <span className="product-price original-price">₹ {product.price}</span>
-            <span className="product-price discounted-price">₹ {product.price - (product.price * product.offerPercentage / 100)}</span>
+            <span className="product-price discounted-price">₹ {Math.round(product.price - (product.price * product.offerPercentage / 100))}</span>
 
         </>
       ) : (
