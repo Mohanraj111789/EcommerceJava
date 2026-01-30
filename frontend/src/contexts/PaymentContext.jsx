@@ -41,7 +41,7 @@ const order = JSON.parse(localStorage.getItem("currentOrder"));
       const response = await axios.post(
         `${API_URL}/payment/transfer`,
         {
-          amount: order.totalPrice
+          amount: parseFloat(order.totalPrice)
         },
         {
           headers: {
