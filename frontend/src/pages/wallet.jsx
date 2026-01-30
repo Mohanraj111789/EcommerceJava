@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import Navbar1 from "../components/Navbar1";
 
 const Wallet = () => {
   const [balance, setBalance] = useState(0);
@@ -61,6 +62,8 @@ const Wallet = () => {
   };
 
   return (
+    <>
+      <Navbar1/>
     <div className="wallet-container">
       <div className="wallet-card">
         <h2>My Wallet</h2>
@@ -84,6 +87,8 @@ const Wallet = () => {
         </div>
       </div>
     </div>
+    </>
+
   );
 };
 
