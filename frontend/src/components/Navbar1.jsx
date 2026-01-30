@@ -33,7 +33,7 @@ const Navbar1 = () => {
       {/* USER */}
       <div className="nav-user">
         <span>Hello,</span>
-        <strong>{user.name}</strong>
+        <strong>{user?.name || "User"}</strong>
       </div>
 
       {/* CART */}
