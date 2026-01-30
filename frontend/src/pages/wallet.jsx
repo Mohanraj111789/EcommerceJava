@@ -64,6 +64,8 @@ const Wallet = () => {
   return (
     <>
       <Navbar1/>
+      <p style={{ color: "red" }}>NAVBAR TEST</p>
+
     <div className="wallet-container">
       <div className="wallet-card">
         <h2>My Wallet</h2>
