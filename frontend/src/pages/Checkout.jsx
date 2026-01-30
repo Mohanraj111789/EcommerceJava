@@ -192,7 +192,7 @@ export default function Checkout() {
                 <span>
                   {product.name} × {item.quantity}
                 </span>
-                <span>₹{product.price * item.quantity}</span>
+                <span>₹{Math.round(product.price * item.quantity)}</span>
               </div>
             );
           })
@@ -202,7 +202,7 @@ export default function Checkout() {
 
         <div className="summary-total">
           <span>Total</span>
-          <span>₹{totalPrice}</span>
+          <span>₹{Math.round(totalPrice)}</span>
         </div>
       </div>
 
