@@ -60,7 +60,7 @@ function App() {
               path="/"
               element={
                 <ProtectedRoute>
-                  <Navigate to="/login" replace />
+                  <Navigate to="/products" replace />
                 </ProtectedRoute>
               }
             />
