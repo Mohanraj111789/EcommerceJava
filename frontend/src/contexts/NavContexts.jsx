@@ -131,7 +131,7 @@ export const CartProvider = ({ children }) => {
     addToCart,
     getCartCount,
     refreshCartCount,
-    updateCartCount
+  
   };
 
   return (
