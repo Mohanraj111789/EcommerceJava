@@ -78,7 +78,7 @@ export const CartProvider = ({ children }) => {
       setLoading(true);
       const token = localStorage.getItem('token');
 
-      const response = await fetch(`${API_URL}cart/${userId}/add`, {
+      const response = await fetch(`${API_URL}/cart/${userId}/add`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
