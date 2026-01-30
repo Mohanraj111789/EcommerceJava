@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { usePayment } from "../contexts/PaymentContext";
-import {useNavContexts} from "../contexts/NavContexts";
+import useNavContexts from "../contexts/NavContexts";
 import "./Payment.css";
 import { useNavigate } from "react-router-dom";
 
