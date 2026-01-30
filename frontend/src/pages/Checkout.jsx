@@ -161,7 +161,7 @@ export default function Checkout() {
           <div>
             <div className="summary-row">
               <span>{buyNowProduct.name}</span>
-              <span>₹{buyNowProduct.price}</span>
+              <span>₹{Math.round(buyNowProduct.price)}</span>
             </div>
             <div className="summary-row">
               <label>Quantity:</label>
