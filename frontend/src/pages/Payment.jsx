@@ -29,7 +29,6 @@ export default function Payment() {
       
       handleWallet().then((balance)=>{
         setwalletbalance(balance);
-        updateCartCount();
         navigate("/orders");
       })
     });
