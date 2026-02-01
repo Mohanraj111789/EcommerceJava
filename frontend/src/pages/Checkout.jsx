@@ -222,10 +222,7 @@ export default function Checkout() {
               <span>{buyNowProduct.name}</span>
               <span>
                 ₹{Math.round(
-                  getDiscountedPrice(
-                    buyNowProduct.price,
-                    buyNowProduct.offerPercentage
-                  ) * buyNowQuantity
+                  buyNowProduct.price
                 )}
               </span>
             </div>
