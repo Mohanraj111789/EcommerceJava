@@ -23,7 +23,7 @@ const Cart = () => {
 
   const loadCart = async () => {
     const res = await axios.get(`${API_URL}/cart/count/${userId}`);
-    setCart(res.data);
+    setCart(res.data===0?0:res.data);
   };
 
   const loadProducts = async () => {
@@ -110,7 +110,7 @@ const Cart = () => {
 
                   <div className="product-details">
                     <h4 className="product-name">{product.name}</h4>
-                    <p className="product-price">₹ {product.price}</p>
+                    <p className="product-price">₹ {product.offerPercentage > 0 ? product.price - (product.price * product.offerPercentage / 100) : product.price}</p>
                   </div>
 
                   <div className="qty-control">
