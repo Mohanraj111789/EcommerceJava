@@ -81,7 +81,7 @@ const Cart = () => {
   }
 
   const total = cart.items.reduce((sum, item) => {
-    const price = products[item.productId]?.price || 0;
+    const price = products[item.productId]?.offerPercentage > 0 ? products[item.productId]?.price - (products[item.productId]?.price * products[item.productId]?.offerPercentage / 100) : products[item.productId]?.price || 0;
     return sum + price * item.quantity;
   }, 0);
 
