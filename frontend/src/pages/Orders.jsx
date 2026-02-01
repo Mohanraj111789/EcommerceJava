@@ -27,6 +27,7 @@ export default function Orders() {
   };
 
   if (loading) return <div className="loading">Loading...</div>;
+  console.log(orders);
 
   return (
     <>
