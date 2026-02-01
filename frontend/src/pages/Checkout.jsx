@@ -175,7 +175,6 @@ export default function Checkout() {
                 <span>{buyNowQuantity}</span>
                 <button 
                   onClick={() => {
-                    totalPrice += buyNowProduct.offerPercentage > 0 ? buyNowProduct.price - (buyNowProduct.price * buyNowProduct.offerPercentage / 100) : buyNowProduct.price;
                     setBuyNowQuantity(Math.min(buyNowProduct.stock, buyNowQuantity + 1))
                   }}
                   style={{ padding: '5px 10px' }}
