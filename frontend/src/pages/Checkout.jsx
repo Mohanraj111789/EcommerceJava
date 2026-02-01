@@ -1,206 +1,147 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect,useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../contexts/AuthContext";
 import { usePayment } from "../contexts/PaymentContext";
 
+
 import "./Checkout.css";
+
+
 
 export default function Checkout() {
 
   const navigate = useNavigate();
   const location = useLocation();
-
-  const { user } = useAuth();
+  const [cartItems, setCartItems] = useState([]);
+  const [cart, setCart] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const {user} = useAuth();
+  const [products, setProducts] = useState({});
+  const [buyNowProduct, setBuyNowProduct] = useState(null);
+  const [buyNowQuantity, setBuyNowQuantity] = useState(1);
   const { setOrderDetails } = usePayment();
 
   const userId = user?.id;
+  const isBuyNow = location.state?.buyNowProduct;
   const API_URL = "https://ecommercejava-2.onrender.com/api";
 
-  const [cartItems, setCartItems] = useState([]);
-  const [products, setProducts] = useState({});
-  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    if(userId)
+    {
+        // If it's a Buy Now checkout, use the passed product
+        if (location.state?.buyNowProduct) {
+          setBuyNowProduct(location.state.buyNowProduct);
+          setBuyNowQuantity(location.state.quantity || 1);
+          setLoading(false);
+        } else {
+          // Regular cart checkout
+          loadCart();
+        }
+        loadProducts();
+    }
+    }, [userId]);
+    
 
-  const [buyNowProduct, setBuyNowProduct] = useState(null);
-  const [buyNowQuantity, setBuyNowQuantity] = useState(1);
 
+    const loadCart = async () => {
+        try {
+            setLoading(true);
+            const res = await axios.get(`${API_URL}/cart/${userId}`);
+            
+            setCart(res.data);
+            setCartItems(res.data.items);
+        } catch (err) {
+            setError('Error loading cart: ' + err.message);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const loadProducts = async () => {
+        const res = await axios.get(`${API_URL}/products`);
+        const map = {};
+        res.data.forEach(p => (map[p.id] = p));
+        setProducts(map);
+    };
+  
+
+  // 🔹 Dummy address
   const [address, setAddress] = useState("");
 
-  const isBuyNow = location.state?.buyNowProduct;
-
-  // -------------------------------
-  // LOAD DATA
-  // -------------------------------
-  useEffect(() => {
-    if (!userId) return;
-
-    if (isBuyNow) {
-      setBuyNowProduct(location.state.buyNowProduct);
-      setBuyNowQuantity(location.state.quantity || 1);
-      setLoading(false);
-    } else {
-      loadCart();
-    }
-
-    loadProducts();
-  }, [userId]);
-
-  const loadCart = async () => {
-    try {
-      const res = await axios.get(`${API_URL}/cart/${userId}`);
-      setCartItems(res.data.items);
-    } catch (err) {
-      console.error("Cart error", err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const loadProducts = async () => {
-    const res = await axios.get(`${API_URL}/products`);
-    const map = {};
-    res.data.forEach(p => (map[p.id] = p));
-    setProducts(map);
-  };
-
-  // -------------------------------
-  // PRICE LOGIC
-  // -------------------------------
-  const getDiscountedPrice = (price, offer) => {
-    if (offer > 0) {
-      return price - (price * offer) / 100;
-    }
-    return price;
-  };
-
+  // 🔹 Calculate total
   const getTotalAmount = () => {
-
-    // BUY NOW
     if (isBuyNow && buyNowProduct) {
-      const pricePerItem = getDiscountedPrice(
-        buyNowProduct.price,
-        buyNowProduct.offerPercentage
-      );
-      return pricePerItem * buyNowQuantity;
+      return buyNowProduct.offerPercentage > 0 ? buyNowProduct.price - (buyNowProduct.price * buyNowProduct.offerPercentage / 100) : buyNowProduct.price * buyNowQuantity;
     }
-
-    // CART
-    return cartItems.reduce((sum, item) => {
-      const product = products[item.productId];
-      if (!product) return sum;
-
-      const pricePerItem = getDiscountedPrice(
-        product.price,
-        product.offerPercentage
-      );
-
-      return sum + pricePerItem * item.quantity;
-    }, 0);
+    return cartItems.reduce(
+      (sum, item) => sum + item.quantity * (products[item.productId]?.offerPercentage > 0 ? products[item.productId]?.price - (products[item.productId]?.price * products[item.productId]?.offerPercentage / 100) : products[item.productId]?.price || 0),
+      0
+    );
   };
 
   const totalPrice = getTotalAmount();
 
-  // -------------------------------
-  // PLACE ORDER
-  // -------------------------------
   const handlePlaceOrder = async () => {
-
     if (!address.trim()) {
       alert("Please enter delivery address");
       return;
     }
 
     try {
-
-      // BUY NOW ORDER
+      // Handle Buy Now checkout
       if (isBuyNow && buyNowProduct) {
-
-        const pricePerItem = getDiscountedPrice(
-          buyNowProduct.price,
-          buyNowProduct.offerPercentage
-        );
-
         const orderData = {
           userId,
           address,
+
           totalPrice,
-          items: [
-            {
-              productId: buyNowProduct.id,
-              quantity: buyNowQuantity,
-              price: pricePerItem
-            }
-          ]
+          productId:buyNowProduct.id
         };
 
-        const res = await axios.post(
-          `${API_URL}/orders`,
-          orderData,
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`
-            }
+        // Call backend to create order
+        const response = await axios.post(`${API_URL}/orders`, orderData, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
           }
-        );
+        });
+        localStorage.setItem("currentOrder", JSON.stringify(response.data));
 
-        localStorage.setItem("currentOrder", JSON.stringify(res.data));
-        navigate("/payment");
-      }
-
-      // CART ORDER
-      else {
-
-        const items = cartItems.map(item => {
-          const product = products[item.productId];
-
-          return {
+        navigate("/payment"); // redirect to orders page
+      } else {
+        // Handle regular cart checkout
+        const orderData = {
+          userId,
+          items: cartItems.map(item => ({
             productId: item.productId,
             quantity: item.quantity,
-            price: getDiscountedPrice(
-              product.price,
-              product.offerPercentage
-            )
-          };
-        });
-
-        const orderData = {
-          userId,
+            price: products[item.productId]?.price
+          })),
           address,
-          totalPrice,
-          items
+          totalPrice
         };
 
-        await axios.post(
-          `${API_URL}/orders`,
-          orderData,
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`
-            }
+        await axios.post(`${API_URL}/orders`, orderData, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
           }
-        );
-
+        });
         setOrderDetails(orderData);
-        navigate("/payment");
-      }
 
+        navigate("/payment"); // redirect to orders page
+      }
     } catch (err) {
-      console.error("Order failed", err);
-      alert("❌ Failed to place order");
+      alert("❌ Error placing order: " + err.message);
+      console.error("Order error:", err);
     }
   };
 
-  if (loading) return <h3 style={{ textAlign: "center" }}>Loading...</h3>;
-
-  // -------------------------------
-  // UI
-  // -------------------------------
   return (
     <div className="checkout-page">
-
       <h2 className="checkout-title">Checkout</h2>
 
-      {/* ADDRESS */}
+      {/* Address Section */}
       <div className="checkout-card">
         <h3>Delivery Address</h3>
         <textarea
@@ -211,72 +152,53 @@ export default function Checkout() {
         />
       </div>
 
-      {/* ORDER SUMMARY */}
+      {/* Order Summary */}
       <div className="checkout-card">
         <h3>Order Summary</h3>
 
         {isBuyNow && buyNowProduct ? (
-
+          // Buy Now Product Summary
           <div>
             <div className="summary-row">
               <span>{buyNowProduct.name}</span>
-              <span>
-                ₹{Math.round(
-                  buyNowProduct.price
-                )}
-              </span>
+              <span>₹{Math.round(buyNowProduct.price)}</span>
             </div>
-
             <div className="summary-row">
-              <label>Quantity</label>
-
-              <div style={{ display: "flex", gap: "10px" }}>
-                <button
-                  onClick={() =>
-                    setBuyNowQuantity(q => Math.max(1, q - 1))
-                  }
+              <label>Quantity:</label>
+              <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                <button 
+                  onClick={() => setBuyNowQuantity(Math.max(1, buyNowQuantity - 1))}
+                  style={{ padding: '5px 10px' }}
                 >
                   -
                 </button>
-
                 <span>{buyNowQuantity}</span>
-
-                <button
-                  onClick={() =>
-                    setBuyNowQuantity(q =>
-                      Math.min(buyNowProduct.stock, q + 1)
-                    )
-                  }
+                <button 
+                  onClick={() => {
+                    totalPrice += buyNowProduct.offerPercentage > 0 ? buyNowProduct.price - (buyNowProduct.price * buyNowProduct.offerPercentage / 100) : buyNowProduct.price;
+                    setBuyNowQuantity(Math.min(buyNowProduct.stock, buyNowQuantity + 1))
+                  }}
+                  style={{ padding: '5px 10px' }}
                 >
                   +
                 </button>
               </div>
             </div>
           </div>
-
         ) : (
-
-          cartItems.map(item => {
+          // Cart Items Summary
+          cartItems.map((item) => {
             const product = products[item.productId];
             if (!product) return null;
-
             return (
-              <div key={item.id} className="summary-row">
+              <div className="summary-row" key={item.id}>
                 <span>
                   {product.name} × {item.quantity}
                 </span>
-                <span>
-                  ₹{Math.round(
-                    getDiscountedPrice(
-                      product.price,
-                      product.offerPercentage
-                    ) * item.quantity
-                  )}
-                </span>
+                <span>₹{Math.round(product.price * item.quantity)}</span>
               </div>
             );
           })
-
         )}
 
         <hr />
@@ -287,14 +209,11 @@ export default function Checkout() {
         </div>
       </div>
 
-      {/* ACTIONS */}
+      {/* Actions */}
       <div className="checkout-actions">
-
         <button
           className="btn-secondary"
-          onClick={() =>
-            isBuyNow ? navigate("/products") : navigate("/cart")
-          }
+          onClick={() => isBuyNow ? navigate("/products") : navigate("/cart")}
         >
           ← {isBuyNow ? "Continue Shopping" : "Back to Cart"}
         </button>
@@ -305,9 +224,7 @@ export default function Checkout() {
         >
           Place Order
         </button>
-
       </div>
-
     </div>
   );
 }
