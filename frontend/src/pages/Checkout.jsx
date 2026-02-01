@@ -73,10 +73,10 @@ export default function Checkout() {
   // 🔹 Calculate total
   const getTotalAmount = () => {
     if (isBuyNow && buyNowProduct) {
-      return buyNowProduct.price * buyNowQuantity;
+      return buyNowProduct.offerPercentage > 0 ? buyNowProduct.price - (buyNowProduct.price * buyNowProduct.offerPercentage / 100) : buyNowProduct.price * buyNowQuantity;
     }
     return cartItems.reduce(
-      (sum, item) => sum + item.quantity * (products[item.productId]?.price || 0),
+      (sum, item) => sum + item.quantity * (products[item.productId]?.offerPercentage > 0 ? products[item.productId]?.price - (products[item.productId]?.price * products[item.productId]?.offerPercentage / 100) : products[item.productId]?.price || 0),
       0
     );
   };
