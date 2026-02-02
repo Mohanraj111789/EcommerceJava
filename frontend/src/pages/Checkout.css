@@ -1,90 +1,120 @@
-.payment-container {
-  width: 90%;
+.checkout-page {
+  max-width: 900px;
   margin: auto;
   padding: 20px;
-  font-family: Arial, sans-serif;
+  color: #fff;
 }
 
-.payment-title {
+.checkout-title {
   margin-bottom: 20px;
 }
 
-.payment-layout {
-  display: grid;
-  grid-template-columns: 1fr 2fr 1fr;
-  gap: 20px;
-}
-
-/* Sidebar */
-.payment-sidebar {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.payment-option {
-  padding: 12px;
-  border: 1px solid #ddd;
-  background: white;
-  cursor: pointer;
-  text-align: left;
-}
-
-.payment-option.active {
-  background: black;
-  color: white;
-}
-
-/* Center Card */
-.payment-main {
-  border: 1px solid #ddd;
+/* CARD */
+.checkout-card {
+  background: #1f2937;
+  border-radius: 12px;
   padding: 20px;
-  border-radius: 10px;
+  margin-bottom: 20px;
 }
 
-.payment-card input,
-.payment-card select {
+/* ADDRESS */
+.checkout-textarea {
   width: 100%;
+  min-height: 80px;
   padding: 10px;
-  margin: 10px 0;
-}
-
-.row {
-  display: flex;
-  gap: 10px;
-}
-
-.btn-light {
-  background: #f1f1f1;
-  border: 1px solid #ccc;
-  padding: 10px;
-  width: 100%;
-  margin-top: 10px;
-}
-
-.btn-dark {
-  background: black;
-  color: white;
+  border-radius: 6px;
   border: none;
-  padding: 12px;
-  width: 100%;
-  margin-top: 10px;
+  outline: none;
+  resize: none;
 }
 
-/* Price summary */
-.price-summary {
-  border: 1px solid #ddd;
-  padding: 20px;
-  border-radius: 10px;
+/* ORDER ROW */
+.order-row {
+  display: grid;
+  grid-template-columns: 1fr 140px 140px;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 0;
 }
 
-/* Address */
-.address-box {
-  margin-top: 20px;
+.order-product-name {
+  font-size: 15px;
+  font-weight: 500;
 }
 
-.address-box textarea {
-  width: 100%;
-  height: 80px;
-  padding: 10px;
+/* QUANTITY */
+.order-qty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.qty-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  border: 1px solid #9ca3af;
+  background: transparent;
+  color: #fff;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.qty-btn:hover {
+  background: #374151;
+}
+
+.qty-value {
+  min-width: 24px;
+  text-align: center;
+  font-weight: 600;
+}
+
+/* PRICE */
+.order-price {
+  text-align: right;
+  font-weight: 600;
+  font-size: 15px;
+}
+
+/* DIVIDER */
+.checkout-card hr {
+  border: none;
+  border-top: 1px solid #374151;
+  margin: 16px 0;
+}
+
+/* TOTAL */
+.summary-total {
+  display: flex;
+  justify-content: space-between;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+/* ACTIONS */
+.checkout-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.btn-primary {
+  background: #22c55e;
+  color: #000;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.btn-secondary {
+  background: transparent;
+  color: #fff;
+  border: 1px solid #9ca3af;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
 }
