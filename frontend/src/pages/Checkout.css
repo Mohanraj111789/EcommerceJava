@@ -25,6 +25,7 @@
 .cart-header {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr 0.5fr;
+  color: #000;
   font-weight: bold;
   padding-bottom: 10px;
   border-bottom: 1px solid #ddd;
