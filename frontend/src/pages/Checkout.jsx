@@ -1,82 +1,80 @@
-import React, { useEffect,useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../contexts/AuthContext";
 import { usePayment } from "../contexts/PaymentContext";
-
-
 import "./Checkout.css";
 
-
-
 export default function Checkout() {
-
   const navigate = useNavigate();
   const location = useLocation();
   const [cartItems, setCartItems] = useState([]);
   const [cart, setCart] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const {user} = useAuth();
+  const { user } = useAuth();
   const [products, setProducts] = useState({});
   const [buyNowProduct, setBuyNowProduct] = useState(null);
   const [buyNowQuantity, setBuyNowQuantity] = useState(1);
   const { setOrderDetails } = usePayment();
+  const [selectedPayment, setSelectedPayment] = useState("UPI");
 
   const userId = user?.id;
   const isBuyNow = location.state?.buyNowProduct;
   const API_URL = "https://ecommercejava-2.onrender.com/api";
 
   useEffect(() => {
-    if(userId)
-    {
-        // If it's a Buy Now checkout, use the passed product
-        if (location.state?.buyNowProduct) {
-          setBuyNowProduct(location.state.buyNowProduct);
-          setBuyNowQuantity(location.state.quantity || 1);
-          setLoading(false);
-        } else {
-          // Regular cart checkout
-          loadCart();
-        }
-        loadProducts();
+    if (userId) {
+      if (location.state?.buyNowProduct) {
+        setBuyNowProduct(location.state.buyNowProduct);
+        setBuyNowQuantity(location.state.quantity || 1);
+        setLoading(false);
+      } else {
+        loadCart();
+      }
+      loadProducts();
     }
-    }, [userId]);
-    
+  }, [userId]);
 
+  const loadCart = async () => {
+    try {
+      setLoading(true);
+      const res = await axios.get(`${API_URL}/cart/${userId}`);
+      setCart(res.data);
+      setCartItems(res.data.items);
+    } catch (err) {
+      setError("Error loading cart: " + err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    const loadCart = async () => {
-        try {
-            setLoading(true);
-            const res = await axios.get(`${API_URL}/cart/${userId}`);
-            
-            setCart(res.data);
-            setCartItems(res.data.items);
-        } catch (err) {
-            setError('Error loading cart: ' + err.message);
-        } finally {
-            setLoading(false);
-        }
-    };
+  const loadProducts = async () => {
+    const res = await axios.get(`${API_URL}/products`);
+    const map = {};
+    res.data.forEach((p) => (map[p.id] = p));
+    setProducts(map);
+  };
 
-    const loadProducts = async () => {
-        const res = await axios.get(`${API_URL}/products`);
-        const map = {};
-        res.data.forEach(p => (map[p.id] = p));
-        setProducts(map);
-    };
-  
-
-  // 🔹 Dummy address
   const [address, setAddress] = useState("");
 
-  // 🔹 Calculate total
   const getTotalAmount = () => {
     if (isBuyNow && buyNowProduct) {
-      return buyNowProduct.offerPercentage > 0 ? buyNowProduct.price - (buyNowProduct.price * buyNowProduct.offerPercentage / 100) : buyNowProduct.price * buyNowQuantity;
+      return buyNowProduct.offerPercentage > 0
+        ? buyNowProduct.price -
+            (buyNowProduct.price * buyNowProduct.offerPercentage) / 100
+        : buyNowProduct.price * buyNowQuantity;
     }
     return cartItems.reduce(
-      (sum, item) => sum + item.quantity * (products[item.productId]?.offerPercentage > 0 ? products[item.productId]?.price - (products[item.productId]?.price * products[item.productId]?.offerPercentage / 100) : products[item.productId]?.price || 0),
+      (sum, item) =>
+        sum +
+        item.quantity *
+          (products[item.productId]?.offerPercentage > 0
+            ? products[item.productId]?.price -
+              (products[item.productId]?.price *
+                products[item.productId]?.offerPercentage) /
+                100
+            : products[item.productId]?.price || 0),
       0
     );
   };
@@ -90,46 +88,46 @@ export default function Checkout() {
     }
 
     try {
-      // Handle Buy Now checkout
       if (isBuyNow && buyNowProduct) {
         const orderData = {
           userId,
           address,
-
           totalPrice,
-          productId:buyNowProduct.id
+          productId: buyNowProduct.id,
         };
 
-        // Call backend to create order
-        const response = await axios.post(`${API_URL}/orders`, orderData, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`
+        const response = await axios.post(
+          `${API_URL}/orders`,
+          orderData,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
           }
-        });
-        localStorage.setItem("currentOrder", JSON.stringify(response.data));
+        );
 
-        navigate("/payment"); // redirect to orders page
+        localStorage.setItem("currentOrder", JSON.stringify(response.data));
+        navigate("/payment");
       } else {
-        // Handle regular cart checkout
         const orderData = {
           userId,
-          items: cartItems.map(item => ({
+          items: cartItems.map((item) => ({
             productId: item.productId,
             quantity: item.quantity,
-            price: products[item.productId]?.price
+            price: products[item.productId]?.price,
           })),
           address,
-          totalPrice
+          totalPrice,
         };
 
         await axios.post(`${API_URL}/orders`, orderData, {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`
-          }
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
         });
-        setOrderDetails(orderData);
 
-        navigate("/payment"); // redirect to orders page
+        setOrderDetails(orderData);
+        navigate("/payment");
       }
     } catch (err) {
       alert("❌ Error placing order: " + err.message);
@@ -138,91 +136,114 @@ export default function Checkout() {
   };
 
   return (
-    <div className="checkout-page">
-      <h2 className="checkout-title">Checkout</h2>
+    <div className="payment-container">
+      <h2 className="payment-title">Choose Payment Method</h2>
 
-      {/* Address Section */}
-      <div className="checkout-card">
+      <div className="payment-layout">
+        {/* LEFT: Payment Options */}
+        <div className="payment-sidebar">
+          {["UPI", "Credit / Debit Card", "EMI", "Net Banking", "Pay with Wallet"].map(
+            (method) => (
+              <button
+                key={method}
+                className={`payment-option ${
+                  selectedPayment === method ? "active" : ""
+                }`}
+                onClick={() => setSelectedPayment(method)}
+              >
+                {method}
+              </button>
+            )
+          )}
+        </div>
+
+        {/* CENTER: Payment Details UI */}
+        <div className="payment-main">
+          {selectedPayment === "UPI" && (
+            <div className="payment-card">
+              <h3>UPI</h3>
+              <p>Pay instantly using your UPI ID</p>
+              <input type="text" placeholder="Enter UPI ID" />
+              <div className="payment-buttons">
+                <button className="btn-light">Verify & Pay</button>
+                <button className="btn-dark" onClick={handlePlaceOrder}>
+                  Pay Now
+                </button>
+              </div>
+            </div>
+          )}
+
+          {selectedPayment === "Credit / Debit Card" && (
+            <div className="payment-card">
+              <h3>Credit / Debit Card</h3>
+              <input type="text" placeholder="Card Number" />
+              <div className="row">
+                <input type="text" placeholder="MM/YY" />
+                <input type="text" placeholder="CVV" />
+              </div>
+              <button className="btn-light">Proceed to EMI</button>
+              <button className="btn-dark" onClick={handlePlaceOrder}>
+                Pay Now
+              </button>
+            </div>
+          )}
+
+          {selectedPayment === "EMI" && (
+            <div className="payment-card">
+              <h3>EMI</h3>
+              <select>
+                <option>Select EMI Tenure</option>
+              </select>
+              <button className="btn-light">Proceed to EMI</button>
+              <button className="btn-dark" onClick={handlePlaceOrder}>
+                Pay Now
+              </button>
+            </div>
+          )}
+
+          {selectedPayment === "Net Banking" && (
+            <div className="payment-card">
+              <h3>Net Banking</h3>
+              <select>
+                <option>Select Bank</option>
+              </select>
+              <button className="btn-dark" onClick={handlePlaceOrder}>
+                Pay Now
+              </button>
+            </div>
+          )}
+
+          {selectedPayment === "Pay with Wallet" && (
+            <div className="payment-card">
+              <h3>Pay with Wallet</h3>
+              <select>
+                <option>Select your Bank</option>
+              </select>
+              <button className="btn-dark" onClick={handlePlaceOrder}>
+                Pay Now
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* RIGHT: Price Details */}
+        <div className="price-summary">
+          <h3>Price Details</h3>
+          <p>MRP: ₹{Math.round(totalPrice + 16000)}</p>
+          <p>Discount: +16,000</p>
+          <hr />
+          <h2>Total: ₹{Math.round(totalPrice)}</h2>
+        </div>
+      </div>
+
+      {/* Delivery Address (still used by backend) */}
+      <div className="address-box">
         <h3>Delivery Address</h3>
         <textarea
-          className="checkout-textarea"
           placeholder="Enter your delivery address"
           value={address}
           onChange={(e) => setAddress(e.target.value)}
         />
-      </div>
-
-      {/* Order Summary */}
-      <div className="checkout-card">
-        <h3>Order Summary</h3>
-
-        {isBuyNow && buyNowProduct ? (
-          // Buy Now Product Summary
-          <div>
-            <div className="summary-row">
-              <span>{buyNowProduct.name}</span>
-              <span>₹{Math.round(buyNowProduct.price)}</span>
-            </div>
-            <div className="summary-row">
-              <label>Quantity:</label>
-              <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-                <button 
-                  onClick={() => setBuyNowQuantity(Math.max(1, buyNowQuantity - 1))}
-                  style={{ padding: '5px 10px' }}
-                >
-                  -
-                </button>
-                <span>{buyNowQuantity}</span>
-                <button 
-                  onClick={() => {
-                    setBuyNowQuantity(Math.min(buyNowProduct.stock, buyNowQuantity + 1))
-                  }}
-                  style={{ padding: '5px 10px' }}
-                >
-                  +
-                </button>
-              </div>
-            </div>
-          </div>
-        ) : (
-          // Cart Items Summary
-          cartItems.map((item) => {
-            const product = products[item.productId];
-            if (!product) return null;
-            return (
-              <div className="summary-row" key={item.id}>
-                <span>
-                  {product.name} × {item.quantity}
-                </span>
-                <span>₹{Math.round(product.price * item.quantity)}</span>
-              </div>
-            );
-          })
-        )}
-
-        <hr />
-
-        <div className="summary-total">
-          <span>Total</span>
-          <span>₹{Math.round(totalPrice)}</span>
-        </div>
-      </div>
-
-      {/* Actions */}
-      <div className="checkout-actions">
-        <button
-          className="btn-secondary"
-          onClick={() => isBuyNow ? navigate("/products") : navigate("/cart")}
-        >
-          ← {isBuyNow ? "Continue Shopping" : "Back to Cart"}
-        </button>
-
-        <button
-          className="btn-primary"
-          onClick={handlePlaceOrder}
-        >
-          Place Order
-        </button>
       </div>
     </div>
   );
