@@ -64,7 +64,7 @@ export default function Checkout() {
     if (product && newQuantity > product.stock) return;
 
     try {
-      await axios.put(`${API_URL}/cart/${userId}/items/${itemId}`, {
+      await axios.put(`${API_URL}/cart/${userId}/item/${itemId}`, {
         quantity: newQuantity,
       });
       setCartItems((prev) =>
@@ -79,7 +79,7 @@ export default function Checkout() {
 
   const removeItem = async (itemId) => {
     try {
-      await axios.delete(`${API_URL}/cart/${userId}/items/${itemId}`);
+      await axios.delete(`${API_URL}/cart/${userId}/item/${itemId}`);
       setCartItems((prev) => prev.filter((item) => item.id !== itemId));
     } catch (err) {
       console.error("Error removing item:", err);
@@ -139,6 +139,10 @@ export default function Checkout() {
       const totalPrice = getTotalAmount();
 
       if (isBuyNow && buyNowProduct) {
+        const subTotal = getSubTotal();
+        const discountAmount = getDiscountAmount();
+        const deliveryFee = getDeliveryFee();
+
         const orderData = {
           userId,
           address,
@@ -154,16 +158,24 @@ export default function Checkout() {
           },
         });
 
-        // Store order with purchase type info
+        // Store order with purchase type info and price breakdown
         localStorage.setItem("currentOrder", JSON.stringify({
           ...response.data,
           isBuyNow: true,
           productId: buyNowProduct.id,
           quantity: buyNowQuantity,
           userId,
+          subTotal,
+          discountAmount,
+          deliveryFee,
+          totalPrice,
         }));
         navigate("/payment");
       } else {
+        const subTotal = getSubTotal();
+        const discountAmount = getDiscountAmount();
+        const deliveryFee = getDeliveryFee();
+
         const orderData = {
           userId,
           items: cartItems.map((item) => ({
@@ -188,6 +200,10 @@ export default function Checkout() {
           items: orderData.items,
           userId,
           isBuyNow: false,
+          subTotal,
+          discountAmount,
+          deliveryFee,
+          totalPrice,
         }));
         navigate("/payment");
       }

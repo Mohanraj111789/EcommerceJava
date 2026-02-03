@@ -55,10 +55,11 @@ export default function Payment() {
     navigate("/orders");
   };
 
-  // Get order details
-  const mrp = order?.totalPrice || 0;
-  const discount = order?.discount || 0;
-  const total = mrp - discount;
+  // Get order details - use stored price breakdown for consistency
+  const subTotal = order?.subTotal || order?.totalPrice || 0;
+  const discountAmount = order?.discountAmount || 0;
+  const deliveryFee = order?.deliveryFee || 0;
+  const totalPrice = order?.totalPrice || 0;
 
   const paymentMethods = [
     { id: "upi", label: "UPI" },
