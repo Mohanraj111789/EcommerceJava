@@ -39,7 +39,7 @@ const Card = ({ product, onAddToCart, onBuyNow }) => {
       <p className="text-overflow">{product.description}</p>
       <strong className="product-category">Stock: {product.stock}</strong>
 
-      <button className="btn add-btn" onClick={() => onAddToCart(product.id)}>
+      <button className="btn add-btn1" onClick={() => onAddToCart(product.id)}>
         Add to Cart
       </button>
 
