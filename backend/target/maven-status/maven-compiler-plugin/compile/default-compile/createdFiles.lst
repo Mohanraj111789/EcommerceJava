@@ -42,4 +42,5 @@ com\ecommerce\ds\ProductSearchTrie$TrieNode.class
 com\ecommerce\service\RecommendationService.class
 com\ecommerce\ds\RecommendationHeap$ProductNode.class
 com\ecommerce\model\Role.class
+com\ecommerce\controller\MongoTestController.class
 com\ecommerce\repository\CartRepository.class
