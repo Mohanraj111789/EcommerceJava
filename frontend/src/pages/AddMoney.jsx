@@ -4,75 +4,128 @@ import { useNavigate } from "react-router-dom";
 import "./AddMoney.css";
 
 export default function AddMoney() {
-  const [amount, setAmount] = useState(3290);
-  const presetAmounts = [3282, 3290, 10, 50];
-  const {addMoneyToWallet,handleWallet} = usePayment();
-  const [walletbalance,setWalletbalance] = useState(0);
+  const [amount, setAmount] = useState(1000);
+  const presetAmounts = [500, 1000, 2000, 5000];
+  const { addMoneyToWallet, handleWallet } = usePayment();
+  const [walletBalance, setWalletBalance] = useState(0);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleAddMoney = async()=>{
-    addMoneyToWallet(amount).then(()=>{
-      alert("Money added successfully");
-    }).catch((err)=>{
-      alert("Failed to add money");
-    });
+  const handleAddMoney = async () => {
+    if (amount <= 0) {
+      alert("Please enter a valid amount");
+      return;
+    }
+    setLoading(true);
+    addMoneyToWallet(amount)
+      .then(() => {
+        alert("Money added successfully!");
+        handleWallet().then((balance) => {
+          setWalletBalance(balance);
+        });
+      })
+      .catch((err) => {
+        alert("Failed to add money: " + err.message);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
-  useEffect(()=>{
-    handleWallet().then((balance)=>{
-      setWalletbalance(balance);
-    })
-  },[handleWallet]);
 
-  const handleContinue = ()=>{
+  useEffect(() => {
+    handleWallet().then((balance) => {
+      setWalletBalance(balance);
+    });
+  }, []);
+
+  const handleContinue = () => {
     navigate("/payment");
-  }
-
+  };
 
   return (
-    <div className="wallet-container">
-      {/* HEADER */}
-      <div className="wallet-header">
-        <h2>ECOMP Wallet</h2>
-      </div>
-
-      {/* CONTENT */}
-      <div className="wallet-body">
-        <h3>Add Money</h3>
-
-        <div className="balance">
-          <span>Amazon Pay Balance</span>
-          <strong>₹{walletbalance}</strong>
+    <div className="add-money-page">
+      <div className="add-money-container">
+        {/* Header */}
+        <div className="add-money-header">
+          <div className="wallet-icon">💳</div>
+          <h1>ECOM Wallet</h1>
+          <p>Add money to your wallet for faster checkout</p>
         </div>
 
-        {/* AMOUNT INPUT */}
-        <div className="amount-box">
-          <label>Enter Amount</label>
-          <input
-            type="number"
-            value={amount}
-            onChange={(e) => setAmount(e.target.value)}
-          />
+        {/* Balance Card */}
+        <div className="balance-card">
+          <div className="balance-info">
+            <span className="balance-label">Current Balance</span>
+            <span className="balance-amount">₹{walletBalance.toLocaleString()}</span>
+          </div>
+          <div className="balance-icon">💰</div>
         </div>
 
-        {/* QUICK BUTTONS */}
-        <div className="quick-amounts">
-          {presetAmounts.map((amt, index) => (
+        {/* Add Money Form */}
+        <div className="add-money-form">
+          <h3>Add Money</h3>
+
+          {/* Amount Input */}
+          <div className="amount-input-box">
+            <label>Enter Amount</label>
+            <div className="amount-input-wrapper">
+              <span className="currency-symbol">₹</span>
+              <input
+                type="number"
+                value={amount}
+                onChange={(e) => setAmount(Number(e.target.value))}
+                placeholder="0"
+                min="1"
+              />
+            </div>
+          </div>
+
+          {/* Quick Amount Buttons */}
+          <div className="quick-amount-buttons">
+            {presetAmounts.map((amt) => (
+              <button
+                key={amt}
+                className={`quick-btn ${amount === amt ? "active" : ""}`}
+                onClick={() => setAmount(amt)}
+              >
+                ₹{amt.toLocaleString()}
+              </button>
+            ))}
+          </div>
+
+          <p className="info-text">
+            💡 Add money now for quick 1-click payments on your next purchase
+          </p>
+
+          {/* Action Buttons */}
+          <div className="action-buttons">
             <button
-              key={index}
-              className={amount === amt ? "active" : ""}
-              onClick={() => setAmount(amt)}
+              className="add-btn"
+              onClick={handleAddMoney}
+              disabled={loading}
             >
-              ₹{amt}
+              {loading ? "Adding..." : "Add Money"}
             </button>
-          ))}
+            <button className="continue-btn" onClick={handleContinue}>
+              ← Back to Payment
+            </button>
+          </div>
         </div>
 
-        <p className="info">
-          Recommended amount to make your next transaction in 1-click
-        </p>
-        <div className="button-container">
-          <button className="continue-btn" onClick={handleAddMoney}>Add Money</button>
-          <button className="continue-btn" onClick={handleContinue}>Continue Payment</button>
+        {/* Info Section */}
+        <div className="wallet-info">
+          <div className="info-item">
+            <span className="info-icon">🔒</span>
+            <span>100% Secure Payments</span>
+          </div>
+          <div className="info-item">
+            <span className="info-icon">⚡</span>
+            <span>Instant Credit</span>
+          </div>
+          <div className="info-item">
+            <span className="info-icon">🎁</span>
+            <span>Cashback Offers</span>
+          </div>
         </div>
       </div>
     </div>
