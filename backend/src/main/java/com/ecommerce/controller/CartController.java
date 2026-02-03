@@ -175,15 +175,6 @@ public class CartController {
         return ResponseEntity.ok(optionalCart.get());
     }
 
-    @GetMapping("/{productId}")
-    public ResponseEntity<Integer> getCartCount(@PathVariable Long productId) {
-        Optional<Cart> optionalCart = cartRepository.findByUserId(productId);
-        if (optionalCart.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-        Cart cart = optionalCart.get();
-        return ResponseEntity.ok(cart.getItems().size());
-    }
     //testing API call example:
     //http://localhost:8080/api/cart/1
 
