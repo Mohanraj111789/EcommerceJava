@@ -56,7 +56,7 @@ export default function AddMoney() {
         <div className="balance-card">
           <div className="balance-info">
             <span className="balance-label">Current Balance</span>
-            <span className="balance-amount">₹{walletBalance.toLocaleString()}</span>
+            <span className="balance-amount">₹{Math.round(walletBalance).toLocaleString()}</span>
           </div>
           <div className="balance-icon">💰</div>
         </div>

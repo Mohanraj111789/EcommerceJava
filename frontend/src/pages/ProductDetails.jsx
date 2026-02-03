@@ -72,7 +72,7 @@ export default function ProductDetails() {
 
           <div className="product-details-price-stock-wrapper">
             <span className="product-details-product-price">
-              ₹ {product.price}
+              ₹ {Math.round(product.price)}
             </span>
             <span className="product-details-stock-badge">
               In Stock

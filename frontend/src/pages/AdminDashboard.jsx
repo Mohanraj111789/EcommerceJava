@@ -57,17 +57,17 @@ export default function AdminDashboard() {
         }
     };
 
-    const fetchTotalRevenue = async () =>{
-        try{
+    const fetchTotalRevenue = async () => {
+        try {
             setLoading(true);
             const token = localStorage.getItem('token');
             const res = await handleWallet();
             console.log(res);
 
             setTotalRevenue(res.toLocaleString('en-IN'));
-        }catch(err){
+        } catch (err) {
             setError('Error fetching total revenue: ' + err.message);
-        }finally{
+        } finally {
             setLoading(false);
         }
     };
@@ -130,7 +130,7 @@ export default function AdminDashboard() {
                 stock: parseInt(editingProduct.stock),
                 offerPercentage: editingProduct.offerPercentage ? parseInt(editingProduct.offerPercentage) : null,
                 imageUrl: editingProduct.imageUrl || ''
-                
+
             };
 
             const response = await fetch(`${BASEURL}/admin/products/${editingProduct.id}`, {
@@ -141,7 +141,7 @@ export default function AdminDashboard() {
                 },
                 body: JSON.stringify(productData)
             });
-    
+
 
             if (response.ok) {
                 setSuccess('Product updated successfully!');
@@ -231,7 +231,7 @@ export default function AdminDashboard() {
             </div>
 
             <div className="admin-container">
-                
+
                 <div className="admin-actions">
                     <button
                         onClick={() => setShowAddForm(!showAddForm)}
@@ -245,10 +245,10 @@ export default function AdminDashboard() {
                         className="btn-add-product"
                     >
                         👥 View Users
-                        
+
                     </button>
-                    <button onClick={()=>navigate('/products')}
-                    className="btn-add-product">Preview</button>
+                    <button onClick={() => navigate('/products')}
+                        className="btn-add-product">Preview</button>
 
                     <h1 className='total-amount'>Total Revenue: &#8377;{totalRevenue}</h1>
                 </div>
@@ -270,7 +270,7 @@ export default function AdminDashboard() {
                 {showAddForm && (
                     <div className="add-product-form">
                         <h2>Add New Product</h2>
-        
+
                         <form onSubmit={handleAddProduct}>
                             <div className="form-row">
                                 <div className="form-group">
@@ -504,11 +504,11 @@ export default function AdminDashboard() {
                                     {product.offerPercentage && product.offerPercentage > 0 && (
                                         <div className="offer-badge">{product.offerPercentage}% OFF</div>
                                     )}
-                                    {product.imageUrl ?(
+                                    {product.imageUrl ? (
                                         <div className="product-image-container">
                                             <img src={`../assets/${product.imageUrl}`} alt={product.name} className="product-image" />
                                         </div>
-                                    ):(
+                                    ) : (
                                         <div className="product-image-container">
                                             <img src={`../assets/product.jpg`} alt={product.name} className="product-image" />
                                         </div>
@@ -523,18 +523,18 @@ export default function AdminDashboard() {
                                             <div className="price-section">
                                                 {product.offerPercentage && product.offerPercentage > 0 ? (
                                                     <>
-                                                        <span className="product-price original-price">&#8377;{product.price?.toFixed(2)}</span><br></br>
+                                                        <span className="product-price original-price">&#8377;{Math.round(product.price)}</span><br></br>
                                                         <span className="product-price discounted-price">
-                                                        &#8377;{calculateDiscountedPrice(product.price, product.offerPercentage).toFixed(2)}
+                                                            &#8377;{Math.round(calculateDiscountedPrice(product.price, product.offerPercentage))}
                                                         </span>
                                                     </>
                                                 ) : (
-                                                    <span className="product-price">&#8377;{product.price?.toFixed(2)}</span>
+                                                    <span className="product-price">&#8377;{Math.round(product.price)}</span>
                                                 )}
                                             </div>
                                             <span className="product-stock">Stock:
                                                 <span className={`${product.stock > 10 ? "stock" : "stock-red"}`}>
-                                                                    {product.stock}
+                                                    {product.stock}
                                                 </span>
                                             </span>
                                         </div>

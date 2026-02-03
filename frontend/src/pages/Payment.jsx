@@ -281,7 +281,7 @@ export default function Payment() {
               <div className="wallet-balance-card">
                 <div className="wallet-balance-info">
                   <span className="wallet-label">Available Balance</span>
-                  <span className="wallet-amount">₹{walletBalance || 0}</span>
+                  <span className="wallet-amount">₹{Math.round(walletBalance) || 0}</span>
                 </div>
                 <button
                   className="add-money-btn"
