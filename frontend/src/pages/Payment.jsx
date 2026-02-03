@@ -23,27 +23,37 @@ export default function Payment() {
   const [walletBank, setWalletBank] = useState("");
 
   const banks = ["HDFC Bank", "ICICI Bank", "SBI", "Axis Bank", "Kotak Bank"];
-  const emiTenures = ["3 Months", "6 Months", "9 Months", "12 Months", "18 Months", "24 Months"];
+  const emiTenures = [
+    "3 Months",
+    "6 Months",
+    "9 Months",
+    "12 Months",
+    "18 Months",
+    "24 Months",
+  ];
 
   // ---------- FETCH WALLET BALANCE ----------
   useEffect(() => {
     if (method === "wallet") {
-      handleWallet()
-        .then((balance) => setWalletBalance(balance || 0))
-        .catch((err) => console.error("Wallet balance error", err));
+      refreshWalletBalance();
     }
   }, [method]);
 
-  // ---------- PAYMENT HANDLERS ----------
+  const refreshWalletBalance = async () => {
+    try {
+      const balance = await handleWallet();
+      setWalletBalance(balance || 0);
+    } catch (err) {
+      console.error("Wallet balance error", err);
+    }
+  };
+
+  // ---------- PAYMENT HANDLER ----------
   const handlePayment = async () => {
     try {
       await payUsingWallet();
       alert("Order Placed Successfully!");
-
-      handleWallet().then((balance) => {
-        setWalletBalance(balance || 0);
-        navigate("/orders");
-      });
+      navigate("/orders");
     } catch (err) {
       alert("Payment failed: " + err.message);
     }
@@ -54,7 +64,7 @@ export default function Payment() {
     navigate("/orders");
   };
 
-  // ---------- CORRECT PRICE VALUES (IMPORTANT) ----------
+  // ---------- PRICE DETAILS ----------
   const subTotal = order?.subTotal || order?.totalPrice || 0;
   const discountAmount = order?.discountAmount || 0;
   const deliveryFee = order?.deliveryFee || 0;
@@ -68,7 +78,7 @@ export default function Payment() {
     { id: "wallet", label: "Pay with Wallet" },
   ];
 
-  // ---------- EDGE CASE (NO ORDER) ----------
+  // ---------- EDGE CASE ----------
   if (!order) {
     return (
       <div className="payment-page">
@@ -83,7 +93,7 @@ export default function Payment() {
       <h1 className="payment-title">Choose Payment Method</h1>
 
       <div className="payment-layout">
-        {/* LEFT SIDEBAR - PAYMENT METHODS */}
+        {/* LEFT SIDEBAR */}
         <div className="payment-methods-sidebar">
           {paymentMethods.map((item) => (
             <button
@@ -102,8 +112,6 @@ export default function Payment() {
           {method === "upi" && (
             <div className="payment-form-card">
               <h2>UPI</h2>
-              <p>Pay instantly using your UPI ID</p>
-
               <input
                 type="text"
                 placeholder="Enter UPI ID"
@@ -111,7 +119,6 @@ export default function Payment() {
                 onChange={(e) => setUpiId(e.target.value)}
                 className="payment-input"
               />
-
               <button className="payment-btn-primary full-width" onClick={handleOtherPayment}>
                 Pay Now
               </button>
@@ -122,7 +129,6 @@ export default function Payment() {
           {method === "card" && (
             <div className="payment-form-card">
               <h2>Credit / Debit Card</h2>
-
               <input
                 type="text"
                 placeholder="Card Number"
@@ -130,7 +136,6 @@ export default function Payment() {
                 onChange={(e) => setCardNumber(e.target.value)}
                 className="payment-input"
               />
-
               <button className="payment-btn-primary full-width" onClick={handleOtherPayment}>
                 Pay Now
               </button>
@@ -141,7 +146,6 @@ export default function Payment() {
           {method === "emi" && (
             <div className="payment-form-card">
               <h2>EMI</h2>
-
               <select
                 value={emiBank}
                 onChange={(e) => setEmiBank(e.target.value)}
@@ -154,7 +158,6 @@ export default function Payment() {
                   </option>
                 ))}
               </select>
-
               <button className="payment-btn-primary full-width" onClick={handleOtherPayment}>
                 Pay Now
               </button>
@@ -165,7 +168,6 @@ export default function Payment() {
           {method === "netbanking" && (
             <div className="payment-form-card">
               <h2>Net Banking</h2>
-
               <select
                 value={netBank}
                 onChange={(e) => setNetBank(e.target.value)}
@@ -178,14 +180,13 @@ export default function Payment() {
                   </option>
                 ))}
               </select>
-
               <button className="payment-btn-primary full-width" onClick={handleOtherPayment}>
                 Pay Now
               </button>
             </div>
           )}
 
-          {/* WALLET */}
+          {/* WALLET (ADD MONEY NAVIGATES TO /add-money) */}
           {method === "wallet" && (
             <div className="payment-form-card">
               <h2>Pay with Wallet</h2>
@@ -195,6 +196,14 @@ export default function Payment() {
                 <span>₹{Math.round(walletBalance).toLocaleString()}</span>
               </div>
 
+              {/* UPDATED BUTTON */}
+              <button
+                className="payment-btn-outline full-width"
+                onClick={() => navigate("/add-money")}
+              >
+                Add Money
+              </button>
+
               <button className="payment-btn-primary full-width" onClick={handlePayment}>
                 Pay Now
               </button>
@@ -202,7 +211,7 @@ export default function Payment() {
           )}
         </div>
 
-        {/* RIGHT SIDEBAR - PRICE DETAILS (CORRECT VERSION) */}
+        {/* RIGHT SIDEBAR - PRICE DETAILS */}
         <div className="payment-summary-sidebar">
           <div className="payment-summary-card">
             <h3>Price Details</h3>
