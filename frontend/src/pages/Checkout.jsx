@@ -144,6 +144,8 @@ export default function Checkout() {
           address,
           totalPrice,
           productId: buyNowProduct.id,
+          isBuyNow: true,
+          quantity: buyNowQuantity,
         };
 
         const response = await axios.post(`${API_URL}/orders`, orderData, {
@@ -151,7 +153,15 @@ export default function Checkout() {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         });
-        localStorage.setItem("currentOrder", JSON.stringify(response.data));
+
+        // Store order with purchase type info
+        localStorage.setItem("currentOrder", JSON.stringify({
+          ...response.data,
+          isBuyNow: true,
+          productId: buyNowProduct.id,
+          quantity: buyNowQuantity,
+          userId,
+        }));
         navigate("/payment");
       } else {
         const orderData = {
@@ -163,14 +173,22 @@ export default function Checkout() {
           })),
           address,
           totalPrice,
+          isBuyNow: false,
         };
 
-        await axios.post(`${API_URL}/orders`, orderData, {
+        const response = await axios.post(`${API_URL}/orders`, orderData, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         });
-        setOrderDetails(orderData);
+
+        // Store order with items for stock reduction and cart clearing
+        localStorage.setItem("currentOrder", JSON.stringify({
+          ...response.data,
+          items: orderData.items,
+          userId,
+          isBuyNow: false,
+        }));
         navigate("/payment");
       }
     } catch (err) {
