@@ -192,8 +192,8 @@ export default function Payment() {
               <h2>Pay with Wallet</h2>
 
               <div className="wallet-balance-card">
-                <span>Available Balance:{walletBalance}</span>
-                <span>₹{Math.round(walletBalance).toLocaleString()}</span>
+                <span className="wallet-balance-label">Available Balance:</span>
+                <span className="wallet-balance-value">₹{Math.round(walletBalance).toLocaleString()}</span>
               </div>
 
               {/* UPDATED BUTTON */}
