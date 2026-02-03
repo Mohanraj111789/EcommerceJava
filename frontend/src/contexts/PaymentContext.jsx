@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
 
@@ -8,14 +8,26 @@ export const PaymentProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const API_URL = "https://ecommercejava-2.onrender.com/api";
 
-  // Get order from localStorage
-  const order = JSON.parse(localStorage.getItem("currentOrder"));
+  // ✅ FIX: Make order a React state (NOT just localStorage)
+  const [order, setOrder] = useState(() => {
+    const saved = localStorage.getItem("currentOrder");
+    return saved ? JSON.parse(saved) : null;
+  });
+
+  // ✅ Sync with localStorage on refresh
+  useEffect(() => {
+    const savedOrder = localStorage.getItem("currentOrder");
+    if (savedOrder) {
+      setOrder(JSON.parse(savedOrder));
+    }
+  }, []);
 
   // ---------------------------
   // SET ORDER AFTER CHECKOUT
   // ---------------------------
   const setOrderDetails = (orderData) => {
     localStorage.setItem("currentOrder", JSON.stringify(orderData));
+    setOrder(orderData); // 🔥 VERY IMPORTANT - makes UI update instantly
   };
 
   // ---------------------------
@@ -63,7 +75,6 @@ export const PaymentProvider = ({ children }) => {
     try {
       setLoading(true);
 
-      // Process payment transfer
       const response = await axios.post(
         `${API_URL}/payment/transfer`,
         {
@@ -78,7 +89,6 @@ export const PaymentProvider = ({ children }) => {
         }
       );
 
-      // Update order status to PAID
       await axios.put(
         `${API_URL}/payment/update/${order.id}?status=PAID`,
         {},
@@ -89,20 +99,17 @@ export const PaymentProvider = ({ children }) => {
         }
       );
 
-      // Handle post-payment actions based on purchase type
       if (order.isBuyNow) {
-        // Single product purchase - reduce stock
         await reduceProductStock(order.productId, order.quantity || 1);
       } else if (order.items && order.items.length > 0) {
-        // Full cart purchase - reduce stock for all items and clear cart
         for (const item of order.items) {
           await reduceProductStock(item.productId, item.quantity);
         }
         await clearCartAfterPurchase(order.userId);
       }
 
-      // Clear the current order from localStorage
       localStorage.removeItem("currentOrder");
+      setOrder(null); // 🔥 Clear state also
 
       return response.data;
     } catch (error) {

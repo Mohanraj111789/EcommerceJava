@@ -6,10 +6,11 @@ import "./Payment.css";
 export default function Payment() {
   const navigate = useNavigate();
   const [method, setMethod] = useState("upi");
-  const [walletBalance, setWalletBalance] = useState(null);
+  const [walletBalance, setWalletBalance] = useState(0);
+
   const { handleWallet, payUsingWallet, order } = usePayment();
 
-  // Form states
+  // ---------- FORM STATES ----------
   const [upiId, setUpiId] = useState("");
   const [cardNumber, setCardNumber] = useState("");
   const [cardExpiry, setCardExpiry] = useState("");
@@ -24,30 +25,28 @@ export default function Payment() {
   const banks = ["HDFC Bank", "ICICI Bank", "SBI", "Axis Bank", "Kotak Bank"];
   const emiTenures = ["3 Months", "6 Months", "9 Months", "12 Months", "18 Months", "24 Months"];
 
+  // ---------- FETCH WALLET BALANCE ----------
   useEffect(() => {
     if (method === "wallet") {
       handleWallet()
-        .then((balance) => {
-          setWalletBalance(balance);
-        })
-        .catch((err) => {
-          console.error("Wallet balance error", err);
-        });
+        .then((balance) => setWalletBalance(balance || 0))
+        .catch((err) => console.error("Wallet balance error", err));
     }
   }, [method]);
 
+  // ---------- PAYMENT HANDLERS ----------
   const handlePayment = async () => {
-    payUsingWallet()
-      .then(() => {
-        alert("Order Placed Successfully!");
-        handleWallet().then((balance) => {
-          setWalletBalance(balance);
-          navigate("/orders");
-        });
-      })
-      .catch((err) => {
-        alert("Payment failed: " + err.message);
+    try {
+      await payUsingWallet();
+      alert("Order Placed Successfully!");
+
+      handleWallet().then((balance) => {
+        setWalletBalance(balance || 0);
+        navigate("/orders");
       });
+    } catch (err) {
+      alert("Payment failed: " + err.message);
+    }
   };
 
   const handleOtherPayment = () => {
@@ -55,7 +54,7 @@ export default function Payment() {
     navigate("/orders");
   };
 
-  // Get order details - use stored price breakdown for consistency
+  // ---------- CORRECT PRICE VALUES (IMPORTANT) ----------
   const subTotal = order?.subTotal || order?.totalPrice || 0;
   const discountAmount = order?.discountAmount || 0;
   const deliveryFee = order?.deliveryFee || 0;
@@ -69,12 +68,22 @@ export default function Payment() {
     { id: "wallet", label: "Pay with Wallet" },
   ];
 
+  // ---------- EDGE CASE (NO ORDER) ----------
+  if (!order) {
+    return (
+      <div className="payment-page">
+        <h2>No active order found.</h2>
+        <button onClick={() => navigate("/cart")}>Go Back to Cart</button>
+      </div>
+    );
+  }
+
   return (
     <div className="payment-page">
       <h1 className="payment-title">Choose Payment Method</h1>
 
       <div className="payment-layout">
-        {/* Left Sidebar - Payment Method Tabs */}
+        {/* LEFT SIDEBAR - PAYMENT METHODS */}
         <div className="payment-methods-sidebar">
           {paymentMethods.map((item) => (
             <button
@@ -87,171 +96,88 @@ export default function Payment() {
           ))}
         </div>
 
-        {/* Center - Payment Form */}
+        {/* CENTER - PAYMENT FORMS */}
         <div className="payment-form-section">
-          {/* UPI Payment */}
+          {/* UPI */}
           {method === "upi" && (
             <div className="payment-form-card">
-              <div className="payment-form-icon">U</div>
-              <h2 className="payment-form-title">UPI</h2>
-              <p className="payment-form-subtitle">Pay instantly using your UPI ID</p>
+              <h2>UPI</h2>
+              <p>Pay instantly using your UPI ID</p>
 
-              <div className="payment-form-group">
-                <label>UPI ID</label>
-                <input
-                  type="text"
-                  placeholder="UPI ID"
-                  value={upiId}
-                  onChange={(e) => setUpiId(e.target.value)}
-                  className="payment-input"
-                />
-              </div>
+              <input
+                type="text"
+                placeholder="Enter UPI ID"
+                value={upiId}
+                onChange={(e) => setUpiId(e.target.value)}
+                className="payment-input"
+              />
 
-              <div className="payment-btn-group">
-                <button className="payment-btn-outline" onClick={handleOtherPayment}>
-                  Verify & Pay
-                </button>
-                <button className="payment-btn-primary" onClick={handleOtherPayment}>
-                  Pay Now
-                </button>
-              </div>
+              <button className="payment-btn-primary full-width" onClick={handleOtherPayment}>
+                Pay Now
+              </button>
             </div>
           )}
 
-          {/* Card Payment */}
+          {/* CARD */}
           {method === "card" && (
             <div className="payment-form-card">
-              <h2 className="payment-form-title">Credit / Debit Card</h2>
-              <p className="payment-form-subtitle">Pay instantly using Brow ID</p>
+              <h2>Credit / Debit Card</h2>
 
-              <div className="payment-form-group">
-                <label>Card Number</label>
-                <input
-                  type="text"
-                  placeholder="XXXXXXXXXXXX XXXX"
-                  value={cardNumber}
-                  onChange={(e) => setCardNumber(e.target.value)}
-                  className="payment-input"
-                  maxLength="19"
-                />
-              </div>
+              <input
+                type="text"
+                placeholder="Card Number"
+                value={cardNumber}
+                onChange={(e) => setCardNumber(e.target.value)}
+                className="payment-input"
+              />
 
-              <div className="payment-form-row">
-                <div className="payment-form-group">
-                  <label>Expiry</label>
-                  <input
-                    type="text"
-                    placeholder="MM/YY"
-                    value={cardExpiry}
-                    onChange={(e) => setCardExpiry(e.target.value)}
-                    className="payment-input"
-                    maxLength="5"
-                  />
-                </div>
-                <div className="payment-form-group">
-                  <label>CVV</label>
-                  <input
-                    type="password"
-                    placeholder="CVV"
-                    value={cardCvv}
-                    onChange={(e) => setCardCvv(e.target.value)}
-                    className="payment-input"
-                    maxLength="3"
-                  />
-                </div>
-              </div>
-
-              <button className="payment-btn-outline full-width" onClick={handleOtherPayment}>
-                Proceed to EMI
-              </button>
               <button className="payment-btn-primary full-width" onClick={handleOtherPayment}>
                 Pay Now
               </button>
             </div>
           )}
 
-          {/* EMI Payment */}
+          {/* EMI */}
           {method === "emi" && (
             <div className="payment-form-card">
-              <h2 className="payment-form-title">EMI</h2>
-              <p className="payment-form-subtitle">Pay in easy installments</p>
+              <h2>EMI</h2>
 
-              <div className="payment-form-group">
-                <label>Select a Bank</label>
-                <select
-                  value={emiBank}
-                  onChange={(e) => setEmiBank(e.target.value)}
-                  className="payment-select"
-                >
-                  <option value="">Select a Bank</option>
-                  {banks.map((bank) => (
-                    <option key={bank} value={bank}>{bank}</option>
-                  ))}
-                </select>
-              </div>
+              <select
+                value={emiBank}
+                onChange={(e) => setEmiBank(e.target.value)}
+                className="payment-select"
+              >
+                <option value="">Select Bank</option>
+                {banks.map((bank) => (
+                  <option key={bank} value={bank}>
+                    {bank}
+                  </option>
+                ))}
+              </select>
 
-              <div className="payment-form-group">
-                <select
-                  value={emiTenure}
-                  onChange={(e) => setEmiTenure(e.target.value)}
-                  className="payment-select"
-                >
-                  <option value="">Select EMI Tenure</option>
-                  {emiTenures.map((tenure) => (
-                    <option key={tenure} value={tenure}>{tenure}</option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="payment-form-row">
-                <div className="payment-form-group">
-                  <input
-                    type="text"
-                    placeholder="XXXXXXX"
-                    value={emiCardNumber}
-                    onChange={(e) => setEmiCardNumber(e.target.value)}
-                    className="payment-input with-icon"
-                  />
-                </div>
-                <div className="payment-form-group">
-                  <input
-                    type="password"
-                    placeholder="••• CVV"
-                    value={emiCvv}
-                    onChange={(e) => setEmiCvv(e.target.value)}
-                    className="payment-input"
-                    maxLength="3"
-                  />
-                </div>
-              </div>
-
-              <button className="payment-btn-outline full-width" onClick={handleOtherPayment}>
-                Proceed to EMI
-              </button>
               <button className="payment-btn-primary full-width" onClick={handleOtherPayment}>
                 Pay Now
               </button>
             </div>
           )}
 
-          {/* Net Banking */}
+          {/* NET BANKING */}
           {method === "netbanking" && (
             <div className="payment-form-card">
-              <h2 className="payment-form-title">Net Banking</h2>
-              <p className="payment-form-subtitle">Login your bank</p>
+              <h2>Net Banking</h2>
 
-              <div className="payment-form-group">
-                <select
-                  value={netBank}
-                  onChange={(e) => setNetBank(e.target.value)}
-                  className="payment-select"
-                >
-                  <option value="">Select Bank</option>
-                  {banks.map((bank) => (
-                    <option key={bank} value={bank}>{bank}</option>
-                  ))}
-                </select>
-              </div>
+              <select
+                value={netBank}
+                onChange={(e) => setNetBank(e.target.value)}
+                className="payment-select"
+              >
+                <option value="">Select Bank</option>
+                {banks.map((bank) => (
+                  <option key={bank} value={bank}>
+                    {bank}
+                  </option>
+                ))}
+              </select>
 
               <button className="payment-btn-primary full-width" onClick={handleOtherPayment}>
                 Pay Now
@@ -259,37 +185,14 @@ export default function Payment() {
             </div>
           )}
 
-          {/* Wallet Payment */}
+          {/* WALLET */}
           {method === "wallet" && (
             <div className="payment-form-card">
-              <h2 className="payment-form-title">Pay with Wallet</h2>
-              <p className="payment-form-subtitle">Pay using IBank</p>
+              <h2>Pay with Wallet</h2>
 
-              <div className="payment-form-group">
-                <select
-                  value={walletBank}
-                  onChange={(e) => setWalletBank(e.target.value)}
-                  className="payment-select"
-                >
-                  <option value="">Select your Bank</option>
-                  {banks.map((bank) => (
-                    <option key={bank} value={bank}>{bank}</option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Wallet Balance Display */}
               <div className="wallet-balance-card">
-                <div className="wallet-balance-info">
-                  <span className="wallet-label">Available Balance</span>
-                  <span className="wallet-amount">₹{Math.round(walletBalance) || 0}</span>
-                </div>
-                <button
-                  className="add-money-btn"
-                  onClick={() => navigate("/add-money")}
-                >
-                  Add Money
-                </button>
+                <span>Available Balance</span>
+                <span>₹{Math.round(walletBalance).toLocaleString()}</span>
               </div>
 
               <button className="payment-btn-primary full-width" onClick={handlePayment}>
@@ -299,28 +202,33 @@ export default function Payment() {
           )}
         </div>
 
-        {/* Right Sidebar - Price Details */}
+        {/* RIGHT SIDEBAR - PRICE DETAILS (CORRECT VERSION) */}
         <div className="payment-summary-sidebar">
           <div className="payment-summary-card">
-            <h3 className="payment-summary-title">Price Details</h3>
+            <h3>Price Details</h3>
 
             <div className="payment-summary-row">
               <span>MRP</span>
-              <span>₹{Math.round(mrp).toLocaleString()}</span>
+              <span>₹{Math.round(subTotal).toLocaleString()}</span>
             </div>
 
-            {discount > 0 && (
+            {discountAmount > 0 && (
               <div className="payment-summary-row discount">
                 <span>Discount</span>
-                <span>+₹{Math.round(discount).toLocaleString()}</span>
+                <span>-₹{Math.round(discountAmount).toLocaleString()}</span>
               </div>
             )}
 
-            <hr className="payment-summary-divider" />
+            <div className="payment-summary-row">
+              <span>Delivery Fee</span>
+              <span>₹{Math.round(deliveryFee).toLocaleString()}</span>
+            </div>
+
+            <hr />
 
             <div className="payment-summary-row total">
               <span>Total</span>
-              <span>₹{Math.round(total).toLocaleString()}</span>
+              <span>₹{Math.round(totalPrice).toLocaleString()}</span>
             </div>
 
             <button className="payment-summary-btn" onClick={handlePayment}>
