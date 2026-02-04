@@ -260,7 +260,7 @@ export default function Checkout() {
                     <td>
                       <div className="checkout-product-info">
                         <img
-                          src={buyNowProduct.imageUrl || "/placeholder.png"}
+                          src={`assets/${buyNowProduct.imageUrl}`}
                           alt={buyNowProduct.name}
                           className="checkout-product-image"
                         />
@@ -318,7 +318,7 @@ export default function Checkout() {
                         <td>
                           <div className="checkout-product-info">
                             <img
-                              src={product.imageUrl || "/placeholder.png"}
+                              src={`assets/${product.imageUrl}`}
                               alt={product.name}
                               className="checkout-product-image"
                             />
