@@ -60,7 +60,7 @@ export default function Orders() {
 
                 <div>
                   <h4 className="product-name1">{order.productName}</h4>
-                  <p className="items">Items: 1</p>
+                  <p className="items">Items:{order.quantity}</p>
                 </div>
               </div>
 
@@ -78,7 +78,7 @@ export default function Orders() {
 
                 <div className="info-row">
                   <span className="dot green">✔</span>
-                  Method: COD
+                  Method: {order.paymentMethod}
                 </div>
 
                 <div className="info-row">
