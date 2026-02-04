@@ -16,7 +16,7 @@ export default function Checkout() {
   const [products, setProducts] = useState({});
   const [buyNowProduct, setBuyNowProduct] = useState(null);
   const [buyNowQuantity, setBuyNowQuantity] = useState(1);
-  const { setOrderDetails } = usePayment();
+  const { setOrderDetails } = usePayment(); // 🔥 Important
   const [address, setAddress] = useState("");
   const [voucher, setVoucher] = useState("");
   const [discount, setDiscount] = useState(0);
@@ -88,9 +88,6 @@ export default function Checkout() {
 
   const getItemPrice = (product) => {
     if (!product) return 0;
-    // if (product.offerPercentage > 0) {
-    //   return product.price - (product.price * product.offerPercentage) / 100;
-    // }
     return product.price;
   };
 
@@ -118,7 +115,6 @@ export default function Checkout() {
   };
 
   const applyVoucher = () => {
-    // Demo voucher codes
     if (voucher.toUpperCase() === "SAVE10") {
       setDiscount(10);
     } else if (voucher.toUpperCase() === "SAVE20") {
@@ -158,8 +154,8 @@ export default function Checkout() {
           },
         });
 
-        // Store order with purchase type info and price breakdown
-        localStorage.setItem("currentOrder", JSON.stringify({
+        // ✅ FIXED: Use context instead of localStorage
+        const finalOrder = {
           ...response.data,
           isBuyNow: true,
           productId: buyNowProduct.id,
@@ -169,7 +165,9 @@ export default function Checkout() {
           discountAmount,
           deliveryFee,
           totalPrice,
-        }));
+        };
+
+        setOrderDetails(finalOrder); // 🔥 Updates context + localStorage
         navigate("/payment");
       } else {
         const subTotal = getSubTotal();
@@ -194,8 +192,8 @@ export default function Checkout() {
           },
         });
 
-        // Store order with items for stock reduction and cart clearing
-        localStorage.setItem("currentOrder", JSON.stringify({
+        // ✅ FIXED: Use context instead of localStorage
+        const finalOrder = {
           ...response.data,
           items: orderData.items,
           userId,
@@ -204,7 +202,9 @@ export default function Checkout() {
           discountAmount,
           deliveryFee,
           totalPrice,
-        }));
+        };
+
+        setOrderDetails(finalOrder); // 🔥 Updates context + localStorage
         navigate("/payment");
       }
     } catch (err) {
@@ -297,7 +297,10 @@ export default function Checkout() {
                     </td>
                     <td>
                       <span className="checkout-item-total">
-                        ₹{Math.round(getItemPrice(buyNowProduct) * buyNowQuantity)}
+                        ₹
+                        {Math.round(
+                          getItemPrice(buyNowProduct) * buyNowQuantity
+                        )}
                       </span>
                     </td>
                     <td>
@@ -361,7 +364,10 @@ export default function Checkout() {
                         </td>
                         <td>
                           <span className="checkout-item-total">
-                            ₹{Math.round(getItemPrice(product) * item.quantity)}
+                            ₹
+                            {Math.round(
+                              getItemPrice(product) * item.quantity
+                            )}
                           </span>
                         </td>
                         <td>
@@ -396,7 +402,9 @@ export default function Checkout() {
 
           <button
             className="checkout-update-btn"
-            onClick={() => (isBuyNow ? navigate("/products") : navigate("/cart"))}
+            onClick={() =>
+              isBuyNow ? navigate("/products") : navigate("/cart")
+            }
           >
             {isBuyNow ? "Continue Shopping" : "Update Cart"}
           </button>
@@ -407,7 +415,6 @@ export default function Checkout() {
           <div className="checkout-summary-card">
             <h3 className="checkout-summary-title">Order Summary</h3>
 
-            {/* Voucher Input */}
             <div className="checkout-voucher">
               <input
                 type="text"
@@ -421,7 +428,6 @@ export default function Checkout() {
               </button>
             </div>
 
-            {/* Summary Rows */}
             <div className="checkout-summary-rows">
               <div className="checkout-summary-row">
                 <span>Sub Total</span>
@@ -430,7 +436,9 @@ export default function Checkout() {
               {discount > 0 && (
                 <div className="checkout-summary-row checkout-discount">
                   <span>Discount ({discount}%)</span>
-                  <span>-₹{Math.round(getDiscountAmount())} INR</span>
+                  <span>
+                    -₹{Math.round(getDiscountAmount())} INR
+                  </span>
                 </div>
               )}
               <div className="checkout-summary-row">
@@ -443,7 +451,6 @@ export default function Checkout() {
               </div>
             </div>
 
-            {/* Total */}
             <div className="checkout-summary-total">
               <span>Total</span>
               <span className="checkout-total-amount">
@@ -451,19 +458,10 @@ export default function Checkout() {
               </span>
             </div>
 
-            {/* Warranty Notice */}
-            <div className="checkout-warranty">
-              <span className="checkout-warranty-icon">✓</span>
-              <span>
-                90 Day Limited Warranty against manufacturer's defects.{" "}
-                <a href="#" className="checkout-details-link">
-                  Details
-                </a>
-              </span>
-            </div>
-
-            {/* Checkout Button */}
-            <button className="checkout-now-btn" onClick={handlePlaceOrder}>
+            <button
+              className="checkout-now-btn"
+              onClick={handlePlaceOrder}
+            >
               Checkout Now
             </button>
           </div>

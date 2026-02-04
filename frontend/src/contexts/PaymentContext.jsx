@@ -8,26 +8,26 @@ export const PaymentProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const API_URL = "https://ecommercejava-2.onrender.com/api";
 
-  // ✅ FIX: Make order a React state (NOT just localStorage)
+  // ✅ FIXED: Initialize from localStorage but allow updates later
   const [order, setOrder] = useState(() => {
     const saved = localStorage.getItem("currentOrder");
     return saved ? JSON.parse(saved) : null;
   });
 
-  // ✅ Sync with localStorage on refresh
+  // ✅ FIXED: Load latest order ONLY if context is empty
   useEffect(() => {
     const savedOrder = localStorage.getItem("currentOrder");
-    if (savedOrder) {
+    if (savedOrder && !order) {
       setOrder(JSON.parse(savedOrder));
     }
   }, []);
 
   // ---------------------------
-  // SET ORDER AFTER CHECKOUT
+  // ✅ FIXED: SET ORDER (MOST IMPORTANT PART)
   // ---------------------------
   const setOrderDetails = (orderData) => {
     localStorage.setItem("currentOrder", JSON.stringify(orderData));
-    setOrder(orderData); // 🔥 VERY IMPORTANT - makes UI update instantly
+    setOrder(orderData); // 🔥 Updates React state instantly (no refresh needed)
   };
 
   // ---------------------------
@@ -108,8 +108,9 @@ export const PaymentProvider = ({ children }) => {
         await clearCartAfterPurchase(order.userId);
       }
 
+      // ✅ Clear everything after success
       localStorage.removeItem("currentOrder");
-      setOrder(null); // 🔥 Clear state also
+      setOrder(null);
 
       return response.data;
     } catch (error) {

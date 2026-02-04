@@ -13,32 +13,12 @@ export default function Payment() {
   // ---------- FORM STATES ----------
   const [upiId, setUpiId] = useState("");
   const [cardNumber, setCardNumber] = useState("");
-  const [cardExpiry, setCardExpiry] = useState("");
-  const [cardCvv, setCardCvv] = useState("");
   const [emiBank, setEmiBank] = useState("");
-  const [emiTenure, setEmiTenure] = useState("");
-  const [emiCardNumber, setEmiCardNumber] = useState("");
-  const [emiCvv, setEmiCvv] = useState("");
   const [netBank, setNetBank] = useState("");
-  const [walletBank, setWalletBank] = useState("");
 
   const banks = ["HDFC Bank", "ICICI Bank", "SBI", "Axis Bank", "Kotak Bank"];
-  const emiTenures = [
-    "3 Months",
-    "6 Months",
-    "9 Months",
-    "12 Months",
-    "18 Months",
-    "24 Months",
-  ];
 
   // ---------- FETCH WALLET BALANCE ----------
-  useEffect(() => {
-    if (method === "wallet") {
-      refreshWalletBalance();
-    }
-  }, [method]);
-
   const refreshWalletBalance = async () => {
     try {
       const balance = await handleWallet();
@@ -48,9 +28,37 @@ export default function Payment() {
     }
   };
 
+  useEffect(() => {
+    if (method === "wallet") {
+      refreshWalletBalance();
+    }
+  }, [method]);
+
+  // Fetch balance once on page load
+  useEffect(() => {
+    refreshWalletBalance();
+  }, []);
+
+  // Refresh wallet when user comes back from /add-money
+  useEffect(() => {
+    const handleFocus = () => {
+      if (method === "wallet") {
+        refreshWalletBalance();
+      }
+    };
+
+    window.addEventListener("focus", handleFocus);
+    return () => window.removeEventListener("focus", handleFocus);
+  }, [method]);
+
   // ---------- PAYMENT HANDLER ----------
   const handlePayment = async () => {
     try {
+      if (method === "wallet" && walletBalance < totalPrice) {
+        alert("Insufficient wallet balance. Please add money.");
+        return;
+      }
+
       await payUsingWallet();
       alert("Order Placed Successfully!");
       navigate("/orders");
@@ -64,11 +72,11 @@ export default function Payment() {
     navigate("/orders");
   };
 
-  // ---------- PRICE DETAILS ----------
-  const subTotal = order?.subTotal || order?.totalPrice || 0;
-  const discountAmount = order?.discountAmount || 0;
-  const deliveryFee = order?.deliveryFee || 0;
-  const totalPrice = order?.totalPrice || 0;
+  // ---------- PRICE DETAILS (SAFE VERSION) ----------
+  const subTotal = order?.subTotal ?? order?.totalPrice ?? 0;
+  const discountAmount = order?.discountAmount ?? 0;
+  const deliveryFee = order?.deliveryFee ?? 0;
+  const totalPrice = order?.totalPrice ?? 0;
 
   const paymentMethods = [
     { id: "upi", label: "UPI" },
@@ -78,7 +86,16 @@ export default function Payment() {
     { id: "wallet", label: "Pay with Wallet" },
   ];
 
-  // ---------- EDGE CASE ----------
+  // ---------- LOADING STATE (IMPORTANT FIX) ----------
+  if (order === null) {
+    return (
+      <div className="payment-page">
+        <h2>Loading payment details...</h2>
+      </div>
+    );
+  }
+
+  // ---------- EDGE CASE (ONLY IF ORDER TRULY MISSING) ----------
   if (!order) {
     return (
       <div className="payment-page">
@@ -98,7 +115,9 @@ export default function Payment() {
           {paymentMethods.map((item) => (
             <button
               key={item.id}
-              className={`payment-method-tab ${method === item.id ? "active" : ""}`}
+              className={`payment-method-tab ${
+                method === item.id ? "active" : ""
+              }`}
               onClick={() => setMethod(item.id)}
             >
               {item.label}
@@ -119,7 +138,10 @@ export default function Payment() {
                 onChange={(e) => setUpiId(e.target.value)}
                 className="payment-input"
               />
-              <button className="payment-btn-primary full-width" onClick={handleOtherPayment}>
+              <button
+                className="payment-btn-primary full-width"
+                onClick={handleOtherPayment}
+              >
                 Pay Now
               </button>
             </div>
@@ -136,7 +158,10 @@ export default function Payment() {
                 onChange={(e) => setCardNumber(e.target.value)}
                 className="payment-input"
               />
-              <button className="payment-btn-primary full-width" onClick={handleOtherPayment}>
+              <button
+                className="payment-btn-primary full-width"
+                onClick={handleOtherPayment}
+              >
                 Pay Now
               </button>
             </div>
@@ -158,7 +183,10 @@ export default function Payment() {
                   </option>
                 ))}
               </select>
-              <button className="payment-btn-primary full-width" onClick={handleOtherPayment}>
+              <button
+                className="payment-btn-primary full-width"
+                onClick={handleOtherPayment}
+              >
                 Pay Now
               </button>
             </div>
@@ -180,23 +208,29 @@ export default function Payment() {
                   </option>
                 ))}
               </select>
-              <button className="payment-btn-primary full-width" onClick={handleOtherPayment}>
+              <button
+                className="payment-btn-primary full-width"
+                onClick={handleOtherPayment}
+              >
                 Pay Now
               </button>
             </div>
           )}
 
-          {/* WALLET (ADD MONEY NAVIGATES TO /add-money) */}
+          {/* WALLET */}
           {method === "wallet" && (
             <div className="payment-form-card">
               <h2>Pay with Wallet</h2>
 
               <div className="wallet-balance-card">
-                <span className="wallet-balance-label">Available Balance:</span>
-                <span className="wallet-balance-value">₹{Math.round(walletBalance).toLocaleString()}</span>
+                <span className="wallet-balance-label">
+                  Available Balance:
+                </span>
+                <span className="wallet-balance-value">
+                  ₹{Math.round(walletBalance).toLocaleString()}
+                </span>
               </div>
 
-              {/* UPDATED BUTTON */}
               <button
                 className="payment-btn-outline full-width"
                 onClick={() => navigate("/add-money")}
@@ -204,7 +238,10 @@ export default function Payment() {
                 Add Money
               </button>
 
-              <button className="payment-btn-primary full-width" onClick={handlePayment}>
+              <button
+                className="payment-btn-primary full-width"
+                onClick={handlePayment}
+              >
                 Pay Now
               </button>
             </div>
@@ -224,23 +261,32 @@ export default function Payment() {
             {discountAmount > 0 && (
               <div className="payment-summary-row discount">
                 <span>Discount</span>
-                <span>-₹{Math.round(discountAmount).toLocaleString()}</span>
+                <span>
+                  -₹{Math.round(discountAmount).toLocaleString()}
+                </span>
               </div>
             )}
 
             <div className="payment-summary-row">
               <span>Delivery Fee</span>
-              <span>₹{Math.round(deliveryFee).toLocaleString()}</span>
+              <span>
+                ₹{Math.round(deliveryFee).toLocaleString()}
+              </span>
             </div>
 
             <hr />
 
             <div className="payment-summary-row total">
               <span>Total</span>
-              <span>₹{Math.round(totalPrice).toLocaleString()}</span>
+              <span>
+                ₹{Math.round(totalPrice).toLocaleString()}
+              </span>
             </div>
 
-            <button className="payment-summary-btn" onClick={handlePayment}>
+            <button
+              className="payment-summary-btn"
+              onClick={handlePayment}
+            >
               Pay Now
             </button>
           </div>
