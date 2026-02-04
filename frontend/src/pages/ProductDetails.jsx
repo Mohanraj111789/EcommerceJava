@@ -27,6 +27,16 @@ export default function ProductDetails() {
     );
   }
 
+  // ---------- ✅ FIX: Proper Buy Now flow (auto-synchronous) ----------
+  const handleBuyNow = () => {
+    navigate("/checkout", {
+      state: {
+        buyNowProduct: product,
+        quantity: 1,
+      },
+    });
+  };
+
   return (
     <div className="product-details-main-page-container">
       <Navbar1 />
@@ -49,21 +59,13 @@ export default function ProductDetails() {
 
         {/* RIGHT SECTION */}
         <div className="product-details-right-section">
-          <span className="product-details-product-tag">
-            PRODUCT
-          </span>
+          <span className="product-details-product-tag">PRODUCT</span>
 
-          <h1 className="product-details-product-title">
-            {product.name}
-          </h1>
+          <h1 className="product-details-product-title">{product.name}</h1>
 
           <div className="product-details-rating-wrapper">
-            <span className="product-details-rating-stars">
-              ★★★★☆
-            </span>
-            <span className="product-details-rating-text">
-              (4.5 Ratings)
-            </span>
+            <span className="product-details-rating-stars">★★★★☆</span>
+            <span className="product-details-rating-text">(4.5 Ratings)</span>
           </div>
 
           <p className="product-details-product-description">
@@ -74,25 +76,19 @@ export default function ProductDetails() {
             <span className="product-details-product-price">
               ₹ {Math.round(product.price)}
             </span>
-            <span className="product-details-stock-badge">
-              In Stock
-            </span>
+            <span className="product-details-stock-badge">In Stock</span>
           </div>
 
           <div className="product-details-meta-information-wrapper">
             <div className="product-details-meta-item">
-              <strong className="product-details-meta-label">
-                Category
-              </strong>
+              <strong className="product-details-meta-label">Category</strong>
               <span className="product-details-meta-value">
                 {product.category}
               </span>
             </div>
 
             <div className="product-details-meta-item">
-              <strong className="product-details-meta-label">
-                Available
-              </strong>
+              <strong className="product-details-meta-label">Available</strong>
               <span className="product-details-meta-value">
                 {product.stock}
               </span>
@@ -100,12 +96,18 @@ export default function ProductDetails() {
           </div>
 
           <div className="product-details-action-buttons-wrapper">
-            <button className="product-details-add-to-cart-button" onClick={() => {
-              addToCart(product.id);
-            }}>
+            <button
+              className="product-details-add-to-cart-button"
+              onClick={() => addToCart(product.id)}
+            >
               Add to Cart
             </button>
-            <button className="product-details-buy-now-button">
+
+            {/* ✅ FIXED BUY NOW BUTTON */}
+            <button
+              className="product-details-buy-now-button"
+              onClick={handleBuyNow}
+            >
               Buy Now
             </button>
           </div>
