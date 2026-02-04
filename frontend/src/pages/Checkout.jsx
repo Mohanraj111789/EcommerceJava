@@ -88,9 +88,9 @@ export default function Checkout() {
 
   const getItemPrice = (product) => {
     if (!product) return 0;
-    if (product.offerPercentage > 0) {
-      return product.price - (product.price * product.offerPercentage) / 100;
-    }
+    // if (product.offerPercentage > 0) {
+    //   return product.price - (product.price * product.offerPercentage) / 100;
+    // }
     return product.price;
   };
 
