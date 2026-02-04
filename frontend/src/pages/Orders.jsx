@@ -74,7 +74,7 @@ export default function Orders() {
 
               {/* RIGHT */}
               <div className="order-right">
-                <h3 className="price">₹{order.totalPrice}</h3>
+                <h3 className="price">₹{Math.round(order.totalPrice)}</h3>
 
                 <div className="info-row">
                   <span className="dot green">✔</span>
